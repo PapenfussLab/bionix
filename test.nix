@@ -71,7 +71,7 @@ let
     '';
   };
 
-  condaTest = conda.withCondaEnv condaEnv "bwa";
+  condaTest = conda.inCondaEnv condaEnv "bwa";
 
 
 in condaTest

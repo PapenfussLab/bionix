@@ -3,7 +3,7 @@
 {
   buildCondaEnv = { depends ? [], run }: stdenv.mkDerivation {
     name = "conda-env";
-    buildInputs = [ conda ] ++ depends;
+    propagatedBuildInputs = [ conda ] ++ depends;
     buildCommand = ''
       mkdir $out
       HOME=$out
@@ -14,7 +14,7 @@
     '';
   };
 
-  withCondaEnv = env: run: stdenv.mkDerivation {
+  inCondaEnv = env: run: stdenv.mkDerivation {
     name = "with-conda-env";
     buildCommand = ''
       #!${stdenv.shell}
