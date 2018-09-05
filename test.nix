@@ -3,6 +3,7 @@
 with pkgs;
 
 let
+  conda = callPackage ./conda.nix {};
 
   qsub = drv: lib.overrideDerivation drv ({ ppn ? 1, mem ? 1, walltime ? "24:00:00", args, builder, ... }: {
     builder = "/bin/bash";
@@ -63,10 +64,14 @@ let
     buildCommand = "sleep 5 && echo ${toString x} > $out";
   };
 
+  condaEnv = conda.buildCondaEnv {
+    run = ''
+      conda config --add channels bioconda
+      conda install -y bwa
+    '';
+  };
 
-in stdenv.mkDerivation rec {
-  name = "dummies";
-  dummies = map dummy [1 2 3 4 5];
-  buildCommand = "for f in ${toString dummies} ; cat $f >> $out";
-}
+  condaTest = conda.withCondaEnv condaEnv "bwa";
 
+
+in condaTest

@@ -1,19 +1,28 @@
-{pkgs ? import <nixpkgs> {}}:
+{ stdenv, lib, writeScript, conda }:
 
-with pkgs;
+{
+  buildCondaEnv = { depends ? [], run }: stdenv.mkDerivation {
+    name = "conda-env";
+    buildInputs = [ conda ] ++ depends;
+    buildCommand = ''
+      mkdir $out
+      HOME=$out
+      conda-shell-4.3.31 << EOF
+      conda-install
+      ${run}
+      EOF
+    '';
+  };
 
-stdenv.mkDerivation {
-  name = "conda";
-  src = ./conda.nix;
-  phases = [ "buildPhase" ];
-  buildInputs = [ conda ];
-  buildPhase = ''
-    HOME=$TMPDIR
-    conda-shell-4.3.31 << EOF
-    conda-install
-    conda config --add channels bioconda
-    conda install -y bwa
-    bwa
-    EOF
-  '';
+  withCondaEnv = env: run: stdenv.mkDerivation {
+    name = "with-conda-env";
+    buildCommand = ''
+      #!${stdenv.shell}
+      export HOME=${env}
+      ${conda}/bin/conda-shell-4.3.31 << EOF
+      ${run}
+      EOF
+    '';
+  };
 }
+
