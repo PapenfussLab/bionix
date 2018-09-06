@@ -1,4 +1,4 @@
-**Reproducible bioinformatics with Nix**
+**Nix for reproducible research**
 
 Justin Bedő, Leon Di Stefano, and Tony Papenfuss
 
