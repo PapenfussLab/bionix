@@ -10,7 +10,7 @@ let
   callVariants = callPackage ./tools/platypus.nix { inherit ref; };
 
   samples = [ {name = "mysample1"; files = {input1 = ./example/sample1-1.fq; input2 = ./example/sample1-2.fq;};}
-             {name = "mysample2"; files = {input1 = ./example/sample2-1.fq; input2 = ./example/sample2-1.fq;};} ];
+              {name = "mysample2"; files = {input1 = ./example/sample2-1.fq; input2 = ./example/sample2-1.fq;};} ];
 
   alignments = map (i: sort (alignWithRG i.name i.files)) samples;
   variants = callVariants alignments;

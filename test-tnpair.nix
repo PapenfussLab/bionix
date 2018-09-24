@@ -13,7 +13,7 @@ let
                normal = {name = "mysample2"; files = {input1 = ./example/sample2-1.fq; input2 = ./example/sample2-1.fq;};};};
 
   processPair = { tumour, normal }: rec {
-    alignments = { normal = sort(alignWithRG normal.name normal.files); tumour = sort (alignWithRG tumour.name tumour.files); };
+    alignments = mapAttrs (_: x: sort (alignWithRG x.name x.files)) { inherit normal tumour; };
     variants = callVariants alignments;
   };
 
