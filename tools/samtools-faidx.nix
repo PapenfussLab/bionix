@@ -13,6 +13,8 @@ stdenv.mkDerivation {
   name = "samtools-faidx";
   buildInputs = [ samtools ];
   buildCommand = ''
-    samtools faidx ${optionalString (flags != null) flags} ${input} > $out
+    ln -s ${input} input.fasta
+    samtools faidx ${optionalString (flags != null) flags} input.fasta
+    cp input.fasta.fai $out
   '';
 }

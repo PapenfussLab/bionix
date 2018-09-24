@@ -4,7 +4,7 @@ with pkgs;
 with lib;
 
 let
-  ref = ../bioshake/examples/ref.fa;
+  ref = ./example/ref.fa;
   alignWithRG = rg: callPackage ./tools/bwa.nix { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
   sort = callPackage ./tools/samtools-sort.nix { };
   callVariants = callPackage ./tools/strelka.nix { inherit ref; };
