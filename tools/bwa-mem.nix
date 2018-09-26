@@ -3,6 +3,7 @@
 , lib
 , bc
 , bwa
+, index ? callPackage ./bwa-index.nix { inherit bwa stdenv lib; }
 , samtools ? null
 , ref
 , bamOutput ? true
@@ -17,14 +18,12 @@ assert bamOutput -> samtools != null;
 
 with lib;
 
-let index = callPackage ./bwa-index.nix { inherit bwa stdenv lib; } ref;
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation {
   name = "bwa-mem";
   buildInputs = [ bwa bc ] ++ optional bamOutput samtools;
   buildCommand = ''
     ln -s ${ref} ref.fa
-    for f in ${index}/* ; do
+    for f in ${index ref}/* ; do
       ln -s $f
     done
     cores=$(echo $NIX_BUILD_CORES ${optionalString bamOutput "- 1"} | bc)
