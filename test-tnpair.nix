@@ -1,23 +1,21 @@
-{pkgs ? import <nixpkgs> {}}:
-
-with pkgs;
+with (import <nixpkgs> {});
+with (import <bionix> {});
 with lib;
 
 let
   ref = ./example/ref.fa;
-  alignWithRG = rg: callPackage ./tools/bwa.nix { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
-  sort = callPackage ./tools/samtools-sort.nix { };
-  callVariants = callPackage ./tools/strelka.nix { inherit ref; };
+  alignWithRG = rg: bwa.align { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
+  sort = samtools.sort { };
+  callVariants = strelka.call { inherit ref; };
 
   tnpair = { tumour = {name = "mysample1"; files = {input1 = ./example/sample1-1.fq; input2 = ./example/sample1-2.fq;};};
-               normal = {name = "mysample2"; files = {input1 = ./example/sample2-1.fq; input2 = ./example/sample2-1.fq;};};};
+             normal = {name = "mysample2"; files = {input1 = ./example/sample2-1.fq; input2 = ./example/sample2-1.fq;};};};
 
   processPair = { tumour, normal }: rec {
     alignments = mapAttrs (_: x: sort (alignWithRG x.name x.files)) { inherit normal tumour; };
     variants = callVariants alignments;
   };
 
-  #results = map processPair tnpairs;
   tnpairResult = processPair tnpair;
 
   testNaming = stdenv.mkDerivation {

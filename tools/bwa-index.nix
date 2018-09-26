@@ -15,5 +15,6 @@ stdenv.mkDerivation {
     bwa index ref.fa
     mkdir $out
     mv ref.fa.* $out
+    grep '^>[^ \t]*_alt$' ref.fa | tr -d '^>' > $out/idxbase.alt || true
   '';
 }
