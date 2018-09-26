@@ -1,6 +1,7 @@
 { stdenv
 , lib
-, fastqc
+, callPackage
+, fastqc ? callPackage ./fastqc-app.nix {}
 , flags ? null}:
 
 with lib;
