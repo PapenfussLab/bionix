@@ -5,7 +5,7 @@ with nixpkgs;
 rec {
   grch38 = grch38-p12;
   grch38-p12 = {
-    seq = stdenv.mkDerivation rec {
+    seq = stdenvNoCC.mkDerivation rec {
         name = "seq-grch38.${version}";
         version = "p12";
         src = fetchurl {
@@ -14,5 +14,13 @@ rec {
         };
         buildCommand = "gunzip < $src > $out";
       };
+    blacklist = stdenvNoCC.mkDerivation {
+      name = "blacklist-grch38";
+      src = fetchurl {
+        url = "http://mitra.stanford.edu/kundaje/akundaje/release/blacklists/hg38-human/hg38.blacklist.bed.gz";
+        sha256 = "1lpnqq1mjidbdxj5i6x26rxa8x1rs8q3hlf0z1z49j3jsnkgffky";
+      };
+      buildCommand = "gunzip < $src > $out";
+    };
   };
 }

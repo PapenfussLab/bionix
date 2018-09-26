@@ -6,6 +6,7 @@ let
     in with self; {
       bwa = callBionix ./tools/bwa.nix;
       fastqc = callBionix ./tools/fastqc.nix;
+      gridss = callBionix ./tools/gridss.nix;
       mosdepth = callBionix ./tools/mosdepth.nix;
       platypus = callBionix ./tools/platypus.nix;
       ref = callBionix ./references.nix;
