@@ -1,6 +1,9 @@
 { stdenv
+, lib
 , mosdepth
 , flags ? null}:
+
+with lib;
 
 input:
 
