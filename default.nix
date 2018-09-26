@@ -11,5 +11,7 @@ let
       ref = callBionix ./references.nix;
       samtools = callBionix ./tools/samtools.nix;
       strelka = callBionix ./tools/strelka.nix;
+
+      qsub = nixpkgs.callPackage ./lib/qsub.nix {};
   });
 in bionix

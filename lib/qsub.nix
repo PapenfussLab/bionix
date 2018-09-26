@@ -1,5 +1,7 @@
 {lib}:
 
+with lib;
+
 
 { ppn ? 1, mem ? 1, walltime ? "24:00:00" }: drv: lib.overrideDerivation drv ({ args, builder, ... }: {
   builder = "/bin/bash";
