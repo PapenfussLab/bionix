@@ -5,6 +5,7 @@ let
     let callBionix = file: import file { bionix = self; nixpkgs = nixpkgs; };
     in with self; {
       bwa = callBionix ./tools/bwa.nix;
+      fastqc = callBionix ./tools/fastqc.nix;
       mosdepth = callBionix ./tools/mosdepth.nix;
       platypus = callBionix ./tools/platypus.nix;
       ref = callBionix ./references.nix;
