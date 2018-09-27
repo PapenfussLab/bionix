@@ -26,6 +26,14 @@
       SHELL=/bin/sh
       NIX_BUILD_CORES=${toString ppn}
       id=$(qsub -l nodes=1:ppn=${toString ppn},mem=${toString mem}gb,walltime=${walltime} ${script})
+
+      function cleanup {
+        qstat ''${id%%.} 2> /dev/null > /dev/null && qdel $id || true
+        sleep 5
+        rm -rf ${tmpDir}/$id
+      }
+      trap cleanup INT TERM EXIT
+
       cp -r $TMPDIR ${tmpDir}/$id
       set > ${tmpDir}/$id/nix-set
       while qstat ''${id%%.} 2> /dev/null > /dev/null ; do
@@ -34,7 +42,6 @@
       cat ${tmpDir}/$id/qsub-stderr >&2
       cat ${tmpDir}/$id/qsub-stdout
       exitCode=$(cat ${tmpDir}/$id/qsub-exit)
-      rm -rf ${tmpDir}/$id
       exit $exitCode
     '';
 
