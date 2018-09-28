@@ -5,6 +5,7 @@ let
     let callBionix = file: import file { bionix = self; nixpkgs = nixpkgs; };
     in with self; {
       bwa = callBionix ./tools/bwa.nix;
+      crumble = callBionix ./tools/crumble.nix;
       fastqc = callBionix ./tools/fastqc.nix;
       gridss = callBionix ./tools/gridss.nix;
       mosdepth = callBionix ./tools/mosdepth.nix;
