@@ -23,4 +23,17 @@ rec {
       buildCommand = "gunzip < $src > $out";
     };
   };
+
+  mm10 = mm10-p4;
+  mm10-p4 = {
+      seq = stdenvNoCC.mkDerivation rec {
+          name = "seq-mm10.${version}";
+          version = "p4";
+          src = fetchurl {
+              url = "ftp://hgdownload.soe.ucsc.edu/goldenPath/mm10/mm10Patch4/mm10Patch4.fa.gz";
+              md5 = "0dfc06235d8e96b8e364932c8fc02456";
+              };
+          buildCommand = "gunzip < $src > $out";
+      };
+  };
 }
