@@ -10,10 +10,10 @@ let
       gridss = callBionix ./tools/gridss.nix;
       mosdepth = callBionix ./tools/mosdepth.nix;
       platypus = callBionix ./tools/platypus.nix;
-      ref = callBionix ./references.nix;
       samtools = callBionix ./tools/samtools.nix;
       strelka = callBionix ./tools/strelka.nix;
 
       qsub = nixpkgs.callPackage ./lib/qsub.nix {};
+      ref = callBionix ./lib/references.nix;
   });
 in bionix
