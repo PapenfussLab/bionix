@@ -6,14 +6,14 @@ rec {
   grch38 = grch38-p12;
   grch38-p12 = {
     seq = stdenvNoCC.mkDerivation rec {
-        name = "seq-grch38.${version}";
-        version = "p12";
-        src = fetchurl {
-          url = "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_28/GRCh38.p12.genome.fa.gz";
-          sha256 = "0ji2ggpmgnbpwbhq8mirj6h3lyy02nl2rnz7n892iq5cqpsblh4z";
-        };
-        buildCommand = "gunzip < $src > $out";
+      name = "seq-grch38.${version}";
+      version = "p12";
+      src = fetchurl {
+        url = "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_28/GRCh38.p12.genome.fa.gz";
+        sha256 = "0ji2ggpmgnbpwbhq8mirj6h3lyy02nl2rnz7n892iq5cqpsblh4z";
       };
+      buildCommand = "gunzip < $src > $out";
+    };
     blacklist = stdenvNoCC.mkDerivation {
       name = "blacklist-grch38";
       src = fetchurl {
@@ -27,14 +27,13 @@ rec {
   grcm38 = grcm38-p6;
   grcm38-p6 = {
     seq = stdenvNoCC.mkDerivation rec {
-        name = "seq-grch38.${version}";
-        version = "p6";
-        src = fetchurl {
-          url = "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M19/GRCm38.${version}.genome.fa.gz";
-          sha256 = "0ryiqab5bldpzawylsk2qpjxr2j701q03ww9jqyxhkimqpn9g3mr";
-        };
-        buildCommand = "gunzip < $src > $out";
+      name = "seq-grch38.${version}";
+      version = "p6";
+      src = fetchurl {
+        url = "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M19/GRCm38.${version}.genome.fa.gz";
+        sha256 = "0ryiqab5bldpzawylsk2qpjxr2j701q03ww9jqyxhkimqpn9g3mr";
       };
+      buildCommand = "gunzip < $src > $out";
     };
   };
 
