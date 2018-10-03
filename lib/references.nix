@@ -27,7 +27,7 @@ rec {
   grcm38 = grcm38-p6;
   grcm38-p6 = {
     seq = stdenvNoCC.mkDerivation rec {
-      name = "seq-grch38.${version}";
+      name = "seq-grcm38.${version}";
       version = "p6";
       src = fetchurl {
         url = "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M19/GRCm38.${version}.genome.fa.gz";
