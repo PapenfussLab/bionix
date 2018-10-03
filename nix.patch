@@ -1,0 +1,38 @@
+diff --git a/src/libstore/build.cc b/src/libstore/build.cc
+index d75ca0be..b3de84e7 100644
+--- a/src/libstore/build.cc
++++ b/src/libstore/build.cc
+@@ -1036,6 +1036,7 @@ void DerivationGoal::killChild()
+                it won't be killed, and we'll potentially lock up in
+                pid.wait().  So also send a conventional kill to the
+                child. */
++            ::kill(-pid, SIGTERM); /* ignore the result */
+             ::kill(-pid, SIGKILL); /* ignore the result */
+             buildUser->kill();
+             pid.wait();
+diff --git a/src/libutil/util.cc b/src/libutil/util.cc
+index 6bc64ae7..7ff4de24 100644
+--- a/src/libutil/util.cc
++++ b/src/libutil/util.cc
+@@ -779,7 +779,7 @@ void Pid::operator =(pid_t pid)
+ {
+     if (this->pid != -1 && this->pid != pid) kill();
+     this->pid = pid;
+-    killSignal = SIGKILL; // reset signal to default
++    killSignal = SIGTERM; // reset signal to default
+ }
+ 
+ 
+diff --git a/src/libutil/util.hh b/src/libutil/util.hh
+index fc25d277..2e0d98f8 100644
+--- a/src/libutil/util.hh
++++ b/src/libutil/util.hh
+@@ -218,7 +218,7 @@ class Pid
+ {
+     pid_t pid = -1;
+     bool separatePG = false;
+-    int killSignal = SIGKILL;
++    int killSignal = SIGTERM;
+ public:
+     Pid();
+     Pid(pid_t pid);
