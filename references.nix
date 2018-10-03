@@ -24,6 +24,20 @@ rec {
     };
   };
 
+  grcm38 = grcm38-p6;
+  grcm38-p6 = {
+    seq = stdenvNoCC.mkDerivation rec {
+        name = "seq-grch38.${version}";
+        version = "p6";
+        src = fetchurl {
+          url = "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M19/GRCm38.${version}.genome.fa.gz";
+          sha256 = "0ryiqab5bldpzawylsk2qpjxr2j701q03ww9jqyxhkimqpn9g3mr";
+        };
+        buildCommand = "gunzip < $src > $out";
+      };
+    };
+  };
+
   mm10 = mm10-p4;
   mm10-p4 = {
       seq = stdenvNoCC.mkDerivation rec {
