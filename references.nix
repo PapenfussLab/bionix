@@ -31,7 +31,7 @@ rec {
           version = "p4";
           src = fetchurl {
               url = "ftp://hgdownload.soe.ucsc.edu/goldenPath/mm10/mm10Patch4/mm10Patch4.fa.gz";
-              md5 = "0dfc06235d8e96b8e364932c8fc02456";
+              sha256 = "1660d6d05f3aa266c6053cfd1efef1747d9e854836917241d6f47cff7a55340c";
               };
           buildCommand = "gunzip < $src > $out";
       };
