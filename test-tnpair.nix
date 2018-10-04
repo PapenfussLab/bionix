@@ -2,8 +2,11 @@ with (import <nixpkgs> {});
 with lib;
 
 let
-  bionix = (import <bionix> {}).extend (self: super: {
-    bwa = super.bwa // { index = attrs: super.bwa.index ({ flags = "-a is" ; } // attrs); };
+  bionix = (import <bionix> {}).extend (self: super: with self; {
+    bwa = with super.bwa; {
+      align = align;
+      index = def index { flags = "-a is"; };
+    };
   });
 
 in
