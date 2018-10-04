@@ -17,6 +17,8 @@ let
       strelka = callBionix ./tools/strelka.nix {};
 
       qsub = nixpkgs.callPackage ./lib/qsub.nix {};
+      qsubAttr = qsubAttrs: f: attrs: i: qsub qsubAttrs (f attrs i);
+      qsubAttrs = attrs: nixpkgs.lib.mapAttrs (_: x: qsubAttr attrs x);
       ref = callBionix ./lib/references.nix {};
   });
 in bionix
