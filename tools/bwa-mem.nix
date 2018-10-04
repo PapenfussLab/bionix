@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   name = "bwa-mem";
   buildInputs = [ bwa bc ] ++ optional bamOutput samtools;
   buildCommand = ''
-    ln -s ${ref} ref.fa
+    ln -s ${ref.seq} ref.fa
     for f in ${bionix.bwa.index indexAttrs ref}/* ; do
       ln -s $f
     done

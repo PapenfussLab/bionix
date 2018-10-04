@@ -14,7 +14,7 @@ in
 with bionix;
 
 let
-  ref = ./example/ref.fa;
+  ref = { seq = ./example/ref.fa; };
   alignWithRG = rg: bwa.align { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
   sort = samtools.sort {};
   flagstat = samtools.flagstat {};

@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
   name = "platypus";
   buildInputs = [ platypus ];
   buildCommand = ''
-    ln -s ${ref} ref.fa
+    ln -s ${ref.seq} ref.fa
     ln -s ${bionix.samtools.faix indexAttrs ref} ref.fa.fai
     ${concatMapStringsSep "\n" (p: "ln -s ${p} ${filename p}.bam") inputs}
     ${concatMapStringsSep "\n" (p: "ln -s ${bionix.samtools.index bamIndexAttrs p} ${filename p}.bai") inputs}

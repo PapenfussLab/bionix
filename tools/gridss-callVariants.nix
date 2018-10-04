@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "01srl3qvv060whqg1y1fpxjc5cwga5wscs1bmf1v3z87dignra7k";
   };
   buildCommand = ''
-    ln -s ${ref} ref.fa
+    ln -s ${ref.seq} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai
     for f in ${bionix.bwa.index bwaIndexAttrs ref}/*; do
       ln -s $f

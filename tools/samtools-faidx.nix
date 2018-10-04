@@ -9,6 +9,7 @@ with nixpkgs;
 with lib;
 
 stdenv.mkDerivation {
+
   name = "samtools-faidx";
   buildInputs = [ samtools ];
   buildCommand = ''
