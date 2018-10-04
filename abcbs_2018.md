@@ -15,3 +15,30 @@ Justin Bedő, Leon Di Stefano, and Tony Papenfuss
 > We will demonstrate how Nix with our extensions can be used to succinctly specify a typical bioinformatics pipeline and contrast this against other dedicated bioinformatics pipeline languages.
 > We then show how it can be executed in whole or in part on an HPC queuing system
 > Finally, we show that the pipeline can also be executed using cloud resources.
+
+### Stuff to match in competitors
+
+-   **A few standard pipelines**
+-   Dealing with big files
+-   Slightly complicated analyses
+-   local, HPC, and cloud execution
+-   Resumable, parallel
+-   Bioconda import
+
+### Points of difference
+
+-   **Full-stack reproduciblity with one tool**
+-   **A language rather than a configuration format (cf. CWL/Javascript)**
+-   Not bioinformatics-specific
+-   Mature (~10y)
+-   Containers obsolete (but easy to generate)
+-   Higher level of reproducibility overall (hashing of inputs, outputs, derivations)
+-   Safety
+    -   Declarative language
+    -   Type/tag system (to do)
+
+### Weaknesses
+
+-   Small bioinformatics collection
+-   No build execution stats
+-   Subtleties around filesystems and the Nix store
