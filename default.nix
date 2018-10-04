@@ -21,5 +21,6 @@ let
       qsubAttrs = attrs: nixpkgs.lib.mapAttrs (_: x: qsubAttr attrs x);
       ref = callBionix ./lib/references.nix {};
       def = f: defs: attrs: f (defs // attrs);
+      defQsub = qsubAttrs: f: defs: qsubAttr qsubAttrs (def f defs);
   });
 in bionix
