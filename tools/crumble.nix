@@ -1,7 +1,9 @@
 { bionix, nixpkgs }:
 
 with nixpkgs;
+with bionix;
 
 {
-  toCram = attrs: callPackage ./crumble-toCram.nix attrs;
+  crumble = callPackage ./crumble-app.nix {};
+  toCram = callBionix ./crumble-toCram.nix;
 }

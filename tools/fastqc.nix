@@ -1,7 +1,9 @@
 { bionix, nixpkgs }:
 
 with nixpkgs;
+with bionix;
 
 {
-  check = attrs: callPackage ./fastqc-check.nix attrs;
+  fastqc = callPackage ./fastqc-app.nix {};
+  check = callBionix ./fastqc-check.nix;
 }

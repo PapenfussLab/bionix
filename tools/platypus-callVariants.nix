@@ -1,10 +1,8 @@
-{ stdenv
-, callPackage
-, lib
-, platypus
+{ bionix
+, nixpkgs
 , ref
-, index ? callPackage ./samtools-faidx.nix {}
-, bamIndex ? callPackage ./samtools-index.nix {}
+, indexAttrs ? {}
+, bamIndexAttrs ? {}
 , flags ? null
 }:
 
@@ -19,9 +17,9 @@ in stdenv.mkDerivation {
   buildInputs = [ platypus ];
   buildCommand = ''
     ln -s ${ref} ref.fa
-    ln -s ${index ref} ref.fa.fai
+    ln -s ${bionix.samtools.faix indexAttrs ref} ref.fa.fai
     ${concatMapStringsSep "\n" (p: "ln -s ${p} ${filename p}.bam") inputs}
-    ${concatMapStringsSep "\n" (p: "ln -s ${bamIndex p} ${filename p}.bai") inputs}
+    ${concatMapStringsSep "\n" (p: "ln -s ${bionix.samtools.index bamIndexAttrs p} ${filename p}.bai") inputs}
     ls -l
     platypus callVariants \
       --nCPU=$NIX_BUILD_CORES \

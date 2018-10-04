@@ -1,9 +1,9 @@
-{ stdenv
-, lib
-, mosdepth
-, python
-, flags ? null}:
+{ bionix
+, nixpkgs
+, flags ? null
+}:
 
+with nixpkgs;
 with lib;
 
 { inputs

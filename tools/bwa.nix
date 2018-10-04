@@ -1,8 +1,8 @@
 { bionix, nixpkgs }:
 
-with nixpkgs;
+with bionix;
 
 {
-  align = attrs: callPackage ./bwa-mem.nix attrs;
-  index = attrs: callPackage ./bwa-index.nix attrs;
+  align = callBionix ./bwa-mem.nix;
+  index = callBionix ./bwa-index.nix;
 }

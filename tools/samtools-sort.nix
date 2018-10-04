@@ -1,13 +1,12 @@
-{ stdenv
-, callPackage
-, lib
-, samtools
+{ bionix
+, nixpkgs
 , nameSort ? false
 , flags ? null
 }:
 
 input:
 
+with nixpkgs;
 with lib;
 
 stdenv.mkDerivation {

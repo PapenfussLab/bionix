@@ -1,8 +1,8 @@
 { bionix, nixpkgs }:
 
-with nixpkgs;
+with bionix;
 
 {
-  depth = attrs: callPackage ./mosdepth-depth.nix attrs;
-  plot = attrs: callPackage ./mosdepth-plot.nix attrs;
+  depth = callBionix ./mosdepth-depth.nix;
+  plot = callBionix ./mosdepth-plot.nix;
 }

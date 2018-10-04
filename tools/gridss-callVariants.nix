@@ -1,15 +1,11 @@
-{ stdenv
-, lib
-, callPackage
-, fetchurl
-, jre
-, R
-, bwa
+{ bionix
+, nixpkgs
 , ref
 , blacklist ? null
-, bwaIndex ? callPackage ./bwa-index.nix { inherit stdenv bwa lib; }
-, faidx ? callPackage ./samtools-faidx.nix { inherit stdenv; }
-, flags ? null}:
+, bwaIndexAttrs ? {}
+, faidxAttrs ? {}
+, flags ? null
+}:
 
 with lib;
 
@@ -24,8 +20,8 @@ stdenv.mkDerivation rec {
   };
   buildCommand = ''
     ln -s ${ref} ref.fa
-    ln -s ${faidx ref} ref.fa.fai
-    for f in ${bwaIndex ref}/*; do
+    ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai
+    for f in ${bionix.bwa.index bwaIndexAttrs ref}/*; do
       ln -s $f
     done
     mkdir $out

@@ -1,10 +1,10 @@
 { bionix, nixpkgs }:
 
-with nixpkgs;
+with bionix;
 
 {
-  faidx = attrs: callPackage ./samtools-faidx.nix attrs;
-  flagstat = attrs: callPackage ./samtools-flagstat.nix attrs;
-  index = attrs: callPackage ./samtools-index.nix attrs;
-  sort = attrs: callPackage ./samtools-sort.nix attrs;
+  faidx = callBionix ./samtools-faidx.nix;
+  flagstat = callBionix ./samtools-flagstat.nix;
+  index = callBionix ./samtools-index.nix;
+  sort = callBionix ./samtools-sort.nix;
 }

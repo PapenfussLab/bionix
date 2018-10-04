@@ -1,7 +1,7 @@
 {bionix, nixpkgs}:
 
-with nixpkgs;
+with bionix;
 
 {
-  callVariants = attrs: callPackage ./gridss-callVariants.nix attrs;
+  callVariants = callBiolnix ./gridss-callVariants.nix;
 }

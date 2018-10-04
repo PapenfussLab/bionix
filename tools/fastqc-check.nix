@@ -1,16 +1,16 @@
-{ stdenv
-, lib
-, callPackage
-, fastqc ? callPackage ./fastqc-app.nix {}
-, flags ? null}:
+{ bionix
+, nixpkgs
+, flags ? null
+}:
 
+with nixpkgs;
 with lib;
 
 input:
 
 stdenv.mkDerivation {
   name = "fastqc-check";
-  buildInputs = [ fastqc ];
+  buildInputs = [ bionix.fastqc.fastqc ];
   buildCommand = ''
     mkdir $out
     fastqc \

@@ -1,11 +1,19 @@
 with (import <nixpkgs> {});
-with (import <bionix> {});
 with lib;
+
+let
+  bionix = (import <bionix> {}).extend (self: super: {
+    bwa = super.bwa // { index = attrs: super.bwa.index ({ flags = "-a is" ; } // attrs); };
+  });
+
+in
+
+with bionix;
 
 let
   ref = ./example/ref.fa;
   alignWithRG = rg: bwa.align { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
-  sort = samtools.sort { };
+  sort = samtools.sort {};
   flagstat = samtools.flagstat {};
   check = fastqc.check {};
   callVariants = strelka.call { inherit ref; };

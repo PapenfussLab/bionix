@@ -1,10 +1,10 @@
-{ stdenv
-, lib
-, callPackage
-, mosdepth
-, index ? callPackage ./samtools-index.nix {}
-, flags ? null}:
+{ bionix
+, nixpkgs
+, indexAttrs ? {}
+, flags ? null
+}:
 
+with nixpkgs;
 with lib;
 
 input:
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir $out
     ln -s ${input} input.bam
-    ln -s ${index input} input.bam.bai
+    ln -s ${bionix.samtools.index indexAttrs input} input.bam.bai
     mosdepth -t $NIX_BUILD_CORES ${optionalString (flags != null) flags} $out/out input.bam
   '';
 }

@@ -1,21 +1,16 @@
-{ stdenv
-, callPackage
-, lib
-, bc
-, bwa
-, index ? callPackage ./bwa-index.nix { inherit bwa stdenv lib; }
-, samtools ? null
+{ bionix
+, nixpkgs
 , ref
 , bamOutput ? true
 , flags ? null
+, indexAttrs ? {}
 }:
 
 { input1
 , input2 ? null
 }:
 
-assert bamOutput -> samtools != null;
-
+with nixpkgs;
 with lib;
 
 stdenv.mkDerivation {
@@ -23,7 +18,7 @@ stdenv.mkDerivation {
   buildInputs = [ bwa bc ] ++ optional bamOutput samtools;
   buildCommand = ''
     ln -s ${ref} ref.fa
-    for f in ${index ref}/* ; do
+    for f in ${bionix.bwa.index indexAttrs ref}/* ; do
       ln -s $f
     done
     cores=$(echo $NIX_BUILD_CORES ${optionalString bamOutput "- 1"} | bc)

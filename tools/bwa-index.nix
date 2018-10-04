@@ -1,11 +1,11 @@
-{ stdenv
-, lib
-, bwa
+{ bionix
+, nixpkgs
 , flags ? null
 }:
 
 ref:
 
+with nixpkgs;
 with lib;
 
 stdenv.mkDerivation {

@@ -1,7 +1,7 @@
 { bionix, nixpkgs }:
 
-with nixpkgs;
+with bionix;
 
 {
-  call = attrs: callPackage ./strelka-call.nix attrs;
+  call = callBionix ./strelka-call.nix;
 }
