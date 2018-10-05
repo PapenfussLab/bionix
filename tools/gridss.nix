@@ -3,5 +3,5 @@
 with bionix;
 
 {
-  callVariants = callBiolnix ./gridss-callVariants.nix;
+  callVariants = callBionix ./gridss-callVariants.nix;
 }

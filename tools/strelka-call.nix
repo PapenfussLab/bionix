@@ -1,6 +1,5 @@
 { bionix
 , nixpkgs
-, ref
 , indexAttrs ? {}
 , bamIndexAttrs ? {}
 , flags ? null
@@ -10,17 +9,25 @@
 
 with nixpkgs;
 with lib;
+with bionix.types;
 
 let
   filename = path: last (splitString "/" path);
+  getref = f: matchFiletype "strelka-call" { bam = x: x.ref; } f;
   inputs = [ normal tumour ];
+  refs = map getref inputs;
+  ref = head refs;
 
-in stdenv.mkDerivation {
+in
+
+assert (length (unique refs) == 1);
+
+stdenv.mkDerivation {
   name = "strelka";
   buildInputs = [ strelka ];
   buildCommand = ''
-    ln -s ${ref.seq} ref.fa
-    ln -s ${bionix.samtools.faidx indexAttrs ref.seq} ref.fa.fai
+    ln -s ${ref} ref.fa
+    ln -s ${bionix.samtools.faidx indexAttrs ref} ref.fa.fai
     ${concatMapStringsSep "\n" (p: "ln -s ${p} ${filename p}.bam") inputs}
     ${concatMapStringsSep "\n" (p: "ln -s ${bionix.samtools.index bamIndexAttrs p} ${filename p}.bai") inputs}
 

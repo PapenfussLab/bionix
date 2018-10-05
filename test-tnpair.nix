@@ -14,15 +14,31 @@ in
 with bionix;
 
 let
-  ref = { seq = ./example/ref.fa; };
-  alignWithRG = rg: bwa.align { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
+  fetchlocal = path: stdenv.mkDerivation {
+    name = baseNameOf path;
+    buildCommand = "ln -s ${path} $out";
+  };
+  fetchfq = attrs: types.tagFiletype (types.filetype.fq {}) (fetchlocal attrs);
+  fetchfa = attrs: types.tagFiletype (types.filetype.fa {}) (fetchlocal attrs);
+
+  alignWithRG = rg: bwa.align { ref = fetchfa ./example/ref.fa; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
   sort = samtools.sort {};
   flagstat = samtools.flagstat {};
   check = fastqc.check {};
-  callVariants = strelka.call { inherit ref; };
+  callVariants = strelka.call {};
 
-  tnpair = { tumour = {name = "mysample1"; files = {input1 = ./example/sample1-1.fq; input2 = ./example/sample1-2.fq;};};
-             normal = {name = "mysample2"; files = {input1 = ./example/sample2-1.fq; input2 = ./example/sample2-1.fq;};};};
+  tnpair = {
+    tumour = {name = "mysample1"; files = {
+        input1 = fetchfq ./example/sample1-1.fq;
+        input2 = fetchfq ./example/sample1-2.fq;
+      };
+    };
+    normal = {name = "mysample2"; files = {
+        input1 = fetchfq ./example/sample2-1.fq;
+        input2 = fetchfq ./example/sample2-1.fq;
+      };
+    };
+  };
 
   processPair = { tumour, normal }: rec {
     alignments = mapAttrs (_: x: sort (alignWithRG x.name x.files)) { inherit normal tumour; };
@@ -37,8 +53,9 @@ let
       mkdir $out
       ln -s ${tnpairResult.variants} $out/strelka
       mkdir $out/alignments
-      ln -s ${tnpairResult.alignments.tumour} $out/alignments/${tnpair.tumour.name}.bam
-      ln -s ${tnpairResult.alignments.normal} $out/alignments/${tnpair.normal.name}.bam
+      ln -s ${gridss.callVariants {} (with tnpairResult.alignments; [tumour])} $out/gridss
+      ln -s ${samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.tumour)} $out/alignments/${tnpair.tumour.name}.cram
+      ln -s ${samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.normal)} $out/alignments/${tnpair.normal.name}.cram
       ln -s ${flagstat tnpairResult.alignments.tumour} $out/alignments/${tnpair.tumour.name}.flagstat
       ln -s ${flagstat tnpairResult.alignments.normal} $out/alignments/${tnpair.normal.name}.flagstat
       mkdir $out/fastqc

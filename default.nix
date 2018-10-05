@@ -7,7 +7,10 @@ let
       callBionix = callBionix;
       id = x: x;
 
+      types = callBionix ./lib/types.nix {};
+
       bwa = callBionix ./tools/bwa.nix {};
+      compression = callBionix ./tools/compression.nix {};
       crumble = callBionix ./tools/crumble.nix {};
       fastqc = callBionix ./tools/fastqc.nix {};
       gridss = callBionix ./tools/gridss.nix {};
@@ -22,5 +25,6 @@ let
       ref = callBionix ./lib/references.nix {};
       def = f: defs: attrs: f (defs // attrs);
       defQsub = qsubAttrs: f: defs: qsubAttr qsubAttrs (def f defs);
+
   });
 in bionix

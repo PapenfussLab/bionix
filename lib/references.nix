@@ -1,6 +1,7 @@
 { bionix, nixpkgs }:
 
 with nixpkgs;
+with bionix.types;
 
 rec {
   grch38 = grch38-p12;
@@ -13,6 +14,7 @@ rec {
         sha256 = "0ji2ggpmgnbpwbhq8mirj6h3lyy02nl2rnz7n892iq5cqpsblh4z";
       };
       buildCommand = "gunzip < $src > $out";
+      passthru.filetype = filetype.fa {};
     };
     blacklist = stdenvNoCC.mkDerivation {
       name = "blacklist-grch38";
@@ -21,6 +23,7 @@ rec {
         sha256 = "1lpnqq1mjidbdxj5i6x26rxa8x1rs8q3hlf0z1z49j3jsnkgffky";
       };
       buildCommand = "gunzip < $src > $out";
+      passthru.filetype = filetype.bed { ref = seq; };
     };
   };
 
@@ -34,6 +37,7 @@ rec {
         sha256 = "0ryiqab5bldpzawylsk2qpjxr2j701q03ww9jqyxhkimqpn9g3mr";
       };
       buildCommand = "gunzip < $src > $out";
+      passthru.filetype = filetype.fa {};
     };
   };
 
@@ -47,6 +51,7 @@ rec {
               sha256 = "1660d6d05f3aa266c6053cfd1efef1747d9e854836917241d6f47cff7a55340c";
               };
           buildCommand = "gunzip < $src > $out";
+          passthru.filetype = filetype.fa {};
       };
   };
 }

@@ -1,7 +1,7 @@
 { bionix, nixpkgs }:
 
-with nixpkgs;
+with bionix;
 
 {
-  call = attrs: callPackage ./platypus-callVariants.nix attrs;
+  call = callBionix ./platypus-callVariants.nix;
 }

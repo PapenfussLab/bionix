@@ -7,6 +7,9 @@ input:
 
 with nixpkgs;
 with lib;
+with bionix.types;
+
+assert (matchFiletype "samtools-faidx" { fa = _: true; } input);
 
 stdenv.mkDerivation {
 

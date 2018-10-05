@@ -7,12 +7,15 @@ ref:
 
 with nixpkgs;
 with lib;
+with bionix.types;
+
+assert (matchFiletype "bwa-index" { fa = _: true; } ref);
 
 stdenv.mkDerivation {
   name = "bwa-index";
   buildInputs = [ bwa ];
   buildCommand = ''
-    ln -s ${ref.seq} ref.fa
+    ln -s ${ref} ref.fa
     bwa index ${optionalString (flags != null) flags} ref.fa
     mkdir $out
     mv ref.fa.* $out

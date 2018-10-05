@@ -1,15 +1,24 @@
 { bionix
 , nixpkgs
-, ref
 , blacklist ? null
 , bwaIndexAttrs ? {}
 , faidxAttrs ? {}
 , flags ? null
 }:
 
+with nixpkgs;
 with lib;
+with bionix.types;
 
 inputs:
+
+let
+  getref = matchFiletype "gridss-callVariants" { bam = x: x.ref; };
+  refs = map getref inputs;
+  ref = head refs;
+in
+
+assert (length (unique refs) == 1);
 
 stdenv.mkDerivation rec {
   name = "gridss-callVariants";
@@ -19,7 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "01srl3qvv060whqg1y1fpxjc5cwga5wscs1bmf1v3z87dignra7k";
   };
   buildCommand = ''
-    ln -s ${ref.seq} ref.fa
+    ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai
     for f in ${bionix.bwa.index bwaIndexAttrs ref}/*; do
       ln -s $f
