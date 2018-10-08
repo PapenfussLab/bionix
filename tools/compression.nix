@@ -37,6 +37,7 @@ with bionix;
       cram = _: gz;
       vcf = _: gz;
       bed = _: gz;
+      gz = x: x;
     } f;
 
   bzip2 = f:
@@ -54,5 +55,6 @@ with bionix;
       cram = _: gz;
       vcf = _: gz;
       bed = _: gz;
+      bz2 = x: x;
     } f;
 }
