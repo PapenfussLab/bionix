@@ -1,6 +1,7 @@
 {bionix, nixpkgs}:
 
 with nixpkgs;
+with lib;
 
 let
   nix-adt-src = fetchFromGitHub {
@@ -16,21 +17,13 @@ let
   idft = sym: ft: _: abort "unhandled filetype (${ft}) for ${sym}";
   idst = sym: st: _: abort "unhandled sorting (${st}) for ${sym}";
 
+  defError = errF: y: x: listToAttrs (map (n: nameValuePair n (errF n)) (filter (x: builtins.substring 0 1 x != "_") (attrNames x))) // y;
+
 in
 rec {
   option-sort = option sorting;
 
-  matchFiletype = sym: y: x: if x ? filetype then match x.filetype ({
-    fa = idft sym "fasta";
-    fq = idft sym "fastq";
-    bam = idft sym "bam";
-    sam = idft sym "sam";
-    cram = idft sym "cram";
-    vcf = idft sym "vcf";
-    bed = idft sym "bed";
-    gz = idft sym "gz";
-    bz2 = idft sym "bz2";
-  } // y) else abort "unknown filetype for ${sym}";
+  matchFiletype = sym: y: x: if x ? filetype then match x.filetype (defError (idft sym) y filetype) else abort "unknown filetype for ${sym}";
   filetype = make-type "filetype" {
     fa = {};
     fq = {};
@@ -47,7 +40,7 @@ rec {
   toBam = matchFiletype "bam2cram" { bam = filetype.bam; sam = filetype.bam; cram = filetype.bam; };
   toSam = matchFiletype "bam2cram" { bam = filetype.sam; sam = filetype.sam; cram = filetype.sam; };
 
-  matchSorting = sym: y: let f = x: match x.sorting { some = z: match z ( { coord = idst sym "coord"; name = idst sym "name"; } // y); none = abort "unknown sort for ${sym}"; }; in matchFiletype sym { bam = f; sam = f; cram = f; };
+  matchSorting = sym: y: let f = x: match x.sorting { some = z: match z (defError (idst sym) y sorting); none = abort "unknown sort for ${sym}"; }; in matchFiletype sym { bam = f; sam = f; cram = f; };
   sorting = make-type "sorting" {
     coord = {};
     name = {};
