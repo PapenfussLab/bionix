@@ -1,6 +1,6 @@
 {stdenv, lib, writeScript}:
 
-{ ppn ? 1, mem ? 1, walltime ? "24:00:00", tmpDir ? "/tmp" }: drv: lib.overrideDerivation drv ({ args, builder, ... }: {
+{ ppn ? 1, mem ? 1, walltime ? "24:00:00", tmpDir ? "/tmp" }: drv: lib.overrideDerivation drv ({ args, builder, name, ... }: {
   builder = "/bin/bash";
   args = let
     script = writeScript "qsub-script" ''
@@ -25,7 +25,7 @@
       PATH=/usr/bin:/bin:/usr/sbin:/sbin
       SHELL=/bin/sh
       NIX_BUILD_CORES=${toString ppn}
-      id=$(qsub -l nodes=1:ppn=${toString ppn},mem=${toString mem}gb,walltime=${walltime} ${script})
+      id=$(qsub -l nodes=1:ppn=${toString ppn},mem=${toString mem}gb,walltime=${walltime} -N "${name}" ${script})
 
       function cleanup {
         qstat ''${id%%.} 2> /dev/null > /dev/null && qdel $id || true
