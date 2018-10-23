@@ -1,0 +1,13 @@
+diff --git a/inst/base.config/conf.d/01-server-protocol-scl.R b/inst/base.config/conf.d/01-server-protocol-scl.R
+index 1ae302a..6156fa3 100644
+--- a/inst/base.config/conf.d/01-server-protocol-scl.R
++++ b/inst/base.config/conf.d/01-server-protocol-scl.R
+@@ -3,7 +3,7 @@
+ (function() {
+ 
+     if (Sys.info()[['sysname']] != "Windows")  {
+-        thisHost <- c("localhost", system("/bin/hostname -f", intern=TRUE));
++        thisHost <- c("localhost", system("hostname -f", intern=TRUE));
+     } else {
+         thisHost <- c("localhost", paste(Sys.getenv('COMPUTERNAME'),Sys.getenv('USERDNSDOMAIN'),sep='.'));
+     }
