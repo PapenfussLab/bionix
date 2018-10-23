@@ -15,10 +15,7 @@
 ,makeWrapper}:
 
 let
-  buildRPackage = callPackage "${<nixpkgs>}/pkgs/development/r-modules/generic-builder.nix" {
-    inherit R gettext gfortran;
-    inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
-  };
+  buildRPackage = rPackages.buildRPackage;
 
   GMD = buildRPackage rec {
     name = "GMD-${version}";
