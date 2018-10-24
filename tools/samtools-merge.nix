@@ -10,13 +10,11 @@ with nixpkgs;
 with lib;
 
 let
-  inherit (bionix.types) matchFiletype option-sort;
-  inputIsSorted = input: matchFiletype "samtools-merge" {
-       bam = _: true; #{sorting, ...}: sorting == option-sort.some (bionix.types.sorting.coord {});
-     } input;
+  inherit (bionix.types) matchFiletype matchSorting;
+  inputIsHomogenous = length (unique (map (matchFiletype "samtools-merge" {bam = x: x // {sorting = matchSorting "samtools-merge" {coord = _: "coord";} x;};}) inputs)) == 1;
 in
 
-assert (all inputIsSorted inputs);
+assert inputIsHomogenous;
 
 stdenv.mkDerivation {
   name = "samtools-merge";

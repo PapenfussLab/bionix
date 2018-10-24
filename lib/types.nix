@@ -38,7 +38,8 @@ rec {
   toBam = matchFiletype "bam2cram" { bam = filetype.bam; sam = filetype.bam; cram = filetype.bam; };
   toSam = matchFiletype "bam2cram" { bam = filetype.sam; sam = filetype.sam; cram = filetype.sam; };
 
-  matchSorting = sym: y: let f = x: match x.sorting (defError (idst sym) y sort); in matchFiletype sym { bam = f; sam = f; cram = f; };
+  matchSorting = sym: y: x: match x.sorting (defError (idst sym) y sort);
+  matchFileSorting = sym: y: let f = matchSorting sym y; in matchFiletype sym { bam = f; sam = f; cram = f; };
   sort = make-type "sort" {
     none = {};
     coord = {};

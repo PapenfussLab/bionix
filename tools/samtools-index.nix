@@ -10,7 +10,7 @@ with lib;
 with bionix.types;
 
 assert (matchFiletype "samtools-index" { bam = _: true; } input);
-assert (matchSorting "samtools-index" { coord = _: true; } input);
+assert (matchFileSorting "samtools-index" { coord = _: true; } input);
 
 stdenv.mkDerivation {
   name = "samtools-index";

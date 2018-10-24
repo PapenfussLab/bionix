@@ -54,6 +54,7 @@ let
       ln -s ${tnpairResult.variants} $out/strelka
       mkdir $out/alignments
       ln -s ${gridss.callVariants {} (with tnpairResult.alignments; [tumour])} $out/gridss
+      ln -s ${samtools.merge {} [tnpairResult.alignments.tumour tnpairResult.alignments.normal]} $out/alignments/merged.bam
       ln -s ${samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.tumour)} $out/alignments/${tnpair.tumour.name}.cram
       ln -s ${samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.normal)} $out/alignments/${tnpair.normal.name}.cram
       ln -s ${flagstat tnpairResult.alignments.tumour} $out/alignments/${tnpair.tumour.name}.flagstat
