@@ -21,15 +21,13 @@ let
 
 in
 rec {
-  option-sort = option sorting;
-
   matchFiletype = sym: y: x: if x ? filetype then match x.filetype (defError (idft sym) y filetype) else abort "unknown filetype for ${sym}";
   filetype = make-type "filetype" {
     fa = {};
     fq = {};
-    bam = {ref = any; sorting = option-sort;};
-    sam = {ref = any; sorting = option-sort;};
-    cram = {ref = any; sorting = option-sort;};
+    bam = {ref = any; sorting = sort;};
+    sam = {ref = any; sorting = sort;};
+    cram = {ref = any; sorting = sort;};
     vcf = {ref = any;};
     bed = {ref = any;};
     gz = filetype;
@@ -40,13 +38,14 @@ rec {
   toBam = matchFiletype "bam2cram" { bam = filetype.bam; sam = filetype.bam; cram = filetype.bam; };
   toSam = matchFiletype "bam2cram" { bam = filetype.sam; sam = filetype.sam; cram = filetype.sam; };
 
-  matchSorting = sym: y: let f = x: match x.sorting { some = z: match z (defError (idst sym) y sorting); none = abort "unknown sort for ${sym}"; }; in matchFiletype sym { bam = f; sam = f; cram = f; };
-  sorting = make-type "sorting" {
+  matchSorting = sym: y: let f = x: match x.sorting (defError (idst sym) y sort); in matchFiletype sym { bam = f; sam = f; cram = f; };
+  sort = make-type "sort" {
+    none = {};
     coord = {};
     name = {};
   };
-  coordSort = f: matchFiletype "coordSort" { bam = x: filetype.bam (x // {sorting = option-sort.some (sorting.coord {});}); } {filetype = f;};
-  nameSort = f: matchFiletype "nameSort" { bam = x: filetype.bam (x // {sorting = option-sort.some (sorting.name {});}); } {filetype = f;};
+  coordSort = f: matchFiletype "coordSort" { bam = x: filetype.bam (x // {sorting = sort.coord {};}); } {filetype = f;};
+  nameSort = f: matchFiletype "nameSort" { bam = x: filetype.bam (x // {sorting = sort.name {};}); } {filetype = f;};
 
   gunzip = matchFiletype "gunzip" { gz = x: x; };
   bunzip2 = matchFiletype "bunzip2" { bz2 = x: x; };
