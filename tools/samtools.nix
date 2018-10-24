@@ -8,4 +8,5 @@ with bionix;
   flagstat = callBionix ./samtools-flagstat.nix;
   index = callBionix ./samtools-index.nix;
   sort = callBionix ./samtools-sort.nix;
+  merge = callBionix ./samtools-merge.nix;
 }
