@@ -14,7 +14,7 @@ with bionix.types;
 
 let
   filename = path: last (splitString "/" path);
-  getref = f: matchFiletype "platypus-callVariants" { bam = r: r; } f;
+  getref = f: matchFiletype "platypus-callVariants" { bam = {ref, ...}: ref; } f;
   refs = map getref inputs;
   ref = head refs;
 in

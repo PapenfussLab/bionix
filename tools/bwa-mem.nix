@@ -29,8 +29,7 @@ in stdenv.mkDerivation {
     done
     cores=$(echo $NIX_BUILD_CORES ${optionalString bamOutput "- 1"} | bc)
     if [[ $cores -lt 1 ]] ; then
-      >&2 echo "not enough build cores"
-      exit 1
+      cores=1
     fi
     bwa mem ${optionalString (flags != null) flags} -t $cores ref.fa ${fq input1} \
       ${optionalString (input2 != null) (fq input2)} \
