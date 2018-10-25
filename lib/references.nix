@@ -5,7 +5,7 @@ with bionix.types;
 
 rec {
   grch38 = grch38-p12;
-  grch38-p12 = {
+  grch38-p12 = rec {
     seq = stdenvNoCC.mkDerivation rec {
       name = "seq-grch38.${version}";
       version = "p12";
@@ -24,6 +24,27 @@ rec {
       };
       buildCommand = "gunzip < $src > $out";
       passthru.filetype = filetype.bed { ref = seq; };
+    };
+    dbsnp = stdenvNoCC.mkDerivation {
+      name = "dbsnp-b151_GRCh38p7";
+      src = fetchurl {
+        url = "ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh38p7/VCF/common_all_20180418.vcf.gz";
+        sha256 = "0r6m2yrcfw8bbdca515axjls30ssjas6x3qwi5qz07l3prjwmdd4";
+      };
+      buildInputs = [ gawk ];
+      buildCommand = ''
+        gunzip < $src | awk '/^[^#]/{print "chr" $0;next}{print}' > $out
+      '';
+      passthru.filetype = filetype.vcf { ref = seq; };
+    };
+    cosmic = {coding, noncoding}: stdenvNoCC.mkDerivation rec {
+      name = "cosmic-grch38";
+      buildInputs = [ gawk ];
+      buildCommand = ''
+        gunzip < ${coding} | grep '^#' > $out
+        cat ${coding} ${noncoding} | gunzip | grep -v '^#' | sed 's/^/chr/' | sort -t$'\t' -k1,1 -k2,2n >> $out
+      '';
+      passthru.filetype = filetype.vcf { ref = seq; };
     };
   };
 
