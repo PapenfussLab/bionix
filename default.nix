@@ -16,6 +16,7 @@ let
     gridss = callBionix ./tools/gridss.nix {};
     infercnv = callBionix ./tools/infercnv.nix {};
     mosdepth = callBionix ./tools/mosdepth.nix {};
+    mutect = callBionix ./tools/mutect.nix {};
     platypus = callBionix ./tools/platypus.nix {};
     samtools = callBionix ./tools/samtools.nix {};
     strelka = callBionix ./tools/strelka.nix {};
