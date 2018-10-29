@@ -10,4 +10,5 @@ with bionix;
   dict = callBionix ./samtools-dict.nix;
   sort = callBionix ./samtools-sort.nix;
   merge = callBionix ./samtools-merge.nix;
+  fixmate = callBionix ./samtools-fixmate.nix;
 }
