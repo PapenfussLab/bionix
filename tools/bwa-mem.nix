@@ -36,5 +36,5 @@ in stdenv.mkDerivation {
       ${optionalString bamOutput "| samtools view -b"} \
       > $out
   '';
-  passthru.filetype = if bamOutput then filetype.bam {ref = ref; sorting = sort.none {};} else filetype.sam {ref = ref; sorting = sort.none {};};
+  passthru.filetype = if bamOutput then filetype.bam {ref = ref; sorting = sort.name {};} else filetype.sam {ref = ref; sorting = sort.name {};};
 }
