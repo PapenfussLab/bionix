@@ -23,10 +23,6 @@ assert (length (unique refs) == 1);
 stdenv.mkDerivation rec {
   name = "gridss-callVariants";
   buildInputs = [ jre R bwa ];
-  jar = fetchurl {
-    url = "https://github.com/PapenfussLab/gridss/releases/download/v2.0.0/gridss-2.0.0-gridss-jar-with-dependencies.jar";
-    sha256 = "01srl3qvv060whqg1y1fpxjc5cwga5wscs1bmf1v3z87dignra7k";
-  };
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai
@@ -41,7 +37,7 @@ stdenv.mkDerivation rec {
 	    -Dsamjdk.use_async_io_write_samtools=true \
 	    -Dsamjdk.use_async_io_write_tribble=true \
 	    -Dgridss.gridss.output_to_temp_file=true \
-	    -cp ${jar} gridss.CallVariants \
+	    -cp ${bionix.gridss.jar} gridss.CallVariants \
       WORKER_THREADS=$NIX_BUILD_CORES \
 	    TMP_DIR=. \
 	    WORKING_DIR=. \
