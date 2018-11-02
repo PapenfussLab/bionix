@@ -21,7 +21,8 @@ let
 
 in
 rec {
-  matchFiletype = sym: y: x: if x ? filetype then match x.filetype (defError (idft sym) y filetype) else abort "unknown filetype for ${sym}";
+  matchFiletype = sym: y: x: if x ? filetype then matchFiletype' sym y x.filetype else abort "unknown filetype for ${sym}";
+  matchFiletype' = sym: y: x: match x (defError (idft sym) y filetype);
   filetype = make-type "filetype" {
     fa = {};
     fq = {};

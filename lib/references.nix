@@ -46,6 +46,28 @@ rec {
       '';
       passthru.filetype = filetype.vcf { ref = seq; };
     };
+    ensembl = {
+      cdna = stdenvNoCC.mkDerivation rec {
+        name = "ensembl-grch38-cdna-${version}";
+        version = "94";
+        src = fetchurl {
+          url = "ftp://ftp.ensembl.org/pub/release-${version}/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz";
+          sha256 = "1fc5d6p2wlwsm49wnmxmm3byjx5jvr6z9fpzrq7v7fpb086adl0h";
+        };
+        buildCommand = "gunzip < $src > $out";
+        passthru.filetype = filetype.fa {};
+      };
+      ncrna = stdenvNoCC.mkDerivation rec {
+        name = "ensembl-grch38-ncrna-${version}";
+        version = "94";
+        src = fetchurl {
+          url = "ftp://ftp.ensembl.org/pub/release-${version}/fasta/homo_sapiens/ncrna/Homo_sapiens.GRCh38.ncrna.fa.gz";
+          sha256 = "1cpasykwriila52nqgvw6d3mjyh6d9qi613hvhn4h1dxkqzgnjff";
+        };
+        buildCommand = "gunzip < $src > $out";
+        passthru.filetype = filetype.fa {};
+      };
+    };
   };
 
   grcm38 = grcm38-p6;
