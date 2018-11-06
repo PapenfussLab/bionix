@@ -20,7 +20,7 @@ assert (matchFileSorting "gridss-softClipsToSplitReads" { name = _: true; } inpu
 
 stdenv.mkDerivation rec {
   name = "gridss-softClipsToSplitReads";
-  buildInputs = [ jre ];
+  buildInputs = [ jre bwa ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai
