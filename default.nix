@@ -15,6 +15,7 @@ let
     fastqc = callBionix ./tools/fastqc.nix {};
     gridss = callBionix ./tools/gridss.nix {};
     infercnv = callBionix ./tools/infercnv.nix {};
+    kallisto = callBionix ./tools/kallisto.nix {};
     mosdepth = callBionix ./tools/mosdepth.nix {};
     mutect = callBionix ./tools/mutect.nix {};
     platypus = callBionix ./tools/platypus.nix {};

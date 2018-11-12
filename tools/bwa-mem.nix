@@ -17,7 +17,7 @@ with bionix.compression;
 
 let
   fa = f: matchFiletype "bwa-ref" { fa = _: f; } f;
-  fq = f: matchFiletype "bwa-input" { fq = _: f; } f;
+  fq = f: matchFiletype "bwa-input" { fq = _: f; gz = matchFiletype' "bwa-input" { fq = _: f; }; } f;
 
 in stdenv.mkDerivation {
   name = "bwa-mem";

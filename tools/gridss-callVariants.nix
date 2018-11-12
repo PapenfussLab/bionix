@@ -4,6 +4,7 @@
 , bwaIndexAttrs ? {}
 , faidxAttrs ? {}
 , flags ? null
+, config ? null
 }:
 
 with nixpkgs;
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
       WORKER_THREADS=$NIX_BUILD_CORES \
 	    TMP_DIR=. \
 	    WORKING_DIR=. \
+      ${optionalString config ("CONFIGURATION_FILE=" + gridssConfig config)} \
 	    REFERENCE_SEQUENCE="ref.fa" \
       ${concatMapStringsSep " " (i: "INPUT=\"${i}\"") inputs} \
 	    OUTPUT="$out/gridss.vcf" \
