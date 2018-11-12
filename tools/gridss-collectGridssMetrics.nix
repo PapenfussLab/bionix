@@ -2,6 +2,7 @@
 , nixpkgs
 , thresholdCoverage ? 10000
 , flags ? null
+, config ? null
 }:
 
 with nixpkgs;
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
     java -Xmx1G -cp ${bionix.gridss.jar} \
 			gridss.analysis.CollectGridssMetrics \
 			${optionalString sorted "ASSUME_SORTED=true"} \
+      ${optionalString config ("CONFIGURATION_FILE=" + gridssConfig config)} \
 			I=input.bam \
 			O=$out \
 			THRESHOLD_COVERAGE=${toString thresholdCoverage}

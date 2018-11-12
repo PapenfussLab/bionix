@@ -5,6 +5,7 @@
 , flags ? null
 , unmappedReads ? false
 , minClipLength ? 5
+, config ? null
 }:
 
 with nixpkgs;
@@ -35,6 +36,7 @@ stdenv.mkDerivation rec {
       METRICS_OUTPUT=$out/input.sv_metrics \
       INSERT_SIZE_METRICS=$out/input.insert_size_metrics \
       UNMAPPED_READS=${if unmappedReads then "true" else "false"} \
+      ${optionalString config ("CONFIGURATION_FILE=" + gridssConfig config)} \
       MIN_CLIP_LENGTH=${toString minClipLength}
   '';
 }

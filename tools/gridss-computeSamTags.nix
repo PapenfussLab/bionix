@@ -4,6 +4,7 @@
 , bwaIndexAttrs ? {}
 , faidxAttrs ? {}
 , flags ? null
+, config ? null
 }:
 
 with nixpkgs;
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
 			REFERENCE_SEQUENCE=ref.fa \
 			WORKING_DIR=$TMP_DIR \
 			TMP_DIR=$TMP_DIR \
+      ${optionalString config ("CONFIGURATION_FILE=" + gridssConfig config)} \
 			I=${input} \
 			O=$out \
       AS=true

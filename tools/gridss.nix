@@ -8,6 +8,7 @@ rec {
     url = "https://github.com/PapenfussLab/gridss/releases/download/v2.0.0/gridss-2.0.0-gridss-jar-with-dependencies.jar";
     sha256 = "01srl3qvv060whqg1y1fpxjc5cwga5wscs1bmf1v3z87dignra7k";
   };
+  gridssConfig = callBionix ./gridss-configFile.nix {};
   callVariants = callBionix ./gridss-callVariants.nix;
   computeSamTags = callBionix ./gridss-computeSamTags.nix;
   softClipsToSplitReads = callBionix ./gridss-softClipsToSplitReads.nix;

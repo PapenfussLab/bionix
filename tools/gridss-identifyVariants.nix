@@ -7,6 +7,7 @@
 , collectMetricsAttrs ? {}
 , softClipsToSplitReadsAttrs ? {}
 , flags ? null
+, config ? null
 }:
 
 with nixpkgs;
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
       ${concatMapStringsSep " " (i: "INPUT='${i}'") inputs} \
       ASSEMBLY=${assembly} \
       OUTPUT_VCF=out.vcf \
+      ${optionalString config ("CONFIGURATION_FILE=" + gridssConfig config)} \
       WORKING_DIR=$TMPDIR/ \
       TMP_DIR=$TMPDIR/
 

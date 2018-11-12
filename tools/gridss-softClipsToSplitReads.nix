@@ -4,6 +4,7 @@
 , faidxAttrs ? {}
 , alignerStreaming ? false
 , flags ? null
+, config ? null
 }:
 
 with nixpkgs;
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
 			I=${input} \
 			O=$out \
       ${optionalString alignerStreaming "ALIGNER_STREAMING=true"} \
+      ${optionalString config ("CONFIGURATION_FILE=" + gridssConfig config)} \
 			WORKER_THREADS=$NIX_BUILD_CORES
     '';
   passthru.filetype =
