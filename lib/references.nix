@@ -82,6 +82,28 @@ rec {
       buildCommand = "gunzip < $src > $out";
       passthru.filetype = filetype.fa {};
     };
+    ensembl = {
+      cdna = stdenvNoCC.mkDerivation rec {
+        name = "ensembl-grch38-cdna-${version}";
+        version = "94";
+        src = fetchurl {
+          url = "ftp://ftp.ensembl.org/pub/release-${version}/fasta/mus_musculus/cdna/Mus_musculus.GRCm38.cdna.all.fa.gz";
+          sha256 = "0khp9l6s35lav2xqp7vkk6ybnz4wjihn7lapjf2lbpnbzjb4hp6d";
+        };
+        buildCommand = "gunzip < $src > $out";
+        passthru.filetype = filetype.fa {};
+      };
+      ncrna = stdenvNoCC.mkDerivation rec {
+        name = "ensembl-grch38-ncrna-${version}";
+        version = "94";
+        src = fetchurl {
+          url = "ftp://ftp.ensembl.org/pub/release-${version}/fasta/mus_musculus/ncrna/Mus_musculus.GRCm38.ncrna.fa.gz";
+          sha256 = "0d997gm8p2b89rm5d46m2x4vz9lijxarfr2lzylnbi8gyqrbagdd";
+        };
+        buildCommand = "gunzip < $src > $out";
+        passthru.filetype = filetype.fa {};
+      };
+    };
   };
 
   mm10 = mm10-p4;
