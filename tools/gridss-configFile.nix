@@ -27,10 +27,10 @@ let
                     builtins.head (
                         builtins.match "([0-9]+\.0?[1-9]*)0+" (builtins.toString attr)));
         bool   = name: attr: name + " = " + (if attr == true then "true" else "false");
-        attrs  = name: attr: attrsToGridssConfigStringPrepend (name + ".") attr;
+        set    = name: attr: attrsToGridssConfigStringPrepend (name + ".") attr;
         # Allows for repeated fields (e.g. for adapters):
         list   = name: attr: concatStringsSep "\n" (map (x: iniLine name x) attr);
     };
 in configAttrs: (writeText
         "gridss.properties.override"
-        (attrsToGridssConfigString configAttrs))
+        ((attrsToGridssConfigString configAttrs) + "\n"))

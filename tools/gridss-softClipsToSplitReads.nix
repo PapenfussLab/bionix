@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 			I=${input} \
 			O=$out \
       ${optionalString alignerStreaming "ALIGNER_STREAMING=true"} \
-      ${optionalString (config != null) ("CONFIGURATION_FILE=" + gridssConfig config)} \
+      ${optionalString (config != null) ("CONFIGURATION_FILE=" + bionix.gridss.gridssConfig config)} \
 			WORKER_THREADS=$NIX_BUILD_CORES
     '';
   passthru.filetype = filetype.bam { ref = ref; sorting = sort.none {}; };

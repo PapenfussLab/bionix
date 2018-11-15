@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       WORKER_THREADS=$NIX_BUILD_CORES \
 	    TMP_DIR=. \
 	    WORKING_DIR=. \
-      ${optionalString (config != null) ("CONFIGURATION_FILE=" + gridssConfig config)} \
+      ${optionalString (config != null) ("CONFIGURATION_FILE=" + bionix.gridss.gridssConfig config)} \
 	    REFERENCE_SEQUENCE="ref.fa" \
       ${concatMapStringsSep " " (i: "INPUT=\"${i}\"") inputs} \
 	    OUTPUT="$out/gridss.vcf" \

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       ${concatMapStringsSep " " (i: "INPUT='${i}'") inputs} \
       WORKER_THREADS=$NIX_BUILD_CORES \
       OUTPUT=$out \
-      ${optionalString (config != null) ("CONFIGURATION_FILE=" + gridssConfig config)} \
+      ${optionalString (config != null) ("CONFIGURATION_FILE=" + bionix.gridss.gridssConfig config)} \
       WORKING_DIR=$TMPDIR/ \
       TMP_DIR=$TMPDIR/
   '';

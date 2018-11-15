@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       METRICS_OUTPUT=$out/input.sv_metrics \
       INSERT_SIZE_METRICS=$out/input.insert_size_metrics \
       UNMAPPED_READS=${if unmappedReads then "true" else "false"} \
-      ${optionalString (config != null) ("CONFIGURATION_FILE=" + gridssConfig config)} \
+      ${optionalString (config != null) ("CONFIGURATION_FILE=" + bionix.gridss.gridssConfig config)} \
       MIN_CLIP_LENGTH=${toString minClipLength}
   '';
 }
