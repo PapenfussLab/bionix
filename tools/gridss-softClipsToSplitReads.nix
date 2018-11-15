@@ -21,7 +21,7 @@ assert (matchFileSorting "gridss-softClipsToSplitReads" { name = _: true; } inpu
 
 stdenv.mkDerivation rec {
   name = "gridss-softClipsToSplitReads";
-  buildInputs = [ jre ];
+  buildInputs = [ jre bwa ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai
@@ -37,9 +37,5 @@ stdenv.mkDerivation rec {
       ${optionalString config ("CONFIGURATION_FILE=" + gridssConfig config)} \
 			WORKER_THREADS=$NIX_BUILD_CORES
     '';
-  passthru.filetype =
-    if alignerStreaming then
-      filetype.bam { ref = ref; sort = sorting.none {};  }
-    else
-      input.filetype;
+  passthru.filetype = filetype.bam { ref = ref; sort = sorting.none {};  }
 }

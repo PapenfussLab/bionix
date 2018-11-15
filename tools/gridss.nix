@@ -17,6 +17,6 @@ rec {
   assemble = callBionix ./gridss-assemble.nix;
   identifyVariants = callBionix ./gridss-identifyVariants.nix;
   annotateVariants = callBionix ./gridss-annotateVariants.nix;
-  preprocessBam = input: with samtools; markdup {} (sort {} (fixmate {mateScore = true;} (softClipsToSplitReads {} (computeSamTags {} (sort {nameSort = true;} input)))));
-  call = inputs: annotateVariants {} (map preprocessBam inputs);
+  preprocessBam = input: with samtools; markdup {} (sort {} (fixmate {mateScore = true;} (bionix.gridss.softClipsToSplitReads {} (bionix.gridss.computeSamTags {} (sort {nameSort = true;} input)))));
+  call = inputs: bionix.gridss.annotateVariants {} (map bionix.gridss.preprocessBam inputs);
 }
