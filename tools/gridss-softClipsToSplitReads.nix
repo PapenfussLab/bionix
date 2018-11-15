@@ -37,5 +37,5 @@ stdenv.mkDerivation rec {
       ${optionalString (config != null) ("CONFIGURATION_FILE=" + gridssConfig config)} \
 			WORKER_THREADS=$NIX_BUILD_CORES
     '';
-  passthru.filetype = filetype.bam { ref = ref; sort = sorting.none {};  }
+  passthru.filetype = filetype.bam { ref = ref; sort = sorting.none {}; };
 }
