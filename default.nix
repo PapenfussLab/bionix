@@ -1,6 +1,8 @@
 {nixpkgs ? import <nixpkgs> {}}:
 
 let
+  inherit (nixpkgs) fetchurl;
+
   bionix = nixpkgs.lib.makeExtensible (self:
   let callBionix = file: attrs: import file ({ bionix = self; nixpkgs = nixpkgs; } // attrs);
   in with self; {
@@ -28,6 +30,13 @@ let
     ref = callBionix ./lib/references.nix {};
     def = f: defs: attrs: f (defs // attrs);
     defQsub = qsubAttrs: f: defs: qsubAttr qsubAttrs (def f defs);
+
+    # Fetching files of specific type
+    fetchFastQ = attrs: with types; tagFiletype (filetype.fq {}) (fetchurl attrs);
+    fetchFastA = attrs: with types; tagFiletype (filetype.fa {}) (fetchurl attrs);
+    fetchFastQGZ = attrs: with types; tagFiletype (filetype.gz (filetype.fq {})) (fetchurl attrs);
+    fetchFastAGZ = attrs: with types; tagFiletype (filetype.gz (filetype.fa {})) (fetchurl attrs);
+
 
   });
 in bionix
