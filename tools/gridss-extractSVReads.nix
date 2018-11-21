@@ -5,6 +5,7 @@
 , flags ? null
 , unmappedReads ? false
 , minClipLength ? 5
+, collectMetricsAttrs ? {}
 , config ? null
 }:
 

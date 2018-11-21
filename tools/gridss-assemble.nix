@@ -2,8 +2,8 @@
 , nixpkgs
 , bwaIndexAttrs ? {}
 , faidxAttrs ? {}
+, indexAttrs ? {}
 , collectMetricsAttrs ? {}
-, extractSVReadsAttrs ? {}
 , flags ? null
 }:
 
@@ -23,9 +23,8 @@ let
     BASENAME=$(basename ${input})
     WRKDIR="''${BASENAME}.gridss.working"
     mkdir $WRKDIR
-    for f in ${bionix.gridss.extractSVReads extractSVReadsAttrs input}/* ; do
-      ln -s $f $WRKDIR/$BASENAME.''${f#*.}
-    done
+    ln -s ${input} $WRKDIR/$BASENAME.sv.bam
+    ln -s  ${bionix.samtools.index indexAttrs input} $WRKDIR/$BASENAME.sv.bai
     for f in ${bionix.gridss.collectMetrics collectMetricsAttrs input}/* ; do
       ln -s $f $WRKDIR/$BASENAME.''${f#*.}
     done

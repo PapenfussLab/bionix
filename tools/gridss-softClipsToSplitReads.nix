@@ -17,8 +17,6 @@ let
   ref = matchFiletype "gridss-softClipsToSplitReads" { bam = x: x.ref; } input;
 in
 
-assert (matchFileSorting "gridss-softClipsToSplitReads" { name = _: true; } input);
-
 stdenv.mkDerivation rec {
   name = "gridss-softClipsToSplitReads";
   buildInputs = [ jre bwa ];

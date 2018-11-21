@@ -2,8 +2,8 @@
 , nixpkgs
 , bwaIndexAttrs ? {}
 , faidxAttrs ? {}
+, indexAttrs ? {}
 , assemblyAttrs ? {}
-, extractSVReadsAttrs ? {}
 , collectMetricsAttrs ? {}
 , softClipsToSplitReadsAttrs ? {}
 , flags ? null
@@ -32,6 +32,16 @@ let
     for f in ${f attrs input}/* ; do
       ln -s $f $WRKDIR/$BASENAME.''${f#*.}
     done
+  '';
+
+  linkSV = input: ''
+    BASENAME=$(basename ${input})
+    WRKDIR="''${BASENAME}.gridss.working"
+    if [[ ! -e $WRKDIR ]] ; then
+      mkdir $WRKDIR
+    fi
+    ln -s ${input} $WRKDIR/$BASENAME.sv.bam
+    ln -s ${bionix.samtools.index indexAttrs input} $WRKDIR/$BASENAME.sv.bai
   '';
 
   assembly = bionix.samtools.sort {} (softClipsToSplitReads softClipsToSplitReadsAttrs (bionix.samtools.sort { nameSort = true;} (bionix.gridss.assemble assemblyAttrs inputs)));
