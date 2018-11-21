@@ -27,16 +27,17 @@ stdenv.mkDerivation rec {
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai
     ln -s ${bionix.samtools.dict dictIndexAttrs ref} ref.fa.dict
     ln -s ${input} input.bam
-    mkdir $out
+    for f in ${bionix.gridss.collectMetrics collectMetricsAttrs input}/* ; do
+      ln -s $f
+    done
     java -Dsamjdk.create_index=true \
       -cp ${bionix.gridss.jar} gridss.ExtractSVReads \
       REFERENCE_SEQUENCE=ref.fa \
       I=input.bam \
-      O=$out/input.sv.bam \
-      METRICS_OUTPUT=$out/input.sv_metrics \
-      INSERT_SIZE_METRICS=$out/input.insert_size_metrics \
+      O=$out \
       UNMAPPED_READS=${if unmappedReads then "true" else "false"} \
-      ${optionalString config ("CONFIGURATION_FILE=" + gridssConfig config)} \
+      ${optionalString (config != null) ("CONFIGURATION_FILE=" + gridssConfig config)} \
       MIN_CLIP_LENGTH=${toString minClipLength}
   '';
+  passthru.filetype = input.filetype;
 }

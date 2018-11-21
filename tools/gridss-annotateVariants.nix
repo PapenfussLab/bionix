@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
       INPUT_VCF=input.vcf \
       OUTPUT_VCF=out.vcf \
       WORKING_DIR=$TMPDIR/ \
-      ${optionalString config ("CONFIGURATION_FILE=" + gridssConfig config)} \
+      ${optionalString (config != null) ("CONFIGURATION_FILE=" + gridssConfig config)} \
       TMP_DIR=$TMPDIR/
 
     mv out.vcf $out

@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
 			I=${input} \
 			O=$out \
       ${optionalString alignerStreaming "ALIGNER_STREAMING=true"} \
-      ${optionalString config ("CONFIGURATION_FILE=" + gridssConfig config)} \
+      ${optionalString (config != null) ("CONFIGURATION_FILE=" + bionix.gridss.gridssConfig config)} \
 			WORKER_THREADS=$NIX_BUILD_CORES
     '';
-  passthru.filetype = filetype.bam { ref = ref; sort = sorting.none {};  }
+  passthru.filetype = filetype.bam { ref = ref; sorting = matchFileSorting "grids-softClipsToSplitReads" { coord = _: input.sorting; name = _: sort.none {}; none = _: input.sorting;} input;};
 }

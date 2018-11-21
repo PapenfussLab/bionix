@@ -42,26 +42,24 @@ assert (homoRef);
 
 stdenv.mkDerivation rec {
   name = "gridss-identifyVariants";
-  buildInputs = [ jre ];
+  buildInputs = [ jre samtools ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai
     for f in ${bionix.bwa.index bwaIndexAttrs ref}/*; do
       ln -s $f
     done
-    ${concatMapStringsSep "\n" (linkInput extractSVReads extractSVReadsAttrs) inputs}
+    ${concatMapStringsSep "\n" (linkSV) inputs}
+    ${linkSV assembly}
     ${concatMapStringsSep "\n" (linkInput collectMetrics collectMetricsAttrs) inputs}
     ${linkInput collectMetrics collectMetricsAttrs assembly}
-    ASSBASE=$(basename ${assembly})
-    ln -s ${assembly} $ASSBASE.gridss.working/$ASSBASE.sv.bam
-    ln -s ${bionix.samtools.index {} assembly} $ASSBASE.gridss.working/$ASSBASE.sv.bai
 	  java -Xmx4g -Dsamjdk.create_index=true \
       -cp ${jar} gridss.IdentifyVariants \
       REFERENCE_SEQUENCE=ref.fa \
       ${concatMapStringsSep " " (i: "INPUT='${i}'") inputs} \
       ASSEMBLY=${assembly} \
       OUTPUT_VCF=out.vcf \
-      ${optionalString config ("CONFIGURATION_FILE=" + gridssConfig config)} \
+      ${optionalString (config != null) ("CONFIGURATION_FILE=" + gridssConfig config)} \
       WORKING_DIR=$TMPDIR/ \
       TMP_DIR=$TMPDIR/
 
