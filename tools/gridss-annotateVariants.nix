@@ -2,8 +2,8 @@
 , nixpkgs
 , bwaIndexAttrs ? {}
 , faidxAttrs ? {}
+, indexAttrs ? {}
 , assemblyAttrs ? {}
-, extractSVReadsAttrs ? {}
 , collectMetricsAttrs ? {}
 , softClipsToSplitReadsAttrs ? {}
 , identifyVariantsAttrs ? {}
@@ -35,6 +35,16 @@ let
     done
   '';
 
+  linkSV = input: ''
+    BASENAME=$(basename ${input})
+    WRKDIR="''${BASENAME}.gridss.working"
+    if [[ ! -e $WRKDIR ]] ; then
+    mkdir $WRKDIR
+    fi
+    ln -s ${input} $WRKDIR/$BASENAME.sv.bam
+    ln -s ${bionix.samtools.index indexAttrs input} $WRKDIR/$BASENAME.sv.bai
+  '';
+
   assembly = bionix.samtools.sort {} (softClipsToSplitReads softClipsToSplitReadsAttrs (bionix.samtools.sort { nameSort = true;} (bionix.gridss.assemble assemblyAttrs inputs)));
 in
 
@@ -50,12 +60,10 @@ stdenv.mkDerivation rec {
     for f in ${bionix.bwa.index bwaIndexAttrs ref}/*; do
       ln -s $f
     done
-    ${concatMapStringsSep "\n" (linkInput extractSVReads extractSVReadsAttrs) inputs}
+    ${concatMapStringsSep "\n" (linkSV) inputs}
+    ${linkSV assembly}
     ${concatMapStringsSep "\n" (linkInput collectMetrics collectMetricsAttrs) inputs}
     ${linkInput collectMetrics collectMetricsAttrs assembly}
-    ASSBASE=$(basename ${assembly})
-    ln -s ${assembly} $ASSBASE.gridss.working/$ASSBASE.sv.bam
-    ln -s ${bionix.samtools.index {} assembly} $ASSBASE.gridss.working/$ASSBASE.sv.bai
     ln -s ${identifyVariants identifyVariantsAttrs inputs} input.vcf
 	  java -Xmx4g -Dsamjdk.create_index=true \
       -cp ${jar} gridss.AnnotateVariants \
@@ -65,7 +73,7 @@ stdenv.mkDerivation rec {
       INPUT_VCF=input.vcf \
       OUTPUT_VCF=out.vcf \
       WORKING_DIR=$TMPDIR/ \
-      ${optionalString (config != null) ("CONFIGURATION_FILE=" +  bionix.gridss.ggridssConfig config)} \
+      ${optionalString (config != null) ("CONFIGURATION_FILE=" +  bionix.gridss.gridssConfig config)} \
       TMP_DIR=$TMPDIR/
 
     mv out.vcf $out

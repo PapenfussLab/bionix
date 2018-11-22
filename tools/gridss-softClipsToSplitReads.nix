@@ -17,8 +17,6 @@ let
   ref = matchFiletype "gridss-softClipsToSplitReads" { bam = x: x.ref; } input;
 in
 
-assert (matchFileSorting "gridss-softClipsToSplitReads" { name = _: true; } input);
-
 stdenv.mkDerivation rec {
   name = "gridss-softClipsToSplitReads";
   buildInputs = [ jre bwa ];
@@ -37,5 +35,5 @@ stdenv.mkDerivation rec {
       ${optionalString (config != null) ("CONFIGURATION_FILE=" + bionix.gridss.gridssConfig config)} \
 			WORKER_THREADS=$NIX_BUILD_CORES
     '';
-  passthru.filetype = filetype.bam { ref = ref; sorting = sort.none {}; };
+  passthru.filetype = filetype.bam { ref = ref; sorting = matchFileSorting "grids-softClipsToSplitReads" { coord = _: input.sorting; name = _: sort.none {}; none = _: input.sorting;} input;};
 }
