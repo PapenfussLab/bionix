@@ -36,7 +36,7 @@
 
       cp -r $TMPDIR ${tmpDir}/$id
       set > ${tmpDir}/$id/nix-set
-      until qstat ''${id%%.} 2>&1 | grep "Unknown Job" > /dev/null ; do
+      until qstat -f ''${id%%.} 2>&1 | grep "\(Unknown Job\|job_state = C\)" > /dev/null ; do
         sleep 60
       done
       cat ${tmpDir}/$id/qsub-stderr >&2
