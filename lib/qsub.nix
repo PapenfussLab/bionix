@@ -25,7 +25,18 @@
       PATH=/usr/bin:/bin:/usr/sbin:/sbin
       SHELL=/bin/sh
       NIX_BUILD_CORES=${toString ppn}
-      id=$(qsub -l nodes=1:ppn=${toString ppn},mem=${toString mem}gb,walltime=${walltime} -N "${name}" ${script})
+
+      while : ; do
+        qsub -l nodes=1:ppn=${toString ppn},mem=${toString mem}gb,walltime=${walltime} -N "${name}" ${script} 2>&1 > id
+        if [ $? -eq 0 ] ; then
+          break
+        fi
+        if ! grep "Please retry" id > /dev/null ; then
+          exit 1
+        fi
+        sleep 60
+      done
+      id=$(cat id)
 
       function cleanup {
         qdel $id 2>/dev/null || true
