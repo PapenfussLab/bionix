@@ -5,6 +5,7 @@
 , indexAttrs ? {}
 , collectMetricsAttrs ? {}
 , flags ? null
+, config ? null
 }:
 
 with nixpkgs;
