@@ -21,14 +21,14 @@
     '';
 
     qsub = writeScript "qsub" ''
-      #!/bin/bash
+      #!${stdenv.shell}
       PATH=/usr/bin:/bin:/usr/sbin:/sbin
       SHELL=/bin/sh
       NIX_BUILD_CORES=${toString ppn}
       id=$(qsub -l nodes=1:ppn=${toString ppn},mem=${toString mem}gb,walltime=${walltime} -N "${name}" ${script})
 
       function cleanup {
-        qstat ''${id%%.} 2> /dev/null > /dev/null && qdel $id || true
+        qdel $id 2>/dev/null || true
         sleep 5
         rm -rf ${tmpDir}/$id
       }
@@ -36,12 +36,16 @@
 
       cp -r $TMPDIR ${tmpDir}/$id
       set > ${tmpDir}/$id/nix-set
-      while qstat ''${id%%.} 2> /dev/null > /dev/null ; do
-        sleep 5
+      until qstat -f ''${id%%.} 2>&1 | grep "\(Unknown Job\|job_state = C\)" > /dev/null ; do
+        sleep 60
       done
       cat ${tmpDir}/$id/qsub-stderr >&2
       cat ${tmpDir}/$id/qsub-stdout
-      exitCode=$(cat ${tmpDir}/$id/qsub-exit)
+      if [ -e ${tmpDir}/$id/qsub-exit ]; then
+        exitCode=$(cat ${tmpDir}/$id/qsub-exit)
+      else
+        exitCode=1
+      fi
       exit $exitCode
     '';
 
