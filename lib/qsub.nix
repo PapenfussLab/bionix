@@ -32,6 +32,7 @@
           break
         fi
         if ! grep "Please retry" id > /dev/null ; then
+          cat id >&2
           exit 1
         fi
         sleep ${toString sleepTime}
