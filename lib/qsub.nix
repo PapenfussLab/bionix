@@ -1,12 +1,12 @@
 {stdenv, lib, writeScript}:
 
-{ ppn ? 1, mem ? 1, walltime ? "24:00:00", tmpDir ? "/tmp" }: drv: lib.overrideDerivation drv ({ args, builder, name, ... }: {
+{ ppn ? 1, mem ? 1, walltime ? "24:00:00", tmpDir ? "/tmp" , sleepTime ? 60}: drv: lib.overrideDerivation drv ({ args, builder, name, ... }: {
   builder = "/bin/bash";
   args = let
     script = writeScript "qsub-script" ''
       #!${stdenv.shell}
       while [ ! -e ${tmpDir}/$PBS_JOBID ] ; do
-        sleep 5
+        sleep ${toString sleepTime}
       done
       TMPDIR=${tmpDir}/$PBS_JOBID
       TEMP=$TMPDIR
@@ -34,13 +34,13 @@
         if ! grep "Please retry" id > /dev/null ; then
           exit 1
         fi
-        sleep 60
+        sleep ${toString sleepTime}
       done
       id=$(cat id)
 
       function cleanup {
         qdel $id 2>/dev/null || true
-        sleep 5
+        sleep ${toString sleepTime}
         rm -rf ${tmpDir}/$id
       }
       trap cleanup INT TERM EXIT
@@ -48,7 +48,7 @@
       cp -r $TMPDIR ${tmpDir}/$id
       set > ${tmpDir}/$id/nix-set
       until qstat -f ''${id%%.} 2>&1 | grep "\(Unknown Job\|job_state = C\)" > /dev/null ; do
-        sleep 60
+        sleep ${toString sleepTime}
       done
       cat ${tmpDir}/$id/qsub-stderr >&2
       cat ${tmpDir}/$id/qsub-stdout
