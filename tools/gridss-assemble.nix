@@ -27,7 +27,7 @@ let
     ln -s ${input} $WRKDIR/$BASENAME.sv.bam
     ln -s  ${bionix.samtools.index indexAttrs input} $WRKDIR/$BASENAME.sv.bai
     for f in ${bionix.gridss.collectMetrics collectMetricsAttrs input}/* ; do
-      ln -s $f $WRKDIR/$BASENAME.''${f#*.}
+      ln -s $f $WRKDIR/$BASENAME.''${f##*.}
     done
   '';
 in

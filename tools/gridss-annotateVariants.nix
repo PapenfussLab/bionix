@@ -31,7 +31,7 @@ let
       mkdir $WRKDIR
     fi
     for f in ${f attrs input}/* ; do
-      ln -s $f $WRKDIR/$BASENAME.''${f#*.}
+      ln -s $f $WRKDIR/$BASENAME.''${f##*.}
     done
   '';
 
