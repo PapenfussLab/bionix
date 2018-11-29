@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 			REFERENCE_SEQUENCE=ref.fa \
 			WORKING_DIR=$TMP_DIR \
 			TMP_DIR=$TMP_DIR \
-      ${optionalString (config != null) ("CONFIGURATION_FILE=" + bionix.gridss.gridssConfig config)} \
+      ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
 			I=${input} \
 			O=$out \
       AS=true

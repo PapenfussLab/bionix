@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
       ${concatMapStringsSep " " (i: "INPUT='${i}'") inputs} \
       ASSEMBLY=${assembly} \
       OUTPUT_VCF=out.vcf \
-      ${optionalString (config != null) ("CONFIGURATION_FILE=" + bionix.gridss.gridssConfig config)} \
+      ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
       WORKING_DIR=$TMPDIR/ \
       TMP_DIR=$TMPDIR/
 

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     java -Xmx1G -cp ${bionix.gridss.jar} \
 			gridss.analysis.CollectGridssMetrics \
 			${optionalString sorted "ASSUME_SORTED=true"} \
-      ${optionalString (config != null) ("CONFIGURATION_FILE=" + bionix.gridss.gridssConfig config)} \
+      ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
 			I=input.bam \
 			O=$out \
 			THRESHOLD_COVERAGE=${toString thresholdCoverage}

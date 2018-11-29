@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       I=input.bam \
       O=$out \
       UNMAPPED_READS=${if unmappedReads then "true" else "false"} \
-      ${optionalString (config != null) ("CONFIGURATION_FILE=" + bionix.gridss.gridssConfig config)} \
+      ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
       MIN_CLIP_LENGTH=${toString minClipLength}
   '';
   passthru.filetype = input.filetype;

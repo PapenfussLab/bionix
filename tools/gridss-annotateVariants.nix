@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       INPUT_VCF=input.vcf \
       OUTPUT_VCF=out.vcf \
       WORKING_DIR=$TMPDIR/ \
-      ${optionalString (config != null) ("CONFIGURATION_FILE=" +  bionix.gridss.gridssConfig config)} \
+      ${optionalString (config != null) ("OPTIONS_FILE=" +  bionix.gridss.gridssConfig config)} \
       TMP_DIR=$TMPDIR/
 
     mv out.vcf $out

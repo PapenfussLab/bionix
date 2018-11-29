@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     mkdir $out
     java -Xmx1G -cp ${bionix.gridss.jar} \
 			gridss.analysis.CollectGridssMetrics \
-      ${optionalString (config != null) ("CONFIGURATION_FILE=" + bionix.gridss.gridssConfig config)} \
+      ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
 			I=${input}\
 			O=$out/input \
       AS=true \
