@@ -8,14 +8,14 @@
       while [ ! -e ${tmpDir}/$PBS_JOBID ] ; do
         sleep ${toString sleepTime}
       done
+      set -a
+      . ${tmpDir}/$PBS_JOBID/nix-set
+      set +a
       TMPDIR=${tmpDir}/$PBS_JOBID
       TEMP=$TMPDIR
       TMP=$TMPDIR
       NIX_BUILD_TOP=$TMPDIR
       cd $TMPDIR
-      set -a
-      . nix-set
-      set +a
       ${builder} ${lib.escapeShellArgs args} > qsub-stdout 2> qsub-stderr
       echo $? > qsub-exit
     '';
