@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
   name = "gridss-identifyVariants";
   buildInputs = [ jre ];
   buildCommand = ''
+    TMPDIR=$(pwd)
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai
     for f in ${bionix.bwa.index bwaIndexAttrs ref}/*; do

@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
   name = "gridss-assemble";
   buildInputs = [ jre bwa ];
   buildCommand = ''
+    TMPDIR=$(pwd)
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai
     for f in ${bionix.bwa.index bwaIndexAttrs ref}/*; do
