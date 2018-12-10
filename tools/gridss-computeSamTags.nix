@@ -5,6 +5,7 @@
 , faidxAttrs ? {}
 , flags ? null
 , config ? null
+, heapSize ? "1G"
 }:
 
 with nixpkgs;
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
     for f in ${bionix.bwa.index bwaIndexAttrs ref}/*; do
       ln -s $f
     done
-    java -Xmx1G \
+    java -Xmx${heapSize} \
       -Dsamjdk.create_index=false \
 			-cp ${bionix.gridss.jar} gridss.ComputeSamTags \
 			REFERENCE_SEQUENCE=ref.fa \

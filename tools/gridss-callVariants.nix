@@ -5,6 +5,7 @@
 , faidxAttrs ? {}
 , flags ? null
 , config ? null
+, heapSize ? "31g"
 }:
 
 with nixpkgs;
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
       ln -s $f
     done
     mkdir $out
-    java -ea -Xmx31g \
+    java -ea -Xmx${heapSize} \
 	    -Dreference_fasta="ref.fa" \
 	    -Dsamjdk.create_index=true \
 	    -Dsamjdk.use_async_io_read_samtools=true \

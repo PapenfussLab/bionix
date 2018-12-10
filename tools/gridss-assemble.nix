@@ -6,6 +6,7 @@
 , collectMetricsAttrs ? {}
 , flags ? null
 , config ? null
+, heapSize ? "31g"
 }:
 
 with nixpkgs;
@@ -46,7 +47,7 @@ stdenv.mkDerivation rec {
       ln -s $f
     done
     ${concatMapStringsSep "\n" linkInput inputs}
-	  java -Xmx31g -Dsamjdk.create_index=true \
+	  java -Xmx${heapSize} -Dsamjdk.create_index=true \
       -cp ${bionix.gridss.jar} gridss.AssembleBreakends \
       REFERENCE_SEQUENCE=ref.fa \
       ${concatMapStringsSep " " (i: "INPUT='${i}'") inputs} \

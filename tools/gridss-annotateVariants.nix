@@ -9,6 +9,8 @@
 , identifyVariantsAttrs ? {}
 , flags ? null
 , config ? null
+, heapSize ? "4g"
+
 }:
 
 with nixpkgs;
@@ -66,7 +68,7 @@ stdenv.mkDerivation rec {
     ${concatMapStringsSep "\n" (linkInput collectMetrics collectMetricsAttrs) inputs}
     ${linkInput collectMetrics collectMetricsAttrs assembly}
     ln -s ${identifyVariants identifyVariantsAttrs inputs} input.vcf
-	  java -Xmx4g -Dsamjdk.create_index=true \
+	  java -Xmx${heapSize} -Dsamjdk.create_index=true \
       -cp ${jar} gridss.AnnotateVariants \
       REFERENCE_SEQUENCE=ref.fa \
       ${concatMapStringsSep " " (i: "INPUT='${i}'") inputs} \

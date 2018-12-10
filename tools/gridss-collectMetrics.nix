@@ -3,6 +3,7 @@
 , thresholdCoverage ? 10000
 , flags ? null
 , config ? null
+, heapSize ? "1G"
 }:
 
 with nixpkgs;
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ jre R ];
   buildCommand = ''
     mkdir $out
-    java -Xmx1G -cp ${bionix.gridss.jar} \
+    java -Xmx${heapSize} -cp ${bionix.gridss.jar} \
 			gridss.analysis.CollectGridssMetrics \
       ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
 			I=${input}\

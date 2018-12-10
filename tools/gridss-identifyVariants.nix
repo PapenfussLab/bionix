@@ -8,6 +8,8 @@
 , softClipsToSplitReadsAttrs ? {}
 , flags ? null
 , config ? null
+, heapSize ? "4g"
+
 }:
 
 with nixpkgs;
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
     ${linkSV assembly}
     ${concatMapStringsSep "\n" (linkInput collectMetrics collectMetricsAttrs) inputs}
     ${linkInput collectMetrics collectMetricsAttrs assembly}
-	  java -Xmx4g -Dsamjdk.create_index=true \
+	  java -Xmx${heapSize} -Dsamjdk.create_index=true \
       -cp ${jar} gridss.IdentifyVariants \
       REFERENCE_SEQUENCE=ref.fa \
       ${concatMapStringsSep " " (i: "INPUT='${i}'") inputs} \

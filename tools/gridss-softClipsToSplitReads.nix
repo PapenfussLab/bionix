@@ -5,6 +5,8 @@
 , alignerStreaming ? false
 , flags ? null
 , config ? null
+, heapSize ? "2G"
+
 }:
 
 with nixpkgs;
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
     for f in ${bionix.bwa.index bwaIndexAttrs ref}/*; do
       ln -s $f
     done
-    java -Xmx2G -Dsamjdk.create_index=false \
+    java -Xmx${heapSize} -Dsamjdk.create_index=false \
       -cp ${bionix.gridss.jar} gridss.SoftClipsToSplitReads \
 			REFERENCE_SEQUENCE=ref.fa \
 			I=${input} \
