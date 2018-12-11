@@ -12,6 +12,7 @@ let
     types = callBionix ./lib/types.nix {};
 
     bwa = callBionix ./tools/bwa.nix {};
+    bowtie = callBionix ./tools/bowtie.nix {};
     compression = callBionix ./tools/compression.nix {};
     crumble = callBionix ./tools/crumble.nix {};
     fastqc = callBionix ./tools/fastqc.nix {};

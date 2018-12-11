@@ -21,7 +21,9 @@ let
   fetchfq = attrs: types.tagFiletype (types.filetype.fq {}) (fetchlocal attrs);
   fetchfa = attrs: types.tagFiletype (types.filetype.fa {}) (fetchlocal attrs);
 
-  alignWithRG = rg: bwa.align { ref = fetchfa ./example/ref.fa; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
+  ref = fetchfa ./example/ref.fa;
+
+  alignWithRG = rg: bwa.align { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
   sort = samtools.sort {};
   flagstat = samtools.flagstat {};
   check = fastqc.check {};
@@ -35,7 +37,7 @@ let
     };
     normal = {name = "mysample2"; files = {
         input1 = fetchfq ./example/sample2-1.fq;
-        input2 = fetchfq ./example/sample2-1.fq;
+        input2 = fetchfq ./example/sample2-2.fq;
       };
     };
   };
@@ -53,8 +55,9 @@ let
       mkdir $out
       ln -s ${tnpairResult.variants} $out/strelka
       mkdir $out/alignments
-      ln -s ${gridss.callVariants {} (with tnpairResult.alignments; [tumour])} $out/gridss
-      ln -s ${gridss.call (with tnpairResult.alignments; [tumour])} $out/gridss2
+      ln -s ${bowtie.align {inherit ref;} tnpair.normal.files} $out/alignments/bowtie-normal.bam
+      ln -s ${gridss.callVariants {} (with tnpairResult.alignments; [normal tumour])} $out/gridss
+      ln -s ${gridss.call (with tnpairResult.alignments; [normal tumour])} $out/gridss2
       ln -s ${samtools.merge {} [tnpairResult.alignments.tumour tnpairResult.alignments.normal]} $out/alignments/merged.bam
       ln -s ${samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.tumour)} $out/alignments/${tnpair.tumour.name}.cram
       ln -s ${samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.normal)} $out/alignments/${tnpair.normal.name}.cram
