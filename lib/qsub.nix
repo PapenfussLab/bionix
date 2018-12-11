@@ -5,13 +5,13 @@
   args = let
     script = writeScript "qsub-script" ''
       #!${stdenv.shell}
-      while [ ! -e ${tmpDir}/$PBS_JOBID ] ; do
+      while [ ! -e ${tmpDir}/qsub-$PBS_JOBID ] ; do
         sleep ${toString sleepTime}
       done
       set -a
-      . ${tmpDir}/$PBS_JOBID/nix-set
+      . ${tmpDir}/qsub-$PBS_JOBID/nix-set
       set +a
-      TMPDIR=${tmpDir}/$PBS_JOBID
+      TMPDIR=${tmpDir}/qsub-$PBS_JOBID
       TEMP=$TMPDIR
       TMP=$TMPDIR
       NIX_BUILD_TOP=$TMPDIR
@@ -46,15 +46,15 @@
       }
       trap cleanup INT TERM EXIT
 
-      cp -r $TMPDIR ${tmpDir}/$id
-      set > ${tmpDir}/$id/nix-set
+      cp -r $TMPDIR ${tmpDir}/qsub-$id
+      set > ${tmpDir}/qsub-$id/nix-set
       until qstat -f ''${id%%.} 2>&1 | grep "\(Unknown Job\|job_state = C\)" > /dev/null ; do
         sleep ${toString sleepTime}
       done
-      cat ${tmpDir}/$id/qsub-stderr >&2
-      cat ${tmpDir}/$id/qsub-stdout
-      if [ -e ${tmpDir}/$id/qsub-exit ]; then
-        exitCode=$(cat ${tmpDir}/$id/qsub-exit)
+      cat ${tmpDir}/qsub-$id/qsub-stderr >&2
+      cat ${tmpDir}/qsub-$id/qsub-stdout
+      if [ -e ${tmpDir}/qsub-$id/qsub-exit ]; then
+        exitCode=$(cat ${tmpDir}/qsub-$id/qsub-exit)
       else
         exitCode=1
       fi
