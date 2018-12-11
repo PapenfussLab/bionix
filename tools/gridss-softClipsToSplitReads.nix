@@ -35,5 +35,5 @@ stdenv.mkDerivation rec {
       ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
 			WORKER_THREADS=$NIX_BUILD_CORES
     '';
-  passthru.filetype = filetype.bam { ref = ref; sorting = matchFileSorting "grids-softClipsToSplitReads" { coord = _: input.sorting; name = _: sort.none {}; none = _: input.sorting;} input;};
+  passthru.filetype = filetype.bam { ref = ref; sorting = sort.none {}; };
 }

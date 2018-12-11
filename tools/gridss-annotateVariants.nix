@@ -5,7 +5,7 @@
 , indexAttrs ? {}
 , assemblyAttrs ? {}
 , collectMetricsAttrs ? {}
-, softClipsToSplitReadsAttrs ? {}
+, softClipsToSplitReadsAttrs ? { flags = "REALIGN_ENTIRE_READ=true"; }
 , identifyVariantsAttrs ? {}
 , flags ? null
 , config ? null
@@ -45,7 +45,7 @@ let
     ln -s ${bionix.samtools.index indexAttrs input} $WRKDIR/$BASENAME.sv.bai
   '';
 
-  assembly = bionix.samtools.sort {} (softClipsToSplitReads softClipsToSplitReadsAttrs (bionix.samtools.sort { nameSort = true;} (bionix.gridss.assemble assemblyAttrs inputs)));
+  assembly = bionix.samtools.sort {} (softClipsToSplitReads softClipsToSplitReadsAttrs (bionix.gridss.assemble assemblyAttrs inputs));
 in
 
 assert (all sorted inputs);

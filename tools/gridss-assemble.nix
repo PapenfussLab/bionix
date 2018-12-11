@@ -55,5 +55,5 @@ stdenv.mkDerivation rec {
       WORKING_DIR=$TMPDIR/ \
       TMP_DIR=$TMPDIR/
   '';
-  passthru.filetype = filetype.bam { ref = ref; sorting = sort.coord {}; };
+  passthru.filetype = filetype.bam { ref = ref; sorting = sort.name {}; };
 }
