@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
   buildInputs = [ samtools ];
   buildCommand =
     if alreadySorted then
-      "ln -s $out ${input}"
+      "ln -s ${input} $out"
     else
       ''
         samtools sort -@ $NIX_BUILD_CORES \
