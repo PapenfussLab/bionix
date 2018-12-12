@@ -90,7 +90,7 @@ rec {
     name = "gridss-annotateVariants";
     buildInputs = [ jre ];
     buildCommand = mkLinks + ''
-      ln -s ${identify} input.vcf
+      ln -s ${bionix.gridss.identifyVariants {inherit bwaIndexAttrs faidxAttrs indexAttrs assemblyAttrs collectMetricsAttrs softClipsToSplitReadsAttrs flags config; } inputs} input.vcf
       java -Xmx4g -Dsamjdk.create_index=true \
         -cp ${jar} gridss.AnnotateVariants \
         REFERENCE_SEQUENCE=ref.fa \
