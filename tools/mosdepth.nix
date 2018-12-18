@@ -3,6 +3,6 @@
 with bionix;
 
 {
-  depth = callBionix ./mosdepth-depth.nix;
-  plot = callBionix ./mosdepth-plot.nix;
+  depth = callBionixE ./mosdepth-depth.nix;
+  plot = callBionixE ./mosdepth-plot.nix;
 }

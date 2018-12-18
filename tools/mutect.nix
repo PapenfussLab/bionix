@@ -5,5 +5,5 @@ with bionix;
 
 {
   app = callPackage ./mutect-app.nix {inherit (nixpkgs) stdenv fetchurl makeWrapper unzip fetchFromGitHub;};
-  call = callBionix ./mutect-call.nix;
+  call = callBionixE ./mutect-call.nix;
 }

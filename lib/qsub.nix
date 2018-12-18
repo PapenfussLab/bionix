@@ -1,6 +1,6 @@
 {stdenv, lib, writeScript}:
 
-{ ppn ? 1, mem ? 1, walltime ? "24:00:00", tmpDir ? "/tmp" , sleepTime ? 60}: drv: lib.overrideDerivation drv ({ args, builder, name, ... }: {
+{ ppn, mem, walltime, tmpDir, sleepTime}: drv: lib.overrideDerivation drv ({ args, builder, name, ... }: {
   builder = "/bin/bash";
   args = let
     script = writeScript "qsub-script" ''

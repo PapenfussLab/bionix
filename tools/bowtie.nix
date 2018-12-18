@@ -3,6 +3,6 @@
 with bionix;
 
 {
-  align = callBionix ./bowtie-align.nix;
-  index = callBionix ./bowtie-index.nix;
+  align = callBionixE ./bowtie-align.nix;
+  index = callBionixE ./bowtie-index.nix;
 }

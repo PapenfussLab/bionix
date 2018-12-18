@@ -1,13 +1,15 @@
 {nixpkgs ? import <nixpkgs> {}}:
 
 let
-  inherit (nixpkgs) fetchurl;
+  inherit (nixpkgs) fetchurl callPackage;
 
   bionix = nixpkgs.lib.makeExtensible (self:
   let callBionix = file: attrs: import file ({ bionix = self; nixpkgs = nixpkgs; } // attrs);
   in with self; {
     callBionix = callBionix;
     id = x: x;
+    exec = f: x: y: f x y;
+    callBionixE = p: exec (callBionix p);
 
     types = callBionix ./lib/types.nix {};
 
@@ -25,12 +27,14 @@ let
     samtools = callBionix ./tools/samtools.nix {};
     strelka = callBionix ./tools/strelka.nix {};
 
-    qsub = nixpkgs.callPackage ./lib/qsub.nix {};
-    qsubAttr = qsubAttrs: f: attrs: i: qsub qsubAttrs (f attrs i);
-    qsubAttrs = attrs: nixpkgs.lib.mapAttrs (_: x: qsubAttr attrs x);
     ref = callBionix ./lib/references.nix {};
+
+    qsub = attrs: bionix.extend (self: super: with self; rec {
+      qsubDefs = { ppn = 1; mem = 1; walltime = "24:00:00"; tmpDir = "/tmp"; sleepTime = 60; } // attrs;
+      qsub = attrs: (callPackage ./lib/qsub.nix {}) (qsubDefs // attrs);
+      exec = f: x: y: qsub (builtins.intersectAttrs qsubDefs x) (f (builtins.removeAttrs x (builtins.attrNames qsubDefs)) y);
+    });
     def = f: defs: attrs: f (defs // attrs);
-    defQsub = qsubAttrs: f: defs: qsubAttr qsubAttrs (def f defs);
 
     # Fetching files of specific type
     fetchFastQ = attrs: with types; tagFiletype (filetype.fq {}) (fetchurl attrs);

@@ -3,5 +3,5 @@
 with bionix;
 
 {
-  call = callBionix ./platypus-callVariants.nix;
+  call = callBionixE ./platypus-callVariants.nix;
 }

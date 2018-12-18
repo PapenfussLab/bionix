@@ -3,6 +3,6 @@
 with bionix;
 
 {
-  align = callBionix ./bwa-mem.nix;
-  index = callBionix ./bwa-index.nix;
+  align = callBionixE ./bwa-mem.nix;
+  index = callBionixE ./bwa-index.nix;
 }

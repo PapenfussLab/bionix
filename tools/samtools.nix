@@ -3,13 +3,13 @@
 with bionix;
 
 {
-  view = callBionix ./samtools-view.nix;
-  faidx = callBionix ./samtools-faidx.nix;
-  flagstat = callBionix ./samtools-flagstat.nix;
-  index = callBionix ./samtools-index.nix;
-  dict = callBionix ./samtools-dict.nix;
-  sort = callBionix ./samtools-sort.nix;
-  merge = callBionix ./samtools-merge.nix;
-  markdup = callBionix ./samtools-markdup.nix;
-  fixmate = callBionix ./samtools-fixmate.nix;
+  view = callBionixE ./samtools-view.nix;
+  faidx = callBionixE ./samtools-faidx.nix;
+  flagstat = callBionixE ./samtools-flagstat.nix;
+  index = callBionixE ./samtools-index.nix;
+  dict = callBionixE ./samtools-dict.nix;
+  sort = callBionixE ./samtools-sort.nix;
+  merge = callBionixE ./samtools-merge.nix;
+  markdup = callBionixE ./samtools-markdup.nix;
+  fixmate = callBionixE ./samtools-fixmate.nix;
 }

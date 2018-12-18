@@ -5,5 +5,5 @@ with bionix;
 
 {
   fastqc = callPackage ./fastqc-app.nix {};
-  check = callBionix ./fastqc-check.nix;
+  check = callBionixE ./fastqc-check.nix;
 }

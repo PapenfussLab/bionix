@@ -3,5 +3,5 @@
 with bionix;
 
 {
-  call = callBionix ./strelka-call.nix;
+  call = callBionixE ./strelka-call.nix;
 }
