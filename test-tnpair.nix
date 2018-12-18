@@ -49,26 +49,20 @@ let
 
   tnpairResult = processPair tnpair;
 
-  testNaming = stdenv.mkDerivation {
-    name = "test-naming";
-    buildCommand = ''
-      mkdir $out
-      ln -s ${tnpairResult.variants} $out/strelka
-      mkdir $out/alignments
-      ln -s ${bowtie.align {inherit ref;} tnpair.normal.files} $out/alignments/bowtie-normal.bam
-      ln -s ${gridss.callVariants {} (with tnpairResult.alignments; [normal tumour])} $out/gridss
-      ln -s ${gridss.call (with tnpairResult.alignments; [normal tumour])} $out/gridss2
-      ln -s ${samtools.merge {} [tnpairResult.alignments.tumour tnpairResult.alignments.normal]} $out/alignments/merged.bam
-      ln -s ${samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.tumour)} $out/alignments/${tnpair.tumour.name}.cram
-      ln -s ${samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.normal)} $out/alignments/${tnpair.normal.name}.cram
-      ln -s ${flagstat tnpairResult.alignments.tumour} $out/alignments/${tnpair.tumour.name}.flagstat
-      ln -s ${flagstat tnpairResult.alignments.normal} $out/alignments/${tnpair.normal.name}.flagstat
-      mkdir $out/fastqc
-      ln -s ${check tnpair.tumour.files.input1} $out/fastqc/${tnpair.tumour.name}.1
-      ln -s ${check tnpair.tumour.files.input2} $out/fastqc/${tnpair.tumour.name}.2
-      ln -s ${check tnpair.normal.files.input1} $out/fastqc/${tnpair.normal.name}.1
-      ln -s ${check tnpair.normal.files.input2} $out/fastqc/${tnpair.normal.name}.2
-    '';
-  };
+  testNaming = linkDrv [
+    (ln tnpairResult.variants "strelka")
+    (ln (bowtie.align {inherit ref;} tnpair.normal.files) "alignments/bowtie-normal.bam")
+    (ln (gridss.callVariants {} (with tnpairResult.alignments; [normal tumour])) "gridss")
+    (ln (gridss.call (with tnpairResult.alignments; [normal tumour])) "gridss2")
+    (ln (samtools.merge {} [tnpairResult.alignments.tumour tnpairResult.alignments.normal]) "alignments/merged.bam")
+    (ln (samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.tumour)) "alignments/${tnpair.tumour.name}.cram")
+    (ln (samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.normal)) "alignments/${tnpair.normal.name}.cram")
+    (ln (flagstat tnpairResult.alignments.tumour) "alignments/${tnpair.tumour.name}.flagstat")
+    (ln (flagstat tnpairResult.alignments.normal) "alignments/${tnpair.normal.name}.flagstat")
+    (ln (check tnpair.tumour.files.input1) "fastqc/${tnpair.tumour.name}.1")
+    (ln (check tnpair.tumour.files.input2) "fastqc/${tnpair.tumour.name}.2")
+    (ln (check tnpair.normal.files.input1) "fastqc/${tnpair.normal.name}.1")
+    (ln (check tnpair.normal.files.input2) "fastqc/${tnpair.normal.name}.2")
+  ];
 
 in testNaming

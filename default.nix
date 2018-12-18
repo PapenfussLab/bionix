@@ -37,6 +37,20 @@ let
     def = f: defs: attrs: f (defs // attrs);
     pipe = let g = fs: with builtins; let h = head fs; t = tail fs; in if t != [] then x: (g t (h x)) else h; in g;
 
+    link = {src, dst}: ''
+      d=$(dirname ${dst})
+      if [ ! -e $out/$d ] ; then
+        mkdir -p $out/$d
+      fi
+      ln -s ${src} $out/${dst}
+    '';
+    mkLinks = nixpkgs.lib.concatMapStringsSep "\n" link;
+    linkDrv = x: nixpkgs.stdenvNoCC.mkDerivation {
+      name = "link";
+      buildCommand = mkLinks x;
+    };
+    ln = x: y: { src = x; dst = y; };
+
     # Fetching files of specific type
     fetchFastQ = attrs: with types; tagFiletype (filetype.fq {}) (fetchurl attrs);
     fetchFastA = attrs: with types; tagFiletype (filetype.fa {}) (fetchurl attrs);
