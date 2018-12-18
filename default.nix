@@ -35,7 +35,7 @@ let
       exec = f: x: y: qsub (builtins.intersectAttrs qsubDefs x) (f (builtins.removeAttrs x (builtins.attrNames qsubDefs)) y);
     });
     def = f: defs: attrs: f (defs // attrs);
-    pipe = let g = fs: with builtins; let h = head fs; t = tail fs; in if t != [] then x: (g t (h x)) else h; in g
+    pipe = let g = fs: with builtins; let h = head fs; t = tail fs; in if t != [] then x: (g t (h x)) else h; in g;
 
     # Fetching files of specific type
     fetchFastQ = attrs: with types; tagFiletype (filetype.fq {}) (fetchurl attrs);
