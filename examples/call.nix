@@ -3,17 +3,17 @@
 # against a reference genome (defaults to GRCH38), fixing mate information, and
 # marking duplicates. Finally platypus is called over all samples.
 {bionix ? import <bionix> {}
-,nixpkgs ? import <nixpkgs> {}
 ,inputs
 ,ref ? null}:
 
 with bionix;
 
 let
-  preprocess = f:
-    samtools.markdup {}
-      (samtools.sort {}
-        (samtools.fixmate {}
-          (bwa.align {ref = if ref == null then bionix.ref.grch38.seq else ref;} f)));
+  preprocess = pipe [
+    (bwa.align {ref = if ref == null then bionix.ref.grch38.seq else ref;})
+    (samtools.fixmate {})
+    (samtools.sort {})
+    (samtools.markdup {})
+  ];
 
-  in platypus.call {} (map preprocess inputs)
+in platypus.call {} (map preprocess inputs)
