@@ -57,6 +57,7 @@ let
     fetchFastQGZ = attrs: with types; tagFiletype (filetype.gz (filetype.fq {})) (fetchurl attrs);
     fetchFastAGZ = attrs: with types; tagFiletype (filetype.gz (filetype.fa {})) (fetchurl attrs);
 
-
+    # Export nixpkgs' lib
+    lib = nixpkgs.lib;
   });
 in bionix
