@@ -17,6 +17,13 @@ rec {
   assemble = callBionixE ./gridss-assemble.nix;
   identifyVariants = exec (attrs: input: ((callBionix ./gridss-variants.nix attrs) input).identify);
   annotateVariants = exec (attrs: input: ((callBionix ./gridss-variants.nix attrs) input).annotate);
-  preprocessBam = input: with samtools; sort {} (gridss.softClipsToSplitReads {} (gridss.computeSamTags {} (sort {nameSort = true;} (gridss.extractSVReads {} (markdup {} (sort {} (fixmate {mateScore = true;} (sort {nameSort = true;} input))))))));
-  call = inputs: bionix.gridss.annotateVariants {} (map gridss.preprocessBam inputs);
+  preprocessBam = with samtools;
+    pipe [
+      (gridss.extractSVReads {})
+      (sort {nameSort = true;})
+      (gridss.computeSamTags {})
+      (gridss.softClipsToSplitReads {})
+      (sort {})
+    ];
+  call = inputs: gridss.annotateVariants {} (map gridss.preprocessBam inputs);
 }
