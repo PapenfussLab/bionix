@@ -1,0 +1,58 @@
+#!/bin/sh
+
+set -e
+
+if [[ $# -ne 5 ]] ; then
+    echo "Usage: $0 ref normal1 normal2 tumour1 tumour2"
+    exit 1
+fi
+
+function cleanup {
+    if [[ -e tnpair-$$ ]]; then
+        rm tnpair-$$
+    fi
+}
+trap cleanup INT TERM EXIT
+
+ref=`readlink -f $1`
+norm1=`readlink -f $2`
+norm2=`readlink -f $3`
+tumour1=`readlink -f $4`
+tumour2=`readlink -f $5`
+
+refhash=`nix-hash --base32 --type sha256 --flat $ref`
+norm1hash=`nix-hash --base32 --type sha256 --flat $norm1`
+norm2hash=`nix-hash --base32 --type sha256 --flat $norm2`
+tumour1hash=`nix-hash --base32 --type sha256 --flat $tumour1`
+tumour2hash=`nix-hash --base32 --type sha256 --flat $tumour2`
+
+cat > tnpair-$$ <<EOF
+import ./tnpair.nix {
+    normal = {
+        input1={
+            url="file://$norm1";
+            sha256="$norm1hash";
+        };
+        input2={
+            url="file://$norm2";
+            sha256="$norm2hash";
+        };
+    };
+    tumour = {
+        input1={
+            url = "file://$tumour1";
+            sha256 = "$tumour1hash";
+        };
+        input2={
+            url = "file://$tumour2";
+            sha256 = "$tumour2hash";
+        };
+    };
+    ref = {
+        url = "file://$ref";
+        sha256 = "$refhash";
+    };
+}
+EOF
+
+nix build --keep-going "(import ./tnpair-$$)"
