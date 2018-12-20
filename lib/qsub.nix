@@ -16,7 +16,7 @@
       TMP=$TMPDIR
       NIX_BUILD_TOP=$TMPDIR
       cd $TMPDIR
-      ${builder} ${lib.escapeShellArgs args} > qsub-stdout 2> qsub-stderr
+      ${builder} ${lib.escapeShellArgs args} 2>&1 > qsub-log
       echo $? > qsub-exit
     '';
 
@@ -52,8 +52,7 @@
       until qstat -f ''${id%%.} 2>&1 | grep "\(Unknown Job\|job_state = C\)" > /dev/null ; do
         sleep ${toString sleepTime}
       done
-      cat ${tmpDir}/qsub-$id/qsub-stderr >&2
-      cat ${tmpDir}/qsub-$id/qsub-stdout
+      cat ${tmpDir}/qsub-$id/qsub-log
       if [ -e ${tmpDir}/qsub-$id/qsub-exit ]; then
         exitCode=$(cat ${tmpDir}/qsub-$id/qsub-exit)
       else
