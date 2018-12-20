@@ -16,7 +16,6 @@
       TMP=$TMPDIR
       NIX_BUILD_TOP=$TMPDIR
       cd $TMPDIR
-      echo I am $PBS_JOBID
       ${builder} ${lib.escapeShellArgs args} > qsub-stdout 2> qsub-stderr
       echo $? > qsub-exit
     '';
@@ -39,6 +38,7 @@
         sleep ${toString sleepTime}
       done
       id=$(cat id)
+      echo $id
 
       function cleanup {
         qdel $id 2>/dev/null || true
