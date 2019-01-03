@@ -1,6 +1,6 @@
 { bionix
 , nixpkgs
-, mateScore ? false
+, mateScore ? true
 , flags ? null
 }:
 
