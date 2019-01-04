@@ -26,6 +26,7 @@ let
     platypus = callBionix ./tools/platypus.nix {};
     samtools = callBionix ./tools/samtools.nix {};
     strelka = callBionix ./tools/strelka.nix {};
+    snpeff = callBionix ./tools/snpeff.nix {};
 
     ref = callBionix ./lib/references.nix {};
 
