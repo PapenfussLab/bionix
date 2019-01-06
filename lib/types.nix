@@ -21,6 +21,7 @@ let
 
 in
 rec {
+  nix-adt = import "${nix-adt-src}";
   matchFiletype = sym: y: x: if x ? filetype then matchFiletype' sym y x.filetype else abort "unknown filetype for ${sym}";
   matchFiletype' = sym: y: x: match x (defError (idft sym) y filetype);
   filetype = make-type "filetype" {
