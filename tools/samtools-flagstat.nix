@@ -1,14 +1,13 @@
 { bionix
-, nixpkgs
 }:
 
 input:
 
-with nixpkgs;
+with bionix;
 with lib;
 
-stdenv.mkDerivation {
+stage {
   name = "samtools-index";
-  buildInputs = [ samtools ];
+  buildInputs = with pkgs; [ samtools ];
   buildCommand = "samtools flagstat -@ $NIX_BUILD_CORES ${input} > $out";
 }

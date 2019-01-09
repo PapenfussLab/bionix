@@ -1,21 +1,20 @@
 {bionix
-,nixpkgs
 ,db
 ,flags ? ""}:
 
 input:
 
-with nixpkgs;
-with bionix.types;
+with bionix;
+with types;
 
 assert (matchFiletype "snpeff-annotate" { vcf = _: true; } input);
 
-stdenv.mkDerivation {
+stage {
   name = "snpeff-annotate";
+  buildInputs = with pkgs; [ snpeff ];
   buildCommand = ''
     ln -s ${db} ${db.name}
     snpeff -nodownload -dataDir $TMPDIR ${db.name} ${input} > $out
   '';
-  buildInputs = [ snpeff ];
   passthru.filetype = input.filetype;
 }

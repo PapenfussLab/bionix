@@ -1,4 +1,4 @@
-{bionix, nixpkgs}:
+{bionix}:
 
 with bionix;
 

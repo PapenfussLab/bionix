@@ -1,14 +1,13 @@
 { bionix
-, nixpkgs
 , thresholdCoverage ? 10000
 , flags ? null
 , config ? null
 , heapSize ? "1G"
 }:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 input:
 
@@ -17,9 +16,9 @@ let
 in
 
 
-stdenv.mkDerivation rec {
+stage rec {
   name = "gridss-collectMetrics";
-  buildInputs = [ jre R ];
+  buildInputs = with pkgs; [ jre R ];
   buildCommand = ''
     mkdir $out
     java -Xmx${heapSize} -cp ${bionix.gridss.jar} \

@@ -1,8 +1,7 @@
-{ bionix, nixpkgs }:
+{ bionix }:
 
-with nixpkgs;
 with bionix;
 
 {
-  crumble = callPackage ./crumble-app.nix {};
+  crumble = pkgs.callPackage ./crumble-app.nix {};
 }

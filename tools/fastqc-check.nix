@@ -1,14 +1,13 @@
 { bionix
-, nixpkgs
 , flags ? null
 }:
 
-with nixpkgs;
+with bionix;
 with lib;
 
 input:
 
-stdenv.mkDerivation {
+stage {
   name = "fastqc-check";
   buildInputs = [ bionix.fastqc.fastqc ];
   buildCommand = ''

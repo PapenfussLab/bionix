@@ -1,5 +1,4 @@
 { bionix
-, nixpkgs
 , blacklist ? null
 , bwaIndexAttrs ? {}
 , faidxAttrs ? {}
@@ -8,9 +7,9 @@
 , heapSize ? "31g"
 }:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 inputs:
 
@@ -22,9 +21,9 @@ in
 
 assert (length (unique refs) == 1);
 
-stdenv.mkDerivation rec {
+stage rec {
   name = "gridss-callVariants";
-  buildInputs = [ jre R bwa ];
+  buildInputs = with pkgs; [ jre R bwa ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai

@@ -1,9 +1,8 @@
-{ bionix, nixpkgs }:
+{ bionix }:
 
-with nixpkgs;
 with bionix;
 
 {
-  fastqc = callPackage ./fastqc-app.nix {};
+  fastqc = pkgs.callPackage ./fastqc-app.nix {};
   check = callBionixE ./fastqc-check.nix;
 }

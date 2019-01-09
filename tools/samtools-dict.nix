@@ -1,19 +1,18 @@
 { bionix
-, nixpkgs
 , flags ? null
 }:
 
 input:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 assert (matchFiletype "samtools-dict" { fa = _: true; } input);
 
-stdenv.mkDerivation {
+stage {
   name = "samtools-dict";
-  buildInputs = [ samtools ];
+  buildInputs = with pkgs; [ samtools ];
   buildCommand = ''
     samtools dict ${optionalString (flags != null) flags} ${input} > $out
   '';

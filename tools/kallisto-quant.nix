@@ -1,5 +1,4 @@
 {bionix
-, nixpkgs
 , indexFlags ? {}
 , bias ? false
 , bootstrapSamples ? 0
@@ -13,7 +12,7 @@
 , fragmentSD ? null
 , ref}:
 
-with nixpkgs;
+with bionix;
 with lib;
 
 assert (!single || (fragmentLength != null && fragmentSD != null));
@@ -27,9 +26,9 @@ in
 
 assert (all (x: isFastQ (x.filetype)) inputs);
 
-stdenv.mkDerivation {
+stage {
   name = "kallisto-quant";
-  buildInputs = [ kallisto ];
+  buildInputs = with pkgs; [ kallisto ];
   buildCommand = ''
     mkdir $out
     kallisto quant \

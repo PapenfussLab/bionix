@@ -1,17 +1,16 @@
 { bionix
-, nixpkgs
 , flags ? null
 }:
 
-with nixpkgs;
+with bionix;
 with lib;
 
 { inputs
 , names ? []}:
 
-stdenv.mkDerivation {
+stage {
   name = "mosdepth-depth";
-  buildInputs = [ python ];
+  buildInputs = with pkgs; [ python ];
   buildCommand = ''
     python ${mosdepth.src}/scripts/plot-dist.py ${concatMapStringsSep " " (i: "${i}/out.mosdepth.global.dist.txt") inputs}
     ${concatStringsSep "\n" (zipListsWith (i: n: "substituteInPlace dist.html --replace ${i}/out ${n}") inputs names)}

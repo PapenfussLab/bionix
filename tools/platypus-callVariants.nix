@@ -1,5 +1,4 @@
 { bionix
-, nixpkgs
 , indexAttrs ? {}
 , bamIndexAttrs ? {}
 , flags ? null
@@ -7,9 +6,9 @@
 
 inputs:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 
 let
@@ -21,9 +20,9 @@ in
 
 assert (length (unique refs) == 1);
 
-stdenv.mkDerivation {
+stage {
   name = "platypus";
-  buildInputs = [ platypus ];
+  buildInputs = with pkgs; [ platypus ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx indexAttrs ref} ref.fa.fai

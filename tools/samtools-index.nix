@@ -1,20 +1,19 @@
 { bionix
-, nixpkgs
 , flags ? null
 }:
 
 input:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 assert (matchFiletype "samtools-index" { bam = _: true; } input);
 assert (matchFileSorting "samtools-index" { coord = _: true; } input);
 
-stdenv.mkDerivation {
+stage {
   name = "samtools-index";
-  buildInputs = [ samtools ];
+  buildInputs = with pkgs; [ samtools ];
   buildCommand = ''
     ln -s ${input} input.bam
     samtools index -@ $NIX_BUILD_CORES ${optionalString (flags != null) flags} input.bam

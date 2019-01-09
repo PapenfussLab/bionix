@@ -4,7 +4,7 @@ let
   inherit (nixpkgs) fetchurl callPackage;
 
   bionix = nixpkgs.lib.makeExtensible (self:
-  let callBionix = file: attrs: import file ({ bionix = self; nixpkgs = nixpkgs; } // attrs);
+  let callBionix = file: attrs: import file ({ bionix = self; } // attrs);
   in with self; {
     callBionix = callBionix;
     id = x: x;
@@ -60,8 +60,8 @@ let
 
     # Export nixpkgs and standard library lib
     pkgs = nixpkgs;
-    lib = nixpkgs.lib;
-    stage = nixpkgs.stdenvNoCC.mkDerivation;
+    lib = nixpkgs.lib // { types = types; };
+    stage = nixpkgs.stdenv.mkDerivation;
 
     # splitting/joining
     splitFile = file: drv: stage {

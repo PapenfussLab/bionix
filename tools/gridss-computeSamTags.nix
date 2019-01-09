@@ -1,5 +1,4 @@
 { bionix
-, nixpkgs
 , blacklist ? null
 , bwaIndexAttrs ? {}
 , faidxAttrs ? {}
@@ -8,9 +7,9 @@
 , heapSize ? "1G"
 }:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 input:
 
@@ -21,9 +20,9 @@ in
 
 assert(sorted);
 
-stdenv.mkDerivation rec {
+stage rec {
   name = "gridss-computeSamTags";
-  buildInputs = [ jre ];
+  buildInputs = with pkgs; [ jre ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai

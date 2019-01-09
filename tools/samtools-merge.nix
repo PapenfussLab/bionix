@@ -1,12 +1,11 @@
 { bionix
-, nixpkgs
 , flags ? null
 , outfmt ? null
 }:
 
 inputs:
 
-with nixpkgs;
+with bionix;
 with lib;
 
 let
@@ -16,9 +15,9 @@ in
 
 assert inputIsHomogenous;
 
-stdenv.mkDerivation {
+stage {
   name = "samtools-merge";
-  buildInputs = [ samtools ];
+  buildInputs = with pkgs; [ samtools ];
   buildCommand = ''
     samtools merge ${optionalString (flags != null) flags} $out ${concatStringsSep " " inputs}
   '';

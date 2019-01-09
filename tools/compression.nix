@@ -1,6 +1,5 @@
-{bionix, nixpkgs}:
+{bionix}:
 
-with nixpkgs;
 with bionix;
 
 {
@@ -12,11 +11,11 @@ with bionix;
     cram = _: f;
     vcf = _: f;
     bed = _: f;
-    gz = _: types.tagFiletype (types.gunzip f.filetype) (stdenv.mkDerivation {
+    gz = _: types.tagFiletype (types.gunzip f.filetype) (stage {
       name = "gunzip";
       buildCommand = "gunzip < ${f} > $out";
     });
-    bz2 = _: types.tagFiletype (types.bunzip2 f.filetype) (stdenv.mkDerivation {
+    bz2 = _: types.tagFiletype (types.bunzip2 f.filetype) (stage {
       name = "bunzip2";
       buildCommand = "bunzip2 < ${f} > $out";
     });
@@ -24,7 +23,7 @@ with bionix;
 
   gzip = f:
     let
-      gz = (stdenv.mkDerivation {
+      gz = (stage {
         name = "gzip";
         buildCommand = "gzip < ${f} > $out";
         passthru = { filetype = types.filetype.gz f.filetype; };
@@ -42,7 +41,7 @@ with bionix;
 
   bzip2 = f:
     let
-      bz2 = (stdenv.mkDerivation {
+      bz2 = (stage {
         name = "bzip2";
         buildCommand = "bzip2 < ${f} > $out";
         passthru = { filetype = types.filetype.bz2 f.filetype; };

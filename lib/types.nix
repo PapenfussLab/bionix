@@ -1,10 +1,10 @@
-{bionix, nixpkgs}:
+{bionix}:
 
-with nixpkgs;
+with bionix;
 with lib;
 
 let
-  nix-adt-src = fetchFromGitHub {
+  nix-adt-src = pkgs.fetchFromGitHub {
     owner = "shlevy";
     repo = "nix-adt";
     rev = "dd04b5d08eed65ecd73aafde56a78078e09f1c74";

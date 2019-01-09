@@ -1,20 +1,19 @@
 { bionix
-, nixpkgs
 , flags ? null
 }:
 
 input:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 assert (matchFiletype "samtools-markdup" { bam = _: true; } input);
 assert (matchFileSorting "samtools-markdup" { coord = _: true; } input);
 
-stdenv.mkDerivation {
+stage {
   name = "samtools-markdup";
-  buildInputs = [ samtools ];
+  buildInputs = with pkgs; [ samtools ];
   buildCommand = ''
     samtools markdup ${optionalString (flags != null) flags} ${input} $out
   '';

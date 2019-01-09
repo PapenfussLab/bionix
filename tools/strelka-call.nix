@@ -1,5 +1,4 @@
 { bionix
-, nixpkgs
 , indexAttrs ? {}
 , bamIndexAttrs ? {}
 , flags ? null
@@ -7,9 +6,9 @@
 
 {normal, tumour}:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 let
   filename = path: last (splitString "/" path);
@@ -22,9 +21,9 @@ in
 
 assert (length (unique refs) == 1);
 
-stdenv.mkDerivation {
+pkgs.stdenv.mkDerivation {
   name = "strelka";
-  buildInputs = [ strelka ];
+  buildInputs = with pkgs; [ strelka ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx indexAttrs ref} ref.fa.fai

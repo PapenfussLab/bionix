@@ -1,49 +1,39 @@
-with (import <nixpkgs> {});
+with import <bionix> {};
 with lib;
 
 let
-  bionix = (import <bionix> {}).extend (self: super: with self; {
-    bwa = with super.bwa; {
-      align = align;
-      index = def index { flags = "-a is"; };
-    };
-  });
-
-in
-
-with bionix;
-
-let
-  fetchlocal = path: stdenv.mkDerivation {
+  fetchlocal = path: pkgs.stdenv.mkDerivation {
     name = baseNameOf path;
     buildCommand = "ln -s ${path} $out";
   };
   fetchfq = attrs: types.tagFiletype (types.filetype.fq {}) (fetchlocal attrs);
   fetchfa = attrs: types.tagFiletype (types.filetype.fa {}) (fetchlocal attrs);
 
-  ref = fetchfa ./example/ref.fa;
+  ref = fetchfa ./examples/ref.fa;
 
   alignWithRG = rg: bwa.align { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
   sort = samtools.sort {};
   flagstat = samtools.flagstat {};
   check = fastqc.check {};
   callVariants = strelka.call {};
+  markdup = samtools.markdup {};
+  fixmate = samtools.fixmate {};
 
   tnpair = {
     tumour = {name = "mysample1"; files = {
-        input1 = fetchfq ./example/sample1-1.fq;
-        input2 = fetchfq ./example/sample1-2.fq;
+        input1 = fetchfq ./examples/sample1-1.fq;
+        input2 = fetchfq ./examples/sample1-2.fq;
       };
     };
     normal = {name = "mysample2"; files = {
-        input1 = fetchfq ./example/sample2-1.fq;
-        input2 = fetchfq ./example/sample2-2.fq;
+        input1 = fetchfq ./examples/sample2-1.fq;
+        input2 = fetchfq ./examples/sample2-2.fq;
       };
     };
   };
 
   processPair = { tumour, normal }: rec {
-    alignments = mapAttrs (_: x: sort (alignWithRG x.name x.files)) { inherit normal tumour; };
+    alignments = mapAttrs (_: x: markdup (sort (fixmate (alignWithRG x.name x.files)))) { inherit normal tumour; };
     variants = callVariants alignments;
   };
 

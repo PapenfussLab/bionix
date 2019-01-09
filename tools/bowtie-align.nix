@@ -1,5 +1,4 @@
 { bionix
-, nixpkgs
 , ref
 , bamOutput ? true
 , flags ? null
@@ -10,18 +9,18 @@
 , input2 ? null
 }:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
-with bionix.compression;
+with types;
+with compression;
 
 let
   fa = f: matchFiletype "bowtie2-ref" { fa = _: f; } f;
   fq = f: matchFiletype "bowtie2-input" { fq = _: f; gz = matchFiletype' "bowtie2-input" { fq = _: f; }; } f;
 
-in stdenv.mkDerivation {
+in stage {
   name = "bowtie2-align";
-  buildInputs = [ bowtie2 bc ] ++ optional bamOutput samtools;
+  buildInputs = with pkgs; [ bowtie2 bc ] ++ optional bamOutput samtools;
   buildCommand = ''
     cores=$(echo $NIX_BUILD_CORES ${optionalString bamOutput "- 1"} | bc)
     if [[ $cores -lt 1 ]] ; then

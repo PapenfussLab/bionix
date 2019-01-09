@@ -1,14 +1,15 @@
-{bionix, nixpkgs}:
+{bionix}:
 
-with nixpkgs;
+with bionix;
+with lib;
 
 let
     attrsToGridssConfigString = attrsToGridssConfigStringPrepend "";
 
     attrsToGridssConfigStringPrepend = prepend: attrs:
-        lib.concatStringsSep "\n" (
-            lib.attrValues (
-                lib.mapAttrs
+        concatStringsSep "\n" (
+            attrValues (
+                mapAttrs
                     (name: attr: prepend + (iniLine name attr))
                     attrs));
 
@@ -31,6 +32,6 @@ let
         # Allows for repeated fields (e.g. for adapters):
         list   = name: attr: concatStringsSep "\n" (map (x: iniLine name x) attr);
     };
-in configAttrs: (writeText
+in configAttrs: (pkgs.writeText
         "gridss.properties.override"
         ((attrsToGridssConfigString configAttrs) + "\n"))

@@ -1,5 +1,4 @@
 { bionix
-, nixpkgs
 , bwaIndexAttrs ? {}
 , faidxAttrs ? {}
 , indexAttrs ? {}
@@ -9,9 +8,9 @@
 , heapSize ? "31g"
 }:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 inputs:
 
@@ -36,9 +35,9 @@ in
 assert (all sorted inputs);
 assert (homoRef);
 
-stdenv.mkDerivation rec {
+stage rec {
   name = "gridss-assemble";
-  buildInputs = [ jre bwa ];
+  buildInputs = with pkgs; [ jre bwa ];
   buildCommand = ''
     TMPDIR=$(pwd)
     ln -s ${ref} ref.fa

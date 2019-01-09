@@ -1,19 +1,18 @@
 { bionix
-, nixpkgs
 , flags ? null
 }:
 
 ref:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 assert (matchFiletype "bwa-index" { fa = _: true; } ref);
 
-stdenv.mkDerivation {
+stage {
   name = "bwa-index";
-  buildInputs = [ bwa ];
+  buildInputs = with pkgs; [ bwa ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     bwa index ${optionalString (flags != null) flags} ref.fa

@@ -1,17 +1,16 @@
 { bionix
-, nixpkgs
 , indexAttrs ? {}
 , flags ? null
 }:
 
-with nixpkgs;
+with bionix;
 with lib;
 
 input:
 
-stdenv.mkDerivation {
+stage {
   name = "mosdepth-depth";
-  buildInputs = [ mosdepth ];
+  buildInputs = with pkgs; [ mosdepth ];
   buildCommand = ''
     mkdir $out
     ln -s ${input} input.bam

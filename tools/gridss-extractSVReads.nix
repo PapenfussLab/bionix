@@ -1,5 +1,4 @@
 { bionix
-, nixpkgs
 , dictIndexAttrs ? {}
 , faidxAttrs ? {}
 , flags ? null
@@ -9,9 +8,9 @@
 , config ? null
 }:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 input:
 
@@ -20,9 +19,9 @@ let
 in
 
 
-stdenv.mkDerivation rec {
+stage rec {
   name = "gridss-extractSVReads";
-  buildInputs = [ jre R ];
+  buildInputs = with pkgs; [ jre R ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai

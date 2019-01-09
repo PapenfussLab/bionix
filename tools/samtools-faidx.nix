@@ -1,20 +1,19 @@
 { bionix
-, nixpkgs
 , flags ? null
 }:
 
 input:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 assert (matchFiletype "samtools-faidx" { fa = _: true; } input);
 
-stdenv.mkDerivation {
+stage {
 
   name = "samtools-faidx";
-  buildInputs = [ samtools ];
+  buildInputs = with pkgs; [ samtools ];
   buildCommand = ''
     ln -s ${input} input.fasta
     samtools faidx ${optionalString (flags != null) flags} input.fasta

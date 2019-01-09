@@ -1,5 +1,4 @@
 { bionix
-, nixpkgs
 , nameSort ? false
 , flags ? null
 , outfmt ? null
@@ -7,7 +6,7 @@
 
 input:
 
-with nixpkgs;
+with bionix;
 with lib;
 
 let
@@ -20,9 +19,9 @@ let
   outfmtR = if outfmt != null then outfmt input else input.filetype;
   outFmtFlags = matchFiletype "samtools-sort-outfmt" { bam = _: "-O BAM"; sam = _: "-O SAM"; cram = ref: "-O CRAM -T ${ref}"; } {filetype = outfmtR;};
   alreadySorted = matchFileSorting "samtools-sort" { name = _: nameSort; coord = _: !nameSort; none = _: false;} input;
-in stdenv.mkDerivation {
+in pkgs.stdenv.mkDerivation {
   name = "samtools-sort";
-  buildInputs = [ samtools ];
+  buildInputs = with pkgs; [ samtools ];
   buildCommand =
     if alreadySorted then
       "ln -s ${input} $out"

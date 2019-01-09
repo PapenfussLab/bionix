@@ -1,5 +1,4 @@
 { bionix
-, nixpkgs
 , bwaIndexAttrs ? {}
 , faidxAttrs ? {}
 , alignerStreaming ? false
@@ -9,9 +8,9 @@
 
 }:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 input:
 
@@ -19,9 +18,9 @@ let
   ref = matchFiletype "gridss-softClipsToSplitReads" { bam = x: x.ref; } input;
 in
 
-stdenv.mkDerivation rec {
+stage rec {
   name = "gridss-softClipsToSplitReads";
-  buildInputs = [ jre bwa ];
+  buildInputs = with pkgs; [ jre bwa ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai

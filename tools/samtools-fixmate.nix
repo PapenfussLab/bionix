@@ -1,21 +1,20 @@
 { bionix
-, nixpkgs
 , mateScore ? true
 , flags ? null
 }:
 
 input:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 assert (matchFiletype "samtools-fixmate" { bam = _: true; } input);
 assert (matchFileSorting "samtools-fixmate" { name = _: true; } input);
 
-stdenv.mkDerivation {
+stage {
   name = "samtools-fixmate";
-  buildInputs = [ samtools ];
+  buildInputs = with pkgs; [ samtools ];
   buildCommand = ''
     samtools fixmate \
       ${optionalString mateScore "-m"} \

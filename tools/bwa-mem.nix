@@ -1,5 +1,4 @@
 { bionix
-, nixpkgs
 , ref
 , bamOutput ? true
 , flags ? null
@@ -10,18 +9,18 @@
 , input2 ? null
 }:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
-with bionix.compression;
+with types;
+with compression;
 
 let
   fa = f: matchFiletype "bwa-ref" { fa = _: f; } f;
   fq = f: matchFiletype "bwa-input" { fq = _: f; gz = matchFiletype' "bwa-input" { fq = _: f; }; } f;
 
-in stdenv.mkDerivation {
+in stage {
   name = "bwa-mem";
-  buildInputs = [ bwa bc ] ++ optional bamOutput samtools;
+  buildInputs = with pkgs; [ bwa bc ] ++ optional bamOutput samtools;
   buildCommand = ''
     ln -s ${fa ref} ref.fa
     for f in ${bionix.bwa.index indexAttrs ref}/* ; do

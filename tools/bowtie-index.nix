@@ -1,20 +1,19 @@
 { bionix
-, nixpkgs
 , flags ? null
 , seed ? 42
 }:
 
 ref:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 assert (matchFiletype "bowtie-index" { fa = _: true; } ref);
 
-stdenv.mkDerivation {
+stage {
   name = "bowtie-index";
-  buildInputs = [ bowtie2 ];
+  buildInputs = with pkgs; [ bowtie2 ];
   buildCommand = ''
     mkdir $out
     bowtie2-build --seed ${toString seed} --threads $NIX_BUILD_CORES ${optionalString (flags != null) flags} ${ref} $out/ref

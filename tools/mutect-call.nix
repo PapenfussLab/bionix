@@ -1,13 +1,12 @@
 {bionix
-, nixpkgs
 , cosmic
 , dbsnp}:
 
-with nixpkgs;
+with bionix;
 with lib;
 
 let
-  inherit (bionix.types) matchFiletype;
+  inherit (types) matchFiletype;
   getVCFref = matchFiletype "mutect-call" {vcf = {ref}: ref;};
   getBAMref = matchFiletype "mutect-call" {bam = {ref, ...}: ref;};
   refs = map getVCFref [ cosmic dbsnp ];
@@ -20,7 +19,7 @@ assert (length (unique refs) == 1);
 
 assert (ref == getBAMref normal && ref == getBAMref tumour);
 
-stdenv.mkDerivation {
+stage {
   name = "mutect";
   buildInputs = [ bionix.mutect.app ];
   buildCommand = ''

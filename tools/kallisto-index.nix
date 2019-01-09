@@ -1,11 +1,10 @@
 {bionix
-, nixpkgs
 , kmerSize ? 31
 , unique ? false}:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
+with types;
 
 assert (kmerSize > 1);
 
@@ -13,9 +12,9 @@ input:
 
 assert (matchFiletype input { fa = _: true; } input);
 
-stdenv.mkDerivation {
+stage {
   name = "kallisto-index";
-  buildInputs = [ kallisto ];
+  buildInputs = with pkgs; [ kallisto ];
   buildCommand = ''
     kallisto index -k ${toString kmerSize} ${optionalString unique "--make-unique"} -i $out ${input}
   '';

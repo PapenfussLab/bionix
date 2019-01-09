@@ -1,9 +1,8 @@
-{bionix, nixpkgs}:
+{bionix}:
 
-with nixpkgs;
 with bionix;
 
 {
-  app = callPackage ./mutect-app.nix {inherit (nixpkgs) stdenv fetchurl makeWrapper unzip fetchFromGitHub;};
+  app = pkgs.callPackage ./mutect-app.nix {inherit (pkgs) stdenv fetchurl makeWrapper unzip fetchFromGitHub;};
   call = callBionixE ./mutect-call.nix;
 }

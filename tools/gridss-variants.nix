@@ -1,5 +1,4 @@
 { bionix
-, nixpkgs
 , bwaIndexAttrs ? {}
 , faidxAttrs ? {}
 , indexAttrs ? {}
@@ -11,10 +10,10 @@
 , heapSize ? "4g"
 }:
 
-with nixpkgs;
+with bionix;
 with lib;
-with bionix.types;
-with bionix.gridss;
+with types;
+with gridss;
 
 inputs:
 
@@ -65,9 +64,9 @@ assert (all sorted inputs);
 assert (homoRef);
 
 rec {
-  identify = stdenv.mkDerivation rec {
+  identify = stage rec {
     name = "gridss-identifyVariants";
-    buildInputs = [ jre samtools ];
+    buildInputs = with pkgs; [ jre samtools ];
     buildCommand = mkLinks + ''
       java -Xmx${heapSize} -Dsamjdk.create_index=true \
         -cp ${jar} gridss.IdentifyVariants \
@@ -87,9 +86,9 @@ rec {
     };
   };
 
-  annotate = stdenv.mkDerivation rec {
+  annotate = stage rec {
     name = "gridss-annotateVariants";
-    buildInputs = [ jre ];
+    buildInputs = with pkgs; [ jre ];
     buildCommand = mkLinks + ''
       ln -s ${bionix.gridss.identifyVariants {inherit bwaIndexAttrs faidxAttrs indexAttrs assemblyAttrs collectMetricsAttrs softClipsToSplitReadsAttrs flags config; } inputs} input.vcf
       java -Xmx${heapSize} -Dsamjdk.create_index=true \

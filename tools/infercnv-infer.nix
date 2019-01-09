@@ -1,15 +1,14 @@
 {bionix
-,nixpkgs
 ,flags ? null}:
 
-with nixpkgs;
+with bionix;
 with lib;
 
 {ref
 ,expr
 ,pos}:
 
-stdenv.mkDerivation {
+stage {
   name = "inferCNV";
   buildInputs = [ bionix.infercnv.app ];
   buildCommand = ''

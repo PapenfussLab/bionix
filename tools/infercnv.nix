@@ -1,6 +1,5 @@
-{nixpkgs, bionix}:
+{bionix}:
 
-with nixpkgs;
 with bionix;
 
 {
