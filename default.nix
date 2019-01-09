@@ -58,7 +58,24 @@ let
     fetchFastQGZ = attrs: with types; tagFiletype (filetype.gz (filetype.fq {})) (fetchurl attrs);
     fetchFastAGZ = attrs: with types; tagFiletype (filetype.gz (filetype.fa {})) (fetchurl attrs);
 
-    # Export nixpkgs' lib
+    # Export nixpkgs and standard library lib
+    pkgs = nixpkgs;
     lib = nixpkgs.lib;
+    stage = nixpkgs.stdenvNoCC.mkDerivation;
+
+    # splitting/joining
+    splitFile = file: drv: stage {
+      name = "split-${file}";
+      buildCommand = "ln -s ${drv}/${file} $out";
+    };
+    split = drv: lib.mapAttrs (p: _: splitFile p drv) (builtins.readDir drv);
+    join = drvs: stage {
+      name = "join";
+      buildCommand = ''
+        mkdir $out
+        ${builtins.concatStringsSep "\n" (builtins.attrValues (lib.mapAttrs (n: d: "ln -s ${d} $out/${n}") drvs))}
+      '';
+    };
+    each = f: drv: join (lib.mapAttrs (_: f) (split drv));
   });
 in bionix
