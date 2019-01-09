@@ -21,7 +21,7 @@ in
 
 assert (length (unique refs) == 1);
 
-pkgs.stdenv.mkDerivation {
+stage {
   name = "strelka";
   buildInputs = with pkgs; [ strelka ];
   buildCommand = ''
