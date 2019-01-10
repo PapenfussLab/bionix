@@ -13,8 +13,9 @@ let
 
     types = callBionix ./lib/types.nix {};
 
-    bwa = callBionix ./tools/bwa.nix {};
     bowtie = callBionix ./tools/bowtie.nix {};
+    bwa = callBionix ./tools/bwa.nix {};
+    cnvkit = callBionix ./tools/cnvkit.nix {};
     compression = callBionix ./tools/compression.nix {};
     crumble = callBionix ./tools/crumble.nix {};
     fastqc = callBionix ./tools/fastqc.nix {};
@@ -25,9 +26,8 @@ let
     mutect = callBionix ./tools/mutect.nix {};
     platypus = callBionix ./tools/platypus.nix {};
     samtools = callBionix ./tools/samtools.nix {};
-    strelka = callBionix ./tools/strelka.nix {};
     snpeff = callBionix ./tools/snpeff.nix {};
-
+    strelka = callBionix ./tools/strelka.nix {};
     ref = callBionix ./lib/references.nix {};
 
     qsub = attrs: bionix.extend (self: super: with self; rec {
