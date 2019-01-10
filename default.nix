@@ -18,6 +18,7 @@ let
     cnvkit = callBionix ./tools/cnvkit.nix {};
     compression = callBionix ./tools/compression.nix {};
     crumble = callBionix ./tools/crumble.nix {};
+    facets = callBionix ./tools/facets.nix {};
     fastqc = callBionix ./tools/fastqc.nix {};
     gridss = callBionix ./tools/gridss.nix {};
     infercnv = callBionix ./tools/infercnv.nix {};
@@ -25,10 +26,10 @@ let
     mosdepth = callBionix ./tools/mosdepth.nix {};
     mutect = callBionix ./tools/mutect.nix {};
     platypus = callBionix ./tools/platypus.nix {};
+    ref = callBionix ./lib/references.nix {};
     samtools = callBionix ./tools/samtools.nix {};
     snpeff = callBionix ./tools/snpeff.nix {};
     strelka = callBionix ./tools/strelka.nix {};
-    ref = callBionix ./lib/references.nix {};
 
     qsub = attrs: bionix.extend (self: super: with self; rec {
       qsubDefs = { ppn = 1; mem = 1; walltime = "24:00:00"; tmpDir = "/tmp"; sleepTime = 60; } // attrs;

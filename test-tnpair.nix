@@ -35,11 +35,13 @@ let
   processPair = { tumour, normal }: rec {
     alignments = mapAttrs (_: x: markdup (sort (fixmate (alignWithRG x.name x.files)))) { inherit normal tumour; };
     variants = callVariants alignments;
+    platypusVars = platypus.call {} (builtins.attrValues alignments);
   };
 
   tnpairResult = processPair tnpair;
 
   testNaming = linkDrv [
+    (ln (facets.callCNV {} {vcf = tnpairResult.platypusVars; bams = with tnpairResult.alignments; [ normal tumour ];}) "facets")
     (ln tnpairResult.variants "strelka")
     (ln (bowtie.align {inherit ref;} tnpair.normal.files) "alignments/bowtie-normal.bam")
     (ln (gridss.callVariants {} (with tnpairResult.alignments; [normal tumour])) "gridss")
