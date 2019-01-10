@@ -94,6 +94,14 @@ rec {
           };
         };
       };
+      UCSCgenes = stage {
+        name = "UCSCgenes";
+        src = pkgs.fetchurl {
+          url = "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/refFlat.txt.gz";
+          sha256 = "0jfrsmrp6386lw9wq48rs5i0qmm3ijb7ardhkcp29bzvbwf9lqaq";
+        };
+        buildCommand = "gunzip < $src > $out";
+      };
     };
 
     grcm38 = grcm38-p6;
