@@ -1,11 +1,10 @@
 {bionix
-,normals ? []
 ,targets ? null
 ,annotations ? null
 ,flags ? null
 ,indexAttrs ? {}}:
 
-{normals ? normals, tumours}:
+{normals ? [], tumours}:
 
 with bionix;
 with lib;
