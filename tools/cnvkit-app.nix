@@ -7,6 +7,9 @@
 , biopython
 , six
 , numpy
+, pillow
+, pysam
+, future
 , scipy
 , pandas
 , matplotlib
@@ -29,51 +32,6 @@ let pyfaidx = buildPythonPackage rec {
       };
 
       propagatedBuildInputs = [ six ];
-    };
-
-    pysam = buildPythonPackage rec {
-      pname = "pysam";
-      version = "0.14";
-
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "11snrwl5pn6knarf0c7zcpkhc7rijb6cfpw8sl3pdvnynj1fmj69";
-      };
-
-      buildInputs = [ zlib ];
-
-      preConfigure = ''
-        export HTSLIB_MODE="external"
-        export HTSLIB_LIBRARY_DIR=${htslib}/lib
-        export HTSLIB_INCLUDE_DIR=${htslib}/include
-      '';
-
-    };
-
-    future = buildPythonPackage rec {
-      pname = "future";
-      version = "0.16.0";
-
-      doCheck = false;
-
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "1nzy1k4m9966sikp0qka7lirh8sqrsyainyf8rk97db7nwdfv773";
-      };
-    };
-
-    pillow = buildPythonPackage rec {
-      pname = "Pillow";
-      version = "5.0.0";
-
-      doCheck = false;
-
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "1fz1n1cq65dqdbiwy1cn8l21amqbzq18rdmmcr670ks24dn9vwhj";
-      };
-
-      buildInputs = [ zlib libjpeg pkgconfig ];
     };
 
     cghFLasso = rPackages.buildRPackage rec {
