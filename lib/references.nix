@@ -97,8 +97,8 @@ rec {
       UCSCgenes = stage {
         name = "UCSCgenes";
         src = pkgs.fetchurl {
-          url = "http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/refFlat.txt.gz";
-          sha256 = "0jfrsmrp6386lw9wq48rs5i0qmm3ijb7ardhkcp29bzvbwf9lqaq";
+          url = "http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/refFlat.txt.gz";
+          sha256 = "1f53myn4vpvswzssx2xsiq9si8w58gpcm0f32srq220w36hq9md4";
         };
         buildCommand = "gunzip < $src > $out";
       };
