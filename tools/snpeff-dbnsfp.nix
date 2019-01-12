@@ -16,6 +16,6 @@ stage {
     ln -s ${dbnsfp.index} dbNSFP.txt.gz.tbi
     snpsift dbnsfp -db dbNSFP.txt.gz ${input} > $out
   '';
-  buildInputs = [ snpeff ];
+  buildInputs = with pkgs; [ snpeff ];
   passthru.filetype = input.filetype;
 }
