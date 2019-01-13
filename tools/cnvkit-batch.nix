@@ -28,7 +28,7 @@ stage {
     ln -s ${samtools.faidx indexAttrs ref} ref.fa.fai
     cnvkit.py batch ${concatStringsSep " " tumours} \
       ${optionalString (normals != []) ("-n " + concatStringsSep " " normals)} \
-      ${optionalString (annotations != null) annotations} \
+      ${optionalString (annotations != null) "--annotate ${annotations}"} \
       ${if targets != null then "--targets ${targets}" else "-m wgs"} \
       -f ref.fa \
       -p $NIX_BUILD_CORES \
