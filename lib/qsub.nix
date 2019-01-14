@@ -16,7 +16,7 @@
       TMP=$TMPDIR
       NIX_BUILD_TOP=$TMPDIR
       cd $TMPDIR
-      ${builder} ${lib.escapeShellArgs args} 2>&1 > qsub-log
+      ${builder} ${lib.escapeShellArgs args} &> qsub-log
       echo $? > qsub-exit
     '';
 
