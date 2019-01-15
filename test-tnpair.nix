@@ -15,7 +15,7 @@ let
   sort = samtools.sort {};
   flagstat = samtools.flagstat {};
   check = fastqc.check {};
-  callVariants = strelka.call {};
+  callVariants = strelka.callSomatic {};
   markdup = samtools.markdup {};
   fixmate = samtools.fixmate {};
 
@@ -35,6 +35,7 @@ let
   processPair = { tumour, normal }: rec {
     alignments = mapAttrs (_: x: markdup (sort (fixmate (alignWithRG x.name x.files)))) { inherit normal tumour; };
     variants = callVariants alignments;
+    glvariants = strelka.call {} (builtins.attrValues alignments);
     platypusVars = platypus.call {} (builtins.attrValues alignments);
   };
 
@@ -43,6 +44,7 @@ let
   testNaming = linkDrv [
     (ln (facets.callCNV {} {vcf = tnpairResult.platypusVars; bams = with tnpairResult.alignments; [ normal tumour ];}) "facets")
     (ln tnpairResult.variants "strelka")
+    (ln tnpairResult.glvariants "strelka-gl")
     (ln (bowtie.align {inherit ref;} tnpair.normal.files) "alignments/bowtie-normal.bam")
     (ln (gridss.callVariants {} (with tnpairResult.alignments; [normal tumour])) "gridss")
     (ln (gridss.call (with tnpairResult.alignments; [normal tumour])) "gridss2")

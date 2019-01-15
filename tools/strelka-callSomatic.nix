@@ -4,7 +4,7 @@
 , flags ? null
 }:
 
-inputs:
+{normal, tumour}:
 
 with bionix;
 with lib;
@@ -13,6 +13,7 @@ with types;
 let
   filename = path: last (splitString "/" path);
   getref = f: matchFiletype "strelka-call" { bam = x: x.ref; } f;
+  inputs = [ normal tumour ];
   refs = map getref inputs;
   ref = head refs;
 
@@ -29,8 +30,9 @@ stage {
     ${concatMapStringsSep "\n" (p: "ln -s ${p} ${filename p}.bam") inputs}
     ${concatMapStringsSep "\n" (p: "ln -s ${bionix.samtools.index bamIndexAttrs p} ${filename p}.bai") inputs}
 
-    configureStrelkaGermlineWorkflow.py \
-      ${concatMapStringsSep " " (i: "--bam ${filename i}.bam") inputs} \
+    configureStrelkaSomaticWorkflow.py \
+      --normalBam ${filename normal}.bam \
+      --tumourBam ${filename tumour}.bam \
       --ref ref.fa \
       --runDir $TMPDIR
 
