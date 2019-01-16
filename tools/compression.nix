@@ -1,9 +1,15 @@
 {bionix}:
 
 with bionix;
+with types;
 
-{
-  uncompress = f: types.matchFiletype "uncompress" {
+let
+  gzip = callBionixE ./compression-gzip.nix;
+  gunzip = callBionixE ./compression-gunzip.nix;
+  bunzip2 = callBionixE ./compression-bunzip2.nix;
+
+in {
+  uncompress = attrs: f: matchFiletype "uncompress" {
     fa = _: f;
     fq = _: f;
     bam = _: f;
@@ -11,23 +17,12 @@ with bionix;
     cram = _: f;
     vcf = _: f;
     bed = _: f;
-    gz = _: types.tagFiletype (types.gunzip f.filetype) (stage {
-      name = "gunzip";
-      buildCommand = "gunzip < ${f} > $out";
-    });
-    bz2 = _: types.tagFiletype (types.bunzip2 f.filetype) (stage {
-      name = "bunzip2";
-      buildCommand = "bunzip2 < ${f} > $out";
-    });
-  } f.filetype;
+    gz = _: gunzip attrs f;
+    bz2 = _: bunzip2 attrs f;
+  } f;
 
-  gzip = f:
-    let
-      gz = (stage {
-        name = "gzip";
-        buildCommand = "gzip < ${f} > $out";
-        passthru = { filetype = types.filetype.gz f.filetype; };
-      });
+  gzip = attrs: f:
+    let gz = gzip attrs f;
     in types.matchFiletype "compressed" {
       fa = _: gz;
       fq = _: gz;
@@ -39,13 +34,8 @@ with bionix;
       gz = x: x;
     } f;
 
-  bzip2 = f:
-    let
-      bz2 = (stage {
-        name = "bzip2";
-        buildCommand = "bzip2 < ${f} > $out";
-        passthru = { filetype = types.filetype.bz2 f.filetype; };
-      });
+  bzip2 = attrs: f:
+    let bz2 = bzip2 attrs f;
     in types.matchFiletype "compressed" {
       fa = _: gz;
       fq = _: gz;
