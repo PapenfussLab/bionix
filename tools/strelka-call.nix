@@ -16,14 +16,12 @@ let
   refs = map getref inputs;
   ref = head refs;
 
-  drv = bionix.strelka.call {inherit indexAttrs bamIndexAttrs flags;} inputs;
-
 in
 
 assert (length (unique refs) == 1);
 
 stage {
-  name = "strelka-call";
+  name = "strelka";
   buildInputs = with pkgs; [ strelka ];
   buildCommand = ''
     ln -s ${ref} ref.fa
@@ -32,7 +30,7 @@ stage {
     ${concatMapStringsSep "\n" (p: "ln -s ${bionix.samtools.index bamIndexAttrs p} ${filename p}.bai") inputs}
 
     configureStrelkaGermlineWorkflow.py \
-    ${concatMapStringsSep " " (i: "--bam ${filename i}.bam") inputs} \
+      ${concatMapStringsSep " " (i: "--bam ${filename i}.bam") inputs} \
       --ref ref.fa \
       --runDir $TMPDIR
 
@@ -42,11 +40,4 @@ stage {
 
     cp -r results $out
   '';
-  passthru.variants = stage {
-    name = "strelka-call-variants";
-    buildCommand = ''
-      ln -s ${drv}/variants/variants.vcf.gz $out
-    '';
-    passthru.filetype = filetype.gz (filetype.vcf {ref=ref;});
-  };
 }

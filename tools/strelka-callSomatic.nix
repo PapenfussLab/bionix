@@ -17,14 +17,12 @@ let
   refs = map getref inputs;
   ref = head refs;
 
-  drv = bionix.strelka.callSomatic {inherit indexAttrs bamIndexAttrs flags;} {inherit normal tumour;};
-
 in
 
 assert (length (unique refs) == 1);
 
 stage {
-  name = "strelka-callSomatic";
+  name = "strelka";
   buildInputs = with pkgs; [ strelka gzip ];
   buildCommand = ''
     ln -s ${ref} ref.fa
@@ -33,27 +31,15 @@ stage {
     ${concatMapStringsSep "\n" (p: "ln -s ${bionix.samtools.index bamIndexAttrs p} ${filename p}.bai") inputs}
 
     configureStrelkaSomaticWorkflow.py \
-    --normalBam ${filename normal}.bam \
-    --tumourBam ${filename tumour}.bam \
-    --ref ref.fa \
-    --runDir $TMPDIR
+      --normalBam ${filename normal}.bam \
+      --tumourBam ${filename tumour}.bam \
+      --ref ref.fa \
+      --runDir $TMPDIR
 
     ./runWorkflow.py \
-    -m local \
-    -j $NIX_BUILD_CORES
+      -m local \
+      -j $NIX_BUILD_CORES
 
     cp -r results $out
   '';
-  passthru = {
-    indels = stage {
-      name = "strelka-callVariants-indels";
-      buildCommand = "ln -s ${drv}/variants/somatic.indels.vcf.gz $out";
-      passthru.filetype = filetype.gz (filetype.vcf {ref = ref;});
-    };
-    snvs = stage {
-      name = "strelka-callVariants-snvs";
-      buildCommand = "ln -s ${drv}/variants/somatic.snvs.vcf.gz $out";
-      passthru.filetype = filetype.gz (filetype.vcf {ref = ref;});
-    };
-  };
 }
