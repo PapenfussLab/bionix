@@ -23,7 +23,7 @@ assert (length (unique refs) == 1);
 
 stage {
   name = "strelka";
-  buildInputs = with pkgs; [ strelka gzip ];
+  buildInputs = with pkgs; [ strelka ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx indexAttrs ref} ref.fa.fai
