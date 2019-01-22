@@ -62,7 +62,7 @@ let
     # Export nixpkgs and standard library lib
     pkgs = nixpkgs;
     lib = nixpkgs.lib // { types = types; };
-    stage = nixpkgs.stdenv.mkDerivation;
+    stage = nixpkgs.stdenvNoCC.mkDerivation;
 
     # splitting/joining
     splitFile = file: drv: stage {

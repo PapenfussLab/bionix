@@ -6,7 +6,7 @@ with types;
 rec {
   grch38 = grch38-p12;
   grch38-p12 = rec {
-    seq = pkgs.stdenvNoCC.mkDerivation rec {
+    seq = stage rec {
       name = "seq-grch38.${version}";
       version = "p12";
       src = pkgs.fetchurl {
@@ -16,7 +16,7 @@ rec {
       buildCommand = "gunzip < $src > $out";
       passthru.filetype = filetype.fa {};
     };
-    blacklist = pkgs.stdenvNoCC.mkDerivation {
+    blacklist = stage {
       name = "blacklist-grch38";
       src = pkgs.fetchurl {
         url = "http://mitra.stanford.edu/kundaje/akundaje/release/blacklists/hg38-human/hg38.blacklist.bed.gz";
@@ -25,7 +25,7 @@ rec {
       buildCommand = "gunzip < $src > $out";
       passthru.filetype = filetype.bed { ref = seq; };
     };
-    dbsnp = pkgs.stdenvNoCC.mkDerivation {
+    dbsnp = stage {
       name = "dbsnp-b151_GRCh38p7";
       src = pkgs.fetchurl {
         url = "ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh38p7/VCF/common_all_20180418.vcf.gz";
@@ -37,7 +37,7 @@ rec {
         '';
         passthru.filetype = filetype.vcf { ref = seq; };
       };
-      cosmic = {coding, noncoding}: pkgs.stdenvNoCC.mkDerivation rec {
+      cosmic = {coding, noncoding}: stage rec {
         name = "cosmic-grch38";
         buildInputs = [ gawk ];
         buildCommand = ''
@@ -47,7 +47,7 @@ rec {
         passthru.filetype = filetype.vcf { ref = seq; };
       };
       ensembl = {
-        cdna = pkgs.stdenvNoCC.mkDerivation rec {
+        cdna = stage rec {
           name = "ensembl-grch38-cdna-${version}";
           version = "94";
           src = pkgs.fetchurl {
@@ -57,7 +57,7 @@ rec {
           buildCommand = "gunzip < $src > $out";
           passthru.filetype = filetype.fa {};
         };
-        ncrna = pkgs.stdenvNoCC.mkDerivation rec {
+        ncrna = stage rec {
           name = "ensembl-grch38-ncrna-${version}";
           version = "94";
           src = pkgs.fetchurl {
@@ -82,12 +82,12 @@ rec {
           '';
         };
         dbnsfp = {
-          db = requireFile {
+          db = pkgs.requireFile {
             name = "dbNSFP.txt.gz";
             message = "download the dbNSFP database manually from https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlbTZodjlGUDZnTGc and add to nix store";
             sha256 = "0gahnwkc7v2q6p6ixkhvsgqvvm6xf0c3bdh4nf0alih83h3wffd0";
           };
-          index = requireFile {
+          index = pkgs.requireFile {
             name = "dbNSFP.txt.gz.tbi";
             message = "download the dbNSFP index manually from https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlNVBJdFA5cFZRYkE and add to nix store";
             sha256 = "18blkly6gvg7r0sx968xlb1zl2kqg5j1kpbrm2r7ajlxlfyvrx3w";
@@ -106,7 +106,7 @@ rec {
 
     grcm38 = grcm38-p6;
     grcm38-p6 = {
-      seq = pkgs.stdenvNoCC.mkDerivation rec {
+      seq = stage rec {
         name = "seq-grcm38.${version}";
         version = "p6";
         src = pkgs.fetchurl {
@@ -117,7 +117,7 @@ rec {
         passthru.filetype = filetype.fa {};
       };
       ensembl = {
-        cdna = pkgs.stdenvNoCC.mkDerivation rec {
+        cdna = stage rec {
           name = "ensembl-grch38-cdna-${version}";
           version = "94";
           src = pkgs.fetchurl {
@@ -127,7 +127,7 @@ rec {
           buildCommand = "gunzip < $src > $out";
           passthru.filetype = filetype.fa {};
         };
-        ncrna = pkgs.stdenvNoCC.mkDerivation rec {
+        ncrna = stage rec {
           name = "ensembl-grch38-ncrna-${version}";
           version = "94";
           src = pkgs.fetchurl {
@@ -142,7 +142,7 @@ rec {
 
     mm10 = mm10-p4;
     mm10-p4 = {
-      seq = pkgs.stdenvNoCC.mkDerivation rec {
+      seq = stage rec {
         name = "seq-mm10.${version}";
         version = "p4";
         src = pkgs.fetchurl {
