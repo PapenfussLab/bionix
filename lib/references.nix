@@ -69,13 +69,13 @@ rec {
         };
       };
       snpeff = {
-        db = stdenv.mkDerivation rec {
+        db = pkgs.stdenv.mkDerivation rec {
           name = "GRCh38.86";
           src = pkgs.fetchurl {
             url = "mirror://sourceforge/project/snpeff/databases/v4_3/snpEff_v4_3_${name}.zip";
             sha256 = "1rf8q7l732ayjq2lpny4s75zpij05j00151374nqblk4wri2mz0i";
           };
-          buildInputs = [ unzip ];
+          buildInputs = with pkgs; [ unzip ];
           buildCommand = ''
             unzip ${src}
             mv data/${name} $out
