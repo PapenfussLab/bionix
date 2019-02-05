@@ -1,6 +1,8 @@
 {stdenv, lib, writeScript}:
 
-{ ppn, mem, walltime, tmpDir, sleepTime}: drv: lib.overrideDerivation drv ({ args, builder, name, ... }: {
+with lib;
+
+{ ppn, mem, walltime, queue ? null, flags ? null, tmpDir, sleepTime}: drv: lib.overrideDerivation drv ({ args, builder, name, ... }: {
   builder = "/bin/bash";
   args = let
     script = writeScript "qsub-script" ''
@@ -27,7 +29,11 @@
       NIX_BUILD_CORES=${toString ppn}
 
       while : ; do
-        qsub -l nodes=1:ppn=${toString ppn},mem=${toString mem}gb,walltime=${walltime} -N "${name}" ${script} 2>&1 > id
+        qsub -l nodes=1:ppn=${toString ppn},mem=${toString mem}gb,walltime=${walltime} \
+          -N "${name}" \
+          ${optionalString (queue != null) "-q ${queue}"} \
+          ${optionalString (flags != null) flags} \
+          ${script} 2>&1 > id
         if [ $? -eq 0 ] ; then
           break
         fi

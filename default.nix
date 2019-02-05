@@ -32,7 +32,7 @@ let
     strelka = callBionix ./tools/strelka.nix {};
 
     qsub = attrs: bionix.extend (self: super: with self; rec {
-      qsubDefs = { ppn = 1; mem = 1; walltime = "24:00:00"; tmpDir = "/tmp"; sleepTime = 60; } // attrs;
+      qsubDefs = { ppn = 1; mem = 1; walltime = "24:00:00"; tmpDir = "/tmp"; sleepTime = 60; queue = null; flags = null; } // attrs;
       qsub = attrs: (callPackage ./lib/qsub.nix {}) (qsubDefs // attrs);
       exec = f: x: y: qsub (builtins.intersectAttrs qsubDefs x) (f (builtins.removeAttrs x (builtins.attrNames qsubDefs)) y);
     });
