@@ -31,7 +31,7 @@ rec {
         url = "ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh38p7/VCF/common_all_20180418.vcf.gz";
         sha256 = "0r6m2yrcfw8bbdca515axjls30ssjas6x3qwi5qz07l3prjwmdd4";
       };
-      buildInputs = [ gawk ];
+      buildInputs = with pkgs; [ gawk ];
       buildCommand = ''
       gunzip < $src | awk '/^[^#]/{print "chr" $0;next}{print}' > $out
         '';
@@ -39,7 +39,7 @@ rec {
       };
       cosmic = {coding, noncoding}: stage rec {
         name = "cosmic-grch38";
-        buildInputs = [ gawk ];
+        buildInputs = with pkgs; [ gawk ];
         buildCommand = ''
         gunzip < ${coding} | grep '^#' > $out
         cat ${coding} ${noncoding} | gunzip | grep -v '^#' | sed 's/^/chr/' | sort -t$'\t' -k1,1 -k2,2n >> $out
