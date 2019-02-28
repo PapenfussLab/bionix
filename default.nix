@@ -30,6 +30,7 @@ let
     samtools = callBionix ./tools/samtools.nix {};
     snpeff = callBionix ./tools/snpeff.nix {};
     strelka = callBionix ./tools/strelka.nix {};
+    ascat = callBionix ./tools/ascat.nix {};
 
     qsub = attrs: bionix.extend (self: super: with self; rec {
       qsubDefs = { ppn = 1; mem = 1; walltime = "24:00:00"; tmpDir = "/tmp"; sleepTime = 60; queue = null; qsubFlags = null; } // attrs;
