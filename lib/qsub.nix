@@ -49,8 +49,7 @@ with lib;
       function cleanup {
         qdel $id 2>/dev/null || true
         sleep ${toString sleepTime}
-        cd /
-        rm -rf ${tmpDir}/$id
+        rm -rf ${tmpDir}/qsub-$id
       }
       trap cleanup INT TERM EXIT
 
