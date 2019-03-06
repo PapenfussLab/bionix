@@ -8,6 +8,7 @@
           xmlns:xi="http://www.w3.org/2001/XInclude"
           xml:id="sec-tools">
   <title>Tools</title>
+  <xi:include href="bowtie.xml" />
   <xi:include href="bwa.xml" />
   <xi:include href="strelka.xml" />
  </section>

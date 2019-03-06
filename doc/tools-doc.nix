@@ -24,6 +24,7 @@ stage {
       nixdoc -c "$1" -d "$2" -f "$1.nix" | sed 's/lib\./bionix./g' |grep -v locations.xml > "$1.xml"
     }
 
+    docgen bowtie 'Bowtie aligner'
     docgen bwa 'BWA aligner'
     docgen strelka 'Strelka2 variant caller'
 
