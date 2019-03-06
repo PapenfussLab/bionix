@@ -1,5 +1,4 @@
 { bionix
-, blacklist ? null
 , bwaIndexAttrs ? {}
 , faidxAttrs ? {}
 , flags ? null

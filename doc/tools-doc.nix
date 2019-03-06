@@ -30,6 +30,7 @@ stage {
     docgen cnvkit 'CNVkit CNV caller'
     docgen facets 'Facets CNV caller'
     docgen fastqc 'FastQC quality control'
+    docgen gridss 'GRIDSS SV caller'
     docgen strelka 'Strelka2 variant caller'
 
     mkdir $out

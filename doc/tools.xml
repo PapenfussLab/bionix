@@ -14,6 +14,7 @@
   <xi:include href="cnvkit.xml" />
   <xi:include href="facets.xml" />
   <xi:include href="fastqc.xml" />
+  <xi:include href="gridss.xml" />
   <xi:include href="strelka.xml" />
  </section>
 </book>
