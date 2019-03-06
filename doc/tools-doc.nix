@@ -29,6 +29,7 @@ stage {
     docgen bwa 'BWA aligner'
     docgen cnvkit 'CNVkit CNV caller'
     docgen facets 'Facets CNV caller'
+    docgen fastqc 'FastQC quality control'
     docgen strelka 'Strelka2 variant caller'
 
     mkdir $out
