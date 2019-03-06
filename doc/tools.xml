@@ -11,6 +11,7 @@
   <xi:include href="ascat.xml" />
   <xi:include href="bowtie.xml" />
   <xi:include href="bwa.xml" />
+  <xi:include href="cnvkit.xml" />
   <xi:include href="strelka.xml" />
  </section>
 </book>

@@ -27,6 +27,7 @@ stage {
     docgen ascat 'ascatNGS CNV caller'
     docgen bowtie 'Bowtie aligner'
     docgen bwa 'BWA aligner'
+    docgen cnvkit 'CNVkit CNV caller'
     docgen strelka 'Strelka2 variant caller'
 
     mkdir $out
