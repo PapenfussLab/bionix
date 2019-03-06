@@ -1,0 +1,14 @@
+<book xmlns="http://docbook.org/ns/docbook"
+      xmlns:xi="http://www.w3.org/2001/XInclude">
+ <info>
+  <title>Bionix</title>
+ </info>
+ <section xmlns="http://docbook.org/ns/docbook"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xml:id="sec-tools">
+  <title>Tools</title>
+  <xi:include href="bwa.xml" />
+  <xi:include href="strelka.xml" />
+ </section>
+</book>
