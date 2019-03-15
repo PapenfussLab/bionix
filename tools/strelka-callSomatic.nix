@@ -42,4 +42,5 @@ stage {
 
     cp -r results $out
   '';
+  passthru.multicore = true;
 }

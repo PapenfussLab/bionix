@@ -33,4 +33,5 @@ stage rec {
       sed 1d $f >> $out
     done
   '';
+  passthru.multicore = true;
 }

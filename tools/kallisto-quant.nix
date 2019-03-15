@@ -44,4 +44,5 @@ stage {
       -t $NIX_BUILD_CORES \
       ${concatStringsSep " " inputs}
   '';
+  passthru.multicore = true;
 }

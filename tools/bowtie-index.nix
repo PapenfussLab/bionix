@@ -18,4 +18,5 @@ stage {
     mkdir $out
     bowtie2-build --seed ${toString seed} --threads $NIX_BUILD_CORES ${optionalString (flags != null) flags} ${ref} $out/ref
   '';
+  passthru.multicore = true;
 }

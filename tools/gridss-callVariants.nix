@@ -50,4 +50,5 @@ stage rec {
       ${optionalString (blacklist != null) ("BLACKLIST=" + blacklist)} \
       ${optionalString (flags != null) flags}
   '';
+  passthru.multicore = true;
 }

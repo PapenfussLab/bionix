@@ -34,4 +34,5 @@ in stage {
           ${input} > $out
       '';
   passthru.filetype = if nameSort then bionix.types.nameSort outfmtR else coordSort outfmtR;
+  passthru.multicore = true;
 }

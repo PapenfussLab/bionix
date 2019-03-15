@@ -19,4 +19,5 @@ stage {
     samtools index -@ $NIX_BUILD_CORES ${optionalString (flags != null) flags} input.bam
     cp input.bam.bai $out
   '';
+  passthru.multicore = true;
 }

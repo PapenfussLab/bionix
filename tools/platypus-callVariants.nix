@@ -37,4 +37,5 @@ stage {
       --bamFiles=${concatMapStringsSep "," (p: "${filename p}.bam") inputs}
   '';
   passthru.filetype = filetype.vcf {ref = ref;};
+  passthru.multicore = true;
 }

@@ -32,4 +32,5 @@ in stage {
       > $out
   '';
   passthru.filetype = if bamOutput then filetype.bam {ref = ref; sorting = sort.name {};} else filetype.sam {ref = ref; sorting = sort.name {};};
+  passthru.multicore = true;
 }

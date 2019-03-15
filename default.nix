@@ -63,7 +63,7 @@ let
     # Export nixpkgs and standard library lib
     pkgs = nixpkgs;
     lib = nixpkgs.lib // { types = types; };
-    stage = nixpkgs.stdenvNoCC.mkDerivation;
+    stage = x: { multicore = false; } // nixpkgs.stdenvNoCC.mkDerivation x;
 
     # splitting/joining
     splitFile = file: drv: stage {

@@ -34,4 +34,5 @@ stage rec {
       -protocol WGS \
       -cpus $NIX_BUILD_CORES
   '';
+  passthru.multicore = true;
 }

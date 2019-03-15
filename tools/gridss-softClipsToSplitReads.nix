@@ -37,4 +37,5 @@ stage rec {
 			WORKER_THREADS=$NIX_BUILD_CORES
     '';
   passthru.filetype = filetype.bam { ref = ref; sorting = sort.none {}; };
+  passthru.multicore = true;
 }

@@ -37,4 +37,5 @@ stage {
     mkdir $out
     cp * $out
   '';
+  passthru.multicore = true;
 }

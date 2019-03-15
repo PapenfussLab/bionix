@@ -17,4 +17,5 @@ stage {
     ln -s ${bionix.samtools.index indexAttrs input} input.bam.bai
     mosdepth -t $NIX_BUILD_CORES ${optionalString (flags != null) flags} $out/out input.bam
   '';
+  passthru.multicore = true;
 }

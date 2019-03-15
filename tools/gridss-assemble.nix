@@ -57,4 +57,5 @@ stage rec {
       TMP_DIR=$TMPDIR/
   '';
   passthru.filetype = filetype.bam { ref = ref; sorting = sort.name {}; };
+  passthru.multicore = true;
 }
