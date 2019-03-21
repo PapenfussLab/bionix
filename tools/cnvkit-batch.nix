@@ -35,7 +35,7 @@ stage {
       -d $TMPDIR \
       ${optionalString (flags != null) flags}
     mkdir $out
-    cp * $out
+    cp *.cn{r,s,n} $out
   '';
   passthru.multicore = true;
 }
