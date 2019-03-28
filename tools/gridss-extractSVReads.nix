@@ -32,6 +32,7 @@ stage rec {
     done
     java -Dsamjdk.create_index=true \
       -cp ${bionix.gridss.jar} gridss.ExtractSVReads \
+      VERBOSITY=WARNING \
       REFERENCE_SEQUENCE=ref.fa \
       I=input.bam \
       O=$out \

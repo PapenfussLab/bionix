@@ -31,6 +31,7 @@ stage rec {
     java -Xmx${heapSize} \
       -Dsamjdk.create_index=false \
 			-cp ${bionix.gridss.jar} gridss.ComputeSamTags \
+      VERBOSITY=WARNING \
 			REFERENCE_SEQUENCE=ref.fa \
 			WORKING_DIR=$TMP_DIR \
 			TMP_DIR=$TMP_DIR \

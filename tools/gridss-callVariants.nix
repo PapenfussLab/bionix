@@ -39,6 +39,7 @@ stage rec {
 	    -Dsamjdk.use_async_io_write_tribble=true \
 	    -Dgridss.gridss.output_to_temp_file=true \
 	    -cp ${bionix.gridss.jar} gridss.CallVariants \
+      VERBOSITY=WARNING \
       WORKER_THREADS=$NIX_BUILD_CORES \
 	    TMP_DIR=. \
 	    WORKING_DIR=. \

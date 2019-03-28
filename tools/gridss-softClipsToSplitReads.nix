@@ -29,6 +29,7 @@ stage rec {
     done
     java -Xmx${heapSize} -Dsamjdk.create_index=false \
       -cp ${bionix.gridss.jar} gridss.SoftClipsToSplitReads \
+      VERBOSITY=WARNING \
 			REFERENCE_SEQUENCE=ref.fa \
 			I=${input} \
 			O=$out \

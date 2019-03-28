@@ -48,6 +48,7 @@ stage rec {
     ${concatMapStringsSep "\n" linkInput inputs}
 	  java -Xmx${heapSize} -Dsamjdk.create_index=true \
       -cp ${bionix.gridss.jar} gridss.AssembleBreakends \
+      VERBOSITY=WARNING \
       REFERENCE_SEQUENCE=ref.fa \
       ${concatMapStringsSep " " (i: "INPUT='${i}'") inputs} \
       WORKER_THREADS=$NIX_BUILD_CORES \

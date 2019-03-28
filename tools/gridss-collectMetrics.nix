@@ -24,6 +24,7 @@ stage rec {
     java -Xmx${heapSize} -cp ${bionix.gridss.jar} \
 			gridss.analysis.CollectGridssMetrics \
       ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
+      VERBOSITY=WARNING \
 			I=${input}\
 			O=$out/input \
       AS=true \

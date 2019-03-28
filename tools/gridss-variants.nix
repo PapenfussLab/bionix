@@ -70,6 +70,7 @@ rec {
     buildCommand = mkLinks + ''
       java -Xmx${heapSize} -Dsamjdk.create_index=true \
         -cp ${jar} gridss.IdentifyVariants \
+        VERBOSITY=WARNING \
         REFERENCE_SEQUENCE=ref.fa \
         ${concatMapStringsSep " " (i: "INPUT='${i}'") inputs} \
         ASSEMBLY=${assembly} \
@@ -93,6 +94,7 @@ rec {
       ln -s ${bionix.gridss.identifyVariants {inherit bwaIndexAttrs faidxAttrs indexAttrs assemblyAttrs collectMetricsAttrs softClipsToSplitReadsAttrs flags config; } inputs} input.vcf
       java -Xmx${heapSize} -Dsamjdk.create_index=true \
         -cp ${jar} gridss.AnnotateVariants \
+        VERBOSITY=WARNING \
         REFERENCE_SEQUENCE=ref.fa \
         ${concatMapStringsSep " " (i: "INPUT='${i}'") inputs} \
         ASSEMBLY=${assembly} \
