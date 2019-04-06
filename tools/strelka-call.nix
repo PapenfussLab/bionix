@@ -21,7 +21,7 @@ in
 assert (length (unique refs) == 1);
 
 stage {
-  name = "strelka";
+  name = "strelka-call";
   buildInputs = with pkgs; [ strelka ];
   buildCommand = ''
     ln -s ${ref} ref.fa
