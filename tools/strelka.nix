@@ -20,9 +20,9 @@ with types;
     drv: stage {
     name = "strelka-call-variants";
     buildCommand = ''
-      ln -s ${drv}/variants/variants.vcf.gz $out
+      ln -s ${drv}/variants/variants.vcf $out
     '';
-    passthru.filetype = filetype.gz (filetype.vcf {ref=ref;});
+    passthru.filetype = filetype.vcf {ref=ref;};
   };
   /* Extract indels from somatic results
   Type: indels :: somatic results -> vcf
@@ -31,8 +31,8 @@ with types;
     # result of callSomatic
     drv: stage {
     name = "strelka-callVariants-indels";
-    buildCommand = "ln -s ${drv}/variants/somatic.indels.vcf.gz $out";
-    passthru.filetype = filetype.gz (filetype.vcf {ref = ref;});
+    buildCommand = "ln -s ${drv}/variants/somatic.indels.vcf $out";
+    passthru.filetype = filetype.vcf {ref = ref;};
   };
   /* Extract SNVs from somatic results
   Type: snvs :: somatic results -> vcf
@@ -41,7 +41,7 @@ with types;
     # result of callSomatic
     drv: stage {
     name = "strelka-callVariants-snvs";
-    buildCommand = "ln -s ${drv}/variants/somatic.snvs.vcf.gz $out";
-    passthru.filetype = filetype.gz (filetype.vcf {ref = ref;});
+    buildCommand = "ln -s ${drv}/variants/somatic.snvs.vcf $out";
+    passthru.filetype = filetype.vcf {ref = ref;};
   };
 }

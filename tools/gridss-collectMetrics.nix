@@ -29,5 +29,11 @@ stage rec {
 			O=$out/input \
       AS=true \
 			THRESHOLD_COVERAGE=${toString thresholdCoverage}
+
+    # Make the output deterministic by removing timestamps
+    sed -i '/^# Started on:/d' $out/input.*_metrics
+    if [ -e $out/input.insert_size_histogram.pdf ] ; then
+      sed -i 's/(D:[0-9]\+)/(D:19700101000000)/g' $out/input.insert_size_histogram.pdf
+    fi
   '';
 }

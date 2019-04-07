@@ -38,7 +38,18 @@ stage {
       -m local \
       -j $NIX_BUILD_CORES 2>&1
 
-    cp -r results $out
+    # Strelka writes runtime stats and timestamps;
+    # both have to be stripped to provide determinism
+    cd results/variants
+    rm *.tbi genome.vcf.gz
+    for f in *.vcf.gz; do
+      gunzip $f
+      g=$(basename $f .gz)
+      sed -i '/^##fileDate/d' $g
+      sed -i '/^##startTime/d' $g
+    done
+    mkdir $out
+    cp -r * $out
   '';
   passthru.multicore = true;
 }

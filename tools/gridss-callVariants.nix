@@ -50,6 +50,9 @@ stage rec {
 	    ASSEMBLY="$out/gridss.bam" \
       ${optionalString (blacklist != null) ("BLACKLIST=" + blacklist)} \
       ${optionalString (flags != null) flags}
+
+    # The VCF index is non-deterministic
+    rm $out/gridss.vcf.idx
   '';
   passthru.multicore = true;
 }

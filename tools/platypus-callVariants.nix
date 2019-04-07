@@ -35,6 +35,9 @@ stage {
       ${optionalString (flags != null) flags} \
       -o $out \
       --bamFiles=${concatMapStringsSep "," (p: "${filename p}.bam") inputs}
+
+    # Remove timestamps from output
+    sed -i '/^##fileDate/d' $out
   '';
   passthru.filetype = filetype.vcf {ref = ref;};
   passthru.multicore = true;

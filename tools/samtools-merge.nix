@@ -19,7 +19,12 @@ stage {
   name = "samtools-merge";
   buildInputs = with pkgs; [ samtools ];
   buildCommand = ''
-    samtools merge ${optionalString (flags != null) flags} $out ${concatStringsSep " " inputs}
+    samtools merge ${optionalString (flags != null) flags} out.bam ${concatStringsSep " " inputs}
+
+    # Merge is non-deterministic with PG lines; if files have clashing PG IDs then a random
+    # suffix is appended to make it unique. PG lines are stripped in the following to
+    # resolve the issue.
+    samtools reheader <(samtools view -H out.bam | grep -v '@PG') out.bam > $out
   '';
   passthru.filetype = (builtins.elemAt inputs 0).filetype;
 }
