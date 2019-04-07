@@ -111,4 +111,14 @@ rec {
       gridss.assembly = assembly;
     };
   };
+
+  annotateAndAssemble = stage rec {
+    name = "gridss-annotateVariants-assemble";
+    buildCommand = ''
+      mkdir $out
+      ln -s ${annotate} $out/gridss.vcf
+      ln -s ${assembly} $out/gridss.bam
+      ln -s ${bionix.samtools.index indexAttrs assembly} $out/gridss.bam.bai
+    '';
+  };
 }

@@ -53,6 +53,9 @@ rec {
   */
   annotateVariants = exec (attrs: input: ((callBionix ./gridss-variants.nix attrs) input).annotate);
 
+  /* As annotateVariants except include assembly in output */
+  annotateAndAssemble = exec (attrs: input: ((callBionix ./gridss-variants.nix attrs) input).annotateAndAssemble);
+
   /* Preprocess BAM files to extract SV reads and convert soft clips to split reads
   Type: preprocessBam :: bam -> bam
   */
@@ -69,4 +72,7 @@ rec {
   Type: [bam] -> GRIDSS result
   */
   call = inputs: gridss.annotateVariants {} (map gridss.preprocessBam inputs);
+
+  /* As call but include assemblies in output */
+  callAndAssemble = inputs: gridss.annotateAndAssemble {} (map gridss.preprocessBam inputs);
 }

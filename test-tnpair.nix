@@ -51,6 +51,7 @@ let
     (ln (bowtie.align {inherit ref;} tnpair.normal.files) "alignments/bowtie-normal.bam")
     (ln (gridss.callVariants {} (with tnpairResult.alignments; [normal tumour])) "gridss")
     (ln (gridss.call (with tnpairResult.alignments; [normal tumour])) "gridss2")
+    (ln (gridss.callAndAssemble (with tnpairResult.alignments; [normal tumour])) "gridss3")
     (ln (samtools.merge {} [tnpairResult.alignments.tumour tnpairResult.alignments.normal]) "alignments/merged.bam")
     (ln (samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.tumour)) "alignments/${tnpair.tumour.name}.cram")
     #(ln (samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.normal)) "alignments/${tnpair.normal.name}.cram")
