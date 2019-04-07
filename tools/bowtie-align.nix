@@ -20,7 +20,7 @@ let
 
 in stage {
   name = "bowtie2-align";
-  buildInputs = with pkgs; [ bowtie2 bc ] ++ optional bamOutput samtools;
+  buildInputs = with pkgs; [ bowtie2 bc samtools ];
   buildCommand = ''
     cores=$(echo $NIX_BUILD_CORES ${optionalString bamOutput "- 1"} | bc)
     if [[ $cores -lt 1 ]] ; then
@@ -28,6 +28,7 @@ in stage {
     fi
     bowtie2 -x ${bionix.bowtie.index indexAttrs ref}/ref ${optionalString (flags != null) flags} --threads $cores \
       ${if input2 != null then "-1 " + fq input1 + " -2 " + fq input2 else "-U " + fq input1} \
+      | samtools sort -n \
       ${optionalString bamOutput "| samtools view -b"} \
       > $out
   '';
