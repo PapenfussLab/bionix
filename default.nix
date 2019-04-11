@@ -25,6 +25,7 @@ let
     kallisto = callBionix ./tools/kallisto.nix {};
     mosdepth = callBionix ./tools/mosdepth.nix {};
     mutect = callBionix ./tools/mutect.nix {};
+    minimap2 = callBionix ./tools/minimap2.nix {};
     platypus = callBionix ./tools/platypus.nix {};
     ref = callBionix ./lib/references.nix {};
     samtools = callBionix ./tools/samtools.nix {};
