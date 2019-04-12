@@ -15,11 +15,11 @@ with types;
 with compression;
 
 let
-  fa = f: matchFiletype "minmap2-ref" { fa = _: f; } f;
-  fq = f: matchFiletype "minmap2-input" { fq = _: f; gz = matchFiletype' "minmap2-input" { fq = _: f; }; } f;
+  fa = f: matchFiletype "minimap2-ref" { fa = _: f; } f;
+  fq = f: matchFiletype "minimap2-input" { fq = _: f; gz = matchFiletype' "minimap2-input" { fq = _: f; }; } f;
 
 in stage {
-  name = "minmap2-align";
+  name = "minimap2-align";
   buildInputs = with pkgs; [ minimap2 bc ] ++ optional bamOutput samtools;
   buildCommand = ''
     ln -s ${fa ref} ref.fa
