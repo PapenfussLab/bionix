@@ -34,6 +34,11 @@ let
     strelka = callBionix ./tools/strelka.nix {};
     ascat = callBionix ./tools/ascat.nix {};
 
+    sbatch = attrs: bionix.extend (self: super: with self; rec {
+      sbatchDefs = { ppn = 1; mem = 1; walltime = "24:00:00"; partition = null; slurmFlags = null; } // attrs;
+      sbatch = attrs: (callPackage ./lib/sbatch.nix {}) (sbatchDefs // attrs);
+      exec = f: x: y: sbatch (builtins.intersectAttrs sbatchDefs x) (f (builtins.removeAttrs x (builtins.attrNames sbatchDefs)) y);
+      });
     qsub = attrs: bionix.extend (self: super: with self; rec {
       qsubDefs = { ppn = 1; mem = 1; walltime = "24:00:00"; tmpDir = "/tmp"; sleepTime = 60; queue = null; qsubFlags = null; } // attrs;
       qsub = attrs: (callPackage ./lib/qsub.nix {}) (qsubDefs // attrs);
