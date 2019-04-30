@@ -2,7 +2,7 @@
 # with the Platypus variant caller. Each input is preprocessed by aligning
 # against a reference genome (defaults to GRCH38), fixing mate information, and
 # marking duplicates. Finally platypus is called over all samples.
-{bionix ? import <bionix> {}
+{bionix ? import ./.. {}
 ,inputs
 ,ref ? null}:
 

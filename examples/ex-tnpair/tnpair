@@ -55,4 +55,4 @@ import ./tnpair.nix {
 }
 EOF
 
-nix build --keep-going "(import ./tnpair-$$)"
+nix build --keep-going "(import ./tnpair-$$)" --no-sandbox

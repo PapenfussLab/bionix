@@ -1,6 +1,6 @@
 # This example uses the pipelines specified in the call.nix file on the
 # synthetic data in this directory.
-with import <bionix> {};
+with import ./.. {};
 
 let
 

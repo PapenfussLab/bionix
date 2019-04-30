@@ -1,5 +1,5 @@
 # This is an example tumour-normal calling pipeline using strelka
-{ bionix ? import <bionix> {}
+{ bionix ? import ./../.. {}
 , normal
 , tumour
 , ref
@@ -20,7 +20,7 @@ let
   ];
 
 in linkDrv [
-  (ln (strelka.call {} {normal = preprocess normal; tumour = preprocess tumour;}) "strelka")
+  (ln (strelka.callSomatic {} {normal = preprocess normal; tumour = preprocess tumour;}) "strelka")
   (ln (preprocess normal) "normal.bam")
   (ln (preprocess tumour) "tumour.bam")
 ]

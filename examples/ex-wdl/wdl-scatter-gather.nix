@@ -1,6 +1,6 @@
 # The scatter-gather example from https://github.com/openwdl/wdl
 # translated to bionix
-{ bionix ? import <bionix> {} }:
+{ bionix ? import ./../.. {} }:
 
 with bionix;
 with lib;

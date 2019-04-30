@@ -1,6 +1,6 @@
 # This is a translation of the Nextflow example found at
 # https://www.nextflow.io/example1.html
-{ bionix ? import <bionix> {}
+{ bionix ? import ./../.. {}
 , input ? ./sample.fa}:
 
 with bionix;
