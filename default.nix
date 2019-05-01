@@ -33,6 +33,7 @@ let
     snpeff = callBionix ./tools/snpeff.nix {};
     strelka = callBionix ./tools/strelka.nix {};
     ascat = callBionix ./tools/ascat.nix {};
+    fastp = callBionix ./tools/fastp.nix {};
 
     sbatch = attrs: bionix.extend (self: super: with self; rec {
       sbatchDefs = { ppn = 1; mem = 1; walltime = "24:00:00"; partition = null; slurmFlags = null; } // attrs;

@@ -14,7 +14,8 @@ let
   alignWithRG = rg: bwa.align { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
   sort = samtools.sort {};
   flagstat = samtools.flagstat {};
-  check = fastqc.check {};
+  check-fastqc = fastqc.check {};
+  check-fastp = fastp.run {};
   callVariants = strelka.callSomatic {};
   markdup = samtools.markdup {};
   fixmate = samtools.fixmate {};
@@ -59,10 +60,11 @@ let
     #(ln (samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.normal)) "alignments/${tnpair.normal.name}.cram")
     (ln (flagstat tnpairResult.alignments.tumour) "alignments/${tnpair.tumour.name}.flagstat")
     #(ln (flagstat tnpairResult.alignments.normal) "alignments/${tnpair.normal.name}.flagstat")
-    (ln (check tnpair.tumour.files.input1) "fastqc/${tnpair.tumour.name}.1")
-    #(ln (check tnpair.tumour.files.input2) "fastqc/${tnpair.tumour.name}.2")
-    #(ln (check tnpair.normal.files.input1) "fastqc/${tnpair.normal.name}.1")
-    #(ln (check tnpair.normal.files.input2) "fastqc/${tnpair.normal.name}.2")
+    (ln (check-fastqc tnpair.tumour.files.input1) "fastqc/${tnpair.tumour.name}.1")
+    #(ln (check-fastqc tnpair.normal.files.input1) "fastqc/${tnpair.normal.name}.1")
+    #(ln (check-fastqc tnpair.normal.files.input2) "fastqc/${tnpair.normal.name}.2")
+    #(ln (check-fastqc tnpair.tumour.files.input2) "fastqc/${tnpair.tumour.name}.2")
+    (ln (check-fastp tnpair.tumour.files) "fastp/${tnpair.tumour.name}")
   ];
 
 in testNaming
