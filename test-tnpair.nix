@@ -13,6 +13,7 @@ let
 
   alignWithRG = rg: bwa.align { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
   sort = samtools.sort {};
+  nameSort = samtools.sort {nameSort = true;};
   flagstat = samtools.flagstat {};
   check-fastqc = fastqc.check {};
   check-fastp = fastp.run {};
@@ -56,6 +57,7 @@ let
     (ln (gridss.call (with tnpairResult.alignments; [normal tumour])) "gridss2")
     (ln (gridss.callAndAssemble (with tnpairResult.alignments; [normal tumour])) "gridss3")
     (ln (samtools.merge {} [tnpairResult.alignments.tumour tnpairResult.alignments.normal]) "alignments/merged.bam")
+    (ln (samtools.merge {} [(nameSort tnpairResult.alignments.tumour) (nameSort tnpairResult.alignments.normal)]) "alignments/merged-namesorted.bam")
     (ln (samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.tumour)) "alignments/${tnpair.tumour.name}.cram")
     #(ln (samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.normal)) "alignments/${tnpair.normal.name}.cram")
     (ln (flagstat tnpairResult.alignments.tumour) "alignments/${tnpair.tumour.name}.flagstat")

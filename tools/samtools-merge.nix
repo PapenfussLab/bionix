@@ -10,7 +10,8 @@ with lib;
 
 let
   inherit (bionix.types) matchFiletype matchSorting;
-  inputIsHomogenous = length (unique (map (matchFiletype "samtools-merge" {bam = x: x // {sorting = matchSorting "samtools-merge" {coord = _: "coord";} x;};}) inputs)) == 1;
+  inputIsHomogenous = length (unique (map (matchFiletype "samtools-merge" {bam = x: x // {sorting = matchSorting "samtools-merge" {coord = _: "coord"; name = _: "name"; } x;};}) inputs)) == 1;
+  nameSorted = matchFiletype "samtools-merge" { bam = x: matchSorting "samtools-merge" {coord = _: false; name = _: true;} x;} (lib.head inputs);
 in
 
 assert inputIsHomogenous;
@@ -19,7 +20,9 @@ stage {
   name = "samtools-merge";
   buildInputs = with pkgs; [ samtools ];
   buildCommand = ''
-    samtools merge ${optionalString (flags != null) flags} out.bam ${concatStringsSep " " inputs}
+    samtools merge ${optionalString (flags != null) flags} \
+      ${if nameSorted then "-n" else ""} \
+      out.bam ${concatStringsSep " " inputs}
 
     # Merge is non-deterministic with PG lines; if files have clashing PG IDs then a random
     # suffix is appended to make it unique. PG lines are stripped in the following to
