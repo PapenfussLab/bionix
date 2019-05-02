@@ -39,6 +39,10 @@ let
     variants = callVariants alignments;
     glvariants = strelka.call {} (builtins.attrValues alignments);
     platypusVars = platypus.call {} (builtins.attrValues alignments);
+    shards = pipe [
+      (shard.fastQPair 2)
+      (map (bwa.align {inherit ref;}))
+    ] normal.files;
   };
 
   tnpairResult = processPair tnpair;
@@ -56,6 +60,7 @@ let
     (ln (gridss.callVariants {} (with tnpairResult.alignments; [normal tumour])) "gridss")
     (ln (gridss.call (with tnpairResult.alignments; [normal tumour])) "gridss2")
     (ln (gridss.callAndAssemble (with tnpairResult.alignments; [normal tumour])) "gridss3")
+    (ln (samtools.merge {} tnpairResult.shards) "alignments/merged-shards.bam")
     (ln (samtools.merge {} [tnpairResult.alignments.tumour tnpairResult.alignments.normal]) "alignments/merged.bam")
     (ln (samtools.merge {} [(nameSort tnpairResult.alignments.tumour) (nameSort tnpairResult.alignments.normal)]) "alignments/merged-namesorted.bam")
     (ln (samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.tumour)) "alignments/${tnpair.tumour.name}.cram")

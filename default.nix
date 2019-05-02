@@ -68,9 +68,12 @@ let
     fetchFastQGZ = attrs: with types; tagFiletype (filetype.gz (filetype.fq {})) (fetchurl attrs);
     fetchFastAGZ = attrs: with types; tagFiletype (filetype.gz (filetype.fa {})) (fetchurl attrs);
 
+    # Turn a multi-output derivation into a list of derivations
+    outputDrvs = drv: map (o: lib.getAttr o drv) drv.outputs;
+
     # Export nixpkgs and standard library lib
     pkgs = nixpkgs;
-    lib = nixpkgs.lib // { types = types; };
+    lib = nixpkgs.lib // { types = types; shard = callBionix ./lib/shard.nix {};};
     stage = x@{ name, ... }: { multicore = false; } // nixpkgs.stdenvNoCC.mkDerivation (x // {name = "bionix-" + name;});
 
     # splitting/joining
