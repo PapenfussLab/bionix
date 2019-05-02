@@ -9,6 +9,7 @@ let
     callBionix = callBionix;
     id = x: x;
     exec = f: x: y: f x y;
+    exec' = f: exec (_: f) {};
     callBionixE = p: exec (callBionix p);
 
     types = callBionix ./lib/types.nix {};
