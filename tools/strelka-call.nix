@@ -20,9 +20,11 @@ in
 
 assert (length (unique refs) == 1);
 
-stage {
+let
+out = stage {
   name = "strelka-call";
   buildInputs = with pkgs; [ strelka ];
+  outputs = [ "out" "variants" ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx indexAttrs ref} ref.fa.fai
@@ -48,8 +50,12 @@ stage {
       sed -i '/^##fileDate/d' $g
       sed -i '/^##startTime/d' $g
     done
+    mv variants.vcf $variants
+    ln -s $variants variants.vcf
     mkdir $out
     cp -r * $out
   '';
   passthru.multicore = true;
-}
+};
+ft = {filetype = types.filetype.vcf {ref = ref;};};
+in out // { variants = out.variants // ft; }

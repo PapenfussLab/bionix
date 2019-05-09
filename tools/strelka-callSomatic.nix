@@ -21,9 +21,12 @@ in
 
 assert (length (unique refs) == 1);
 
-stage {
+let
+
+out = stage {
   name = "strelka-callSomatic";
   buildInputs = with pkgs; [ strelka ];
+  outputs = [ "out" "indels" "snvs" ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx indexAttrs ref} ref.fa.fai
@@ -50,8 +53,14 @@ stage {
       sed -i '/^##fileDate/d' $g
       sed -i '/^##startTime/d' $g
     done
+    mv somatic.indels.vcf $indels
+    ln -s $indels somatic.indels.vcf
+    mv somatic.snvs.vcf $snvs
+    ln -s $snvs somatic.snvs.vcf
     mkdir $out
     cp -r * $out
   '';
   passthru.multicore = true;
-}
+};
+ft = {filetype = types.filetype.vcf {ref = ref;};};
+in out // { indels = out.indels // ft; snvs = out.snvs // ft;}
