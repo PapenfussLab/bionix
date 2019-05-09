@@ -16,7 +16,7 @@ let
   nameSort = samtools.sort {nameSort = true;};
   flagstat = samtools.flagstat {};
   check-fastqc = fastqc.check {};
-  check-fastp = fastp.run {};
+  check-fastp = fastp.check {};
   callVariants = strelka.callSomatic {};
   markdup = samtools.markdup {};
   fixmate = samtools.fixmate {};
