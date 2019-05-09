@@ -14,6 +14,7 @@ let
 
     types = callBionix ./lib/types.nix {};
 
+    battenberg = callBionix ./tools/battenberg.nix {};
     bowtie = callBionix ./tools/bowtie.nix {};
     bwa = callBionix ./tools/bwa.nix {};
     cnvkit = callBionix ./tools/cnvkit.nix {};
