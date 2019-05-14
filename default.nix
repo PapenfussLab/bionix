@@ -75,7 +75,28 @@ let
     # Export nixpkgs and standard library lib
     pkgs = nixpkgs;
     lib = nixpkgs.lib // { types = types; shard = callBionix ./lib/shard.nix {};};
-    stage = x@{ name, ... }: { multicore = false; } // nixpkgs.stdenvNoCC.mkDerivation (x // {name = "bionix-" + name;});
+    stage = x@{ name, stripStorePaths ? true, ... }:
+      (if stripStorePaths then strip else x: x) ({ multicore = false; } // nixpkgs.stdenvNoCC.mkDerivation (x // {name = "bionix-" + name; }));
+    strip = drv: drv.overrideAttrs (attrs: {
+      buildCommand = attrs.buildCommand + ''
+
+        function rewrite {
+          sed -i 's|/nix/store/[^-]*|/nix/store/00000000000000000000000000000000|g' $1
+        }
+        function rewriteOutput {
+          if [ -f ''${!1} ] ; then
+            rewrite ''${!1}
+          else
+            for f in $(find ''${!1} -type f) ; do
+              rewrite $f
+            done
+          fi
+        }
+        for o in $outputs ; do
+          rewriteOutput $o
+        done
+      '';
+  });
 
     # splitting/joining
     splitFile = file: drv: stage {

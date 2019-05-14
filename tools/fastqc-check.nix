@@ -9,12 +9,16 @@ input:
 
 stage {
   name = "fastqc-check";
-  buildInputs = [ bionix.fastqc.fastqc ];
+  buildInputs = [ bionix.fastqc.fastqc pkgs.unzip ];
+  stripStorePaths = false; # we do it explicity for fastqc
+  outputs = [ "out" "zip" ];
   buildCommand = ''
-    mkdir $out
     fastqc \
-      -o $out \
+      -o $TMPDIR \
       ${optionalString (flags != null) flags} \
       ${input}
+
+    sed  "s|$(basename ${input})|input|g" *.html > $out
+    cp *.zip $zip
   '';
 }
