@@ -8,12 +8,12 @@ drv:
   in lib.overrideDerivation drv ({ args, builder, name, ... }: {
     builder = stdenv.shell;
     args = let
-      script = writeScript "sbatch-script" ''
+      script = writeScript "slurm-script" ''
         #!${stdenv.shell}
         ${builder} ${lib.escapeShellArgs args}
       '';
 
-      sbatch = writeScript "sbatch" ''
+      slurm = writeScript "slurm" ''
         #!${stdenv.shell}
         NIX_BUILD_CORES=${toString ppnReified}
 
@@ -24,5 +24,5 @@ drv:
           ${script}
       '';
 
-      in [ "-c" sbatch ];
+      in [ "-c" slurm ];
   })
