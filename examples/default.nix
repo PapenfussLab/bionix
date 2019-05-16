@@ -41,4 +41,4 @@ let
     sha256 = "0sy9hq8n55knfkiblam50dzaiwhrx6pv8b8l1njdn6kfj4wflz2p";
   };
 
-in import ./call.nix {inherit inputs ref;}
+in import ./call.nix {inherit inputs ref bionix;}
