@@ -2,7 +2,7 @@
 
 with lib;
 
-{ ppn, mem, walltime, partition ? null, slurmFlags ? null}:
+{ ppn, mem, walltime, partition ? null, slurmFlags ? null, salloc ? "/usr/bin/salloc" }:
 drv:
   let ppnReified = if drv.multicore then ppn else 1;
   in lib.overrideDerivation drv ({ args, builder, name, ... }: {
@@ -17,7 +17,7 @@ drv:
         #!${stdenv.shell}
         NIX_BUILD_CORES=${toString ppnReified}
 
-        salloc -c $NIX_BUILD_CORES --mem=${toString mem}G -t ${walltime} \
+        ${salloc} -c $NIX_BUILD_CORES --mem=${toString mem}G -t ${walltime} \
           -J "${name}" \
           ${optionalString (partition != null) "-p ${partition}"} \
           ${optionalString (slurmFlags != null) slurmFlags} \
