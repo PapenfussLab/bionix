@@ -26,8 +26,8 @@ BioNix will download or build all of the necessary software and create a soft li
 Next, check out the code:
 
 -   The pipeline itself is specified in `examples/call.nix` and `examples/default.nix`.
--   The BioNix wrapper for `platypus` is in `tools/platypus-callVariants.nix`.
--   The software package for `platypus` can be found in [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/science/biology/platypus/default.nix).
+-   The BioNix wrapper to run `platypus` is in `tools/platypus-callVariants.nix`.
+-   The Nix expression for the `platypus` software itself can be found in [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/science/biology/platypus/default.nix).
 
 BioNix pipelines can be easily wrapped in shell scripts: see `examples/ex-tnpair/tnpair` for an example script that accepts a reference fasta, along with paired normal and tumor fastq files, and performs alignment, preprocessing, and variant calling with [`strelka`](https://github.com/Illumina/strelka).
 
