@@ -7,12 +7,12 @@
 } :
 
 with bionix;
-with pkgs.lib;
+with lib;
 with types;
 
-# Match input file type—how to do .fq and .fq.gz? Does bz2 work?
-
 let
+  fq = f: matchFiletype "fastp-input" { fq = _: f; gz = matchFiletype' "fastp-input" { fq = _: f; }; } f;
+
   out =
     stage {
         name = "fastp";
@@ -22,10 +22,10 @@ let
             mkdir -p $out
             fastp \
                 ${optionalString (flags != null) flags} \
-                -i ${input1} \
+                -i ${fq input1} \
                 -o fastq1.fq.gz \
                 ${optionalString (input2 != null) ''
-                    -I ${input2} \
+                    -I ${fq input2} \
                     -O fastq2.fq.gz \
 
                     cp fastq2.fq.gz $fastq2
