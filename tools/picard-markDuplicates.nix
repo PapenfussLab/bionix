@@ -9,10 +9,10 @@ with lib;
 with types;
 
 assert (matchFiletype "picard-markDuplicates" { bam = _: true; } inputBam);
+assert !(matchFileSorting "picard-markDuplicates" { none = _: true; } inputBam);
 
-# Not sure what to do with sorting: behavior varies based on sortedness of input!
-# See: https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates
-# assert (matchFileSorting "picard-markDuplicates" { coord = _: true; } inputBam);
+# Note that picard markDuplicates has different behaviour depending on whether the input
+# is name-sorted or coordinate-sorted.
 
 stage {
     name = "picard-markDuplicates";
