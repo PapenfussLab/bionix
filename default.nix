@@ -27,6 +27,7 @@ let
     mosdepth = callBionix ./tools/mosdepth.nix {};
     mutect = callBionix ./tools/mutect.nix {};
     minimap2 = callBionix ./tools/minimap2.nix {};
+    picard = callBionix ./tools/picard.nix {};
     platypus = callBionix ./tools/platypus.nix {};
     ref = callBionix ./lib/references.nix {};
     samtools = callBionix ./tools/samtools.nix {};
