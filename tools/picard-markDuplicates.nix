@@ -8,8 +8,11 @@ with bionix;
 with lib;
 with types;
 
-assert (matchFiletype "picard-markDuplicates" { bam = _: true; } input);
-assert (matchFileSorting "picard-markDuplicates" { coord = _: true; } input);
+assert (matchFiletype "picard-markDuplicates" { bam = _: true; } inputBam);
+
+# Not sure what to do with sorting: behavior varies based on sortedness of input!
+# See: https://broadinstitute.github.io/picard/command-line-overview.html#MarkDuplicates
+# assert (matchFileSorting "picard-markDuplicates" { coord = _: true; } inputBam);
 
 stage {
     name = "picard-markDuplicates";
