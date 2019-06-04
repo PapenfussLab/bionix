@@ -77,8 +77,8 @@ let
     lib = nixpkgs.lib // { types = types; shard = callBionix ./lib/shard.nix {};};
     stage = x@{ name, stripStorePaths ? true, multicore ? false, ... }:
       (if stripStorePaths then strip else x: x) (nixpkgs.stdenvNoCC.mkDerivation (x // {name = "bionix-" + name; inherit multicore;}));
-    strip = drv: drv.overrideAttrs (attrs: {
-      buildCommand = attrs.buildCommand + ''
+    strip = drv: let
+        stripCommand = ''
 
         function rewrite {
           sed -i 's|/nix/store/[^-]*|/nix/store/00000000000000000000000000000000|g' $1
@@ -96,7 +96,12 @@ let
           rewriteOutput $o
         done
       '';
-    });
+      in drv.overrideAttrs (attrs:
+        if attrs ? buildCommand then
+          {buildCommand = attrs.buildCommand + stripCommand;}
+        else
+          { fixupPhase = (if attrs ? fixupPhase then attrs.fixupPhase else "") + stripCommand; }
+        );
 
     # splitting/joining
     splitFile = file: drv: stage {
