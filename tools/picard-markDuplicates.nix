@@ -9,7 +9,10 @@ with lib;
 with types;
 
 assert (matchFiletype "picard-markDuplicates" { bam = _: true; } inputBam);
-assert !(matchFileSorting "picard-markDuplicates" { none = _: true; } inputBam);
+assert (matchFileSorting
+    "picard-markDuplicates"
+    { coord = _: true; name = _: true; }
+    inputBam);
 
 # Note that picard markDuplicates has different behaviour depending on whether the input
 # is name-sorted or coordinate-sorted.
@@ -26,4 +29,5 @@ stage {
             M=$metrics \
             ${optionalString (flags != null) flags}
         '';
+    passthru.filetype = inputBam.filetype;
 }
