@@ -118,7 +118,7 @@ rec {
       };
       ensembl = {
         cdna = stage rec {
-          name = "ensembl-grch38-cdna-${version}";
+          name = "ensembl-grcm38-cdna-${version}";
           version = "94";
           src = pkgs.fetchurl {
             url = "ftp://ftp.ensembl.org/pub/release-${version}/fasta/mus_musculus/cdna/Mus_musculus.GRCm38.cdna.all.fa.gz";
@@ -128,7 +128,7 @@ rec {
           passthru.filetype = filetype.fa {};
         };
         ncrna = stage rec {
-          name = "ensembl-grch38-ncrna-${version}";
+          name = "ensembl-grcm38-ncrna-${version}";
           version = "94";
           src = pkgs.fetchurl {
             url = "ftp://ftp.ensembl.org/pub/release-${version}/fasta/mus_musculus/ncrna/Mus_musculus.GRCm38.ncrna.fa.gz";
