@@ -43,7 +43,7 @@ let
       exec = f: x: y: slurm (builtins.intersectAttrs slurmDefs x) (f (builtins.removeAttrs x (builtins.attrNames slurmDefs)) y);
       });
     qsub = attrs: bionix.extend (self: super: with self; rec {
-      qsubDefs = { ppn = 1; mem = 1; walltime = "24:00:00"; tmpDir = "/tmp"; sleepTime = 60; queue = null; qsubFlags = null; } // attrs;
+      qsubDefs = { ppn = 1; mem = 1; walltime = "24:00:00"; tmpDir = "/tmp"; sleepTime = 60; queue = null; qsubFlags = null;  qsubPath = "/usr/bin"; } // attrs;
       qsub = attrs: (callPackage ./lib/qsub.nix {}) (qsubDefs // attrs);
       exec = f: x: y: qsub (builtins.intersectAttrs qsubDefs x) (f (builtins.removeAttrs x (builtins.attrNames qsubDefs)) y);
     });

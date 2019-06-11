@@ -2,7 +2,7 @@
 
 with lib;
 
-{ ppn, mem, walltime, queue ? null, qsubFlags ? null, tmpDir, sleepTime}:
+{ ppn, mem, walltime, queue ? null, qsubFlags ? null, tmpDir, sleepTime, qsubPath ? "/usr/bin" }:
 drv:
   let ppnReified = if drv.multicore then ppn else 1;
   in lib.overrideDerivation drv ({ args, builder, name, ... }: {
@@ -27,7 +27,7 @@ drv:
 
       qsub = writeScript "qsub" ''
         #!${stdenv.shell}
-        PATH=/usr/bin:/bin:/usr/sbin:/sbin
+        PATH=${qsubPath}
         SHELL=/bin/sh
         NIX_BUILD_CORES=${toString ppnReified}
 
