@@ -2,7 +2,7 @@
 
 with lib;
 
-{ ppn, mem, walltime, partition ? null, slurmFlags ? null, salloc ? "/usr/bin/salloc" }:
+{ ppn, mem, walltime, partition ? null, slurmFlags ? null, salloc ? "/usr/bin/salloc", srun ? "/usr/bin/srun" }:
 drv:
   let ppnReified = if drv.multicore then ppn else 1;
   in lib.overrideDerivation drv ({ args, builder, name, ... }: {
@@ -21,7 +21,7 @@ drv:
           -J "${name}" \
           ${optionalString (partition != null) "-p ${partition}"} \
           ${optionalString (slurmFlags != null) slurmFlags} \
-          ${script}
+          ${srun} ${script}
       '';
 
       in [ "-c" slurm ];
