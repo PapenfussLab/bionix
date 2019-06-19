@@ -37,8 +37,10 @@ let
   processPair = { tumour, normal }: rec {
     alignments = mapAttrs (_: x: markdup (sort (fixmate (alignWithRG x.name x.files)))) { inherit normal tumour; };
     variants = callVariants alignments;
+    octopusSomatic = octopus.callSomatic {} {inherit (alignments) normal; tumours = [ alignments.tumour ];};
     glvariants = strelka.call {} (builtins.attrValues alignments);
     platypusVars = platypus.call {} (builtins.attrValues alignments);
+    octopusVars = octopus.call {} (builtins.attrValues alignments);
     shards = pipe [
       (shard.fastQPair 2)
       (map (bwa.align {inherit ref;}))
@@ -56,6 +58,8 @@ let
     (ln (facets.callCNV {} {vcf = tnpairResult.platypusVars; bams = with tnpairResult.alignments; [ normal tumour ];}) "facets")
     (ln cnvkitResults.cnvs "cnvkit")
     (ln cnvkitResults.plot "cnvkit.pdf")
+    (ln tnpairResult.octopusVars "octopus.vcf")
+    (ln tnpairResult.octopusSomatic "octopus-somatic.vcf")
     (ln tnpairResult.variants "strelka")
     (ln tnpairResult.glvariants "strelka-gl")
     (ln tnpairResult.variants.indels "strelka.indels.vcf")
