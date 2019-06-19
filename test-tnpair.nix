@@ -47,8 +47,15 @@ let
 
   tnpairResult = processPair tnpair;
 
+  cnvkitResults = rec {
+    cnvs = cnvkit.callCNV {} (with tnpairResult.alignments; { normals = [ normal ]; tumours = [ tumour ];});
+    plot = cnvkit.scatterPlot {} cnvs;
+  };
+
   testNaming = linkDrv [
     (ln (facets.callCNV {} {vcf = tnpairResult.platypusVars; bams = with tnpairResult.alignments; [ normal tumour ];}) "facets")
+    (ln cnvkitResults.cnvs "cnvkit")
+    (ln cnvkitResults.plot "cnvkit.pdf")
     (ln tnpairResult.variants "strelka")
     (ln tnpairResult.glvariants "strelka-gl")
     (ln tnpairResult.variants.indels "strelka.indels.vcf")
