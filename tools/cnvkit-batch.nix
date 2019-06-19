@@ -22,7 +22,7 @@ assert (all sorted (normals ++ tumours));
 
 stage {
   name = "cnvkit";
-  buildInputs = [ cnvkit.app ];
+  buildInputs = with pkgs; [ python3Packages.cnvkit ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${samtools.faidx indexAttrs ref} ref.fa.fai
