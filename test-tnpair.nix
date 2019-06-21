@@ -62,6 +62,8 @@ let
     (ln tnpairResult.variants.snvs "strelka.snvs.vcf")
     (ln tnpairResult.glvariants.variants "strelka.gl.vcf")
     (ln (bowtie.align {inherit ref;} tnpair.normal.files) "alignments/bowtie-normal.bam")
+    (ln (bwa.mem {inherit ref;} tnpair.normal.files) "alignments/bwa-mem.bam")
+    (ln (bwa.mem2 {inherit ref;} tnpair.normal.files) "alignments/bwa-mem2.bam")
     (ln (minimap2.align {inherit ref; preset = "sr"; } tnpair.normal.files) "alignments/minimap2-normal.bam")
     (ln (snap.align {inherit ref; } tnpair.normal.files) "alignments/snap-normal.bam")
     (ln (gridss.callVariants {} (with tnpairResult.alignments; [normal tumour])) "gridss")
