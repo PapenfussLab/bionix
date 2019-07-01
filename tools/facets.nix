@@ -8,5 +8,5 @@ with bionix;
   /* Call CNVs
   Type: callCnv :: {...} -> {vcf, bams :: [bams]} -> CNVs
   */
-  callCNV = callBionix ./facets-call.nix;
+  callCNV = callBionixE ./facets-call.nix;
 }
