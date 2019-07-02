@@ -23,6 +23,7 @@ assert (all sorted (normals ++ tumours));
 stage {
   name = "cnvkit";
   buildInputs = with pkgs; [ python3Packages.cnvkit ];
+  outputs = [ "out" ] ++ builtins.genList (x: "out${toString (x + 1)}") (length tumours);
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${samtools.faidx indexAttrs ref} ref.fa.fai
@@ -34,8 +35,19 @@ stage {
       -p $NIX_BUILD_CORES \
       -d $TMPDIR \
       ${optionalString (flags != null) flags}
+
+    # Copy individual tumour files
     mkdir $out
-    cp *.cn{r,s,n} $out
+    cnt=1
+    for f in ${concatStringsSep " " tumours} ; do
+      output="out$cnt"
+      mkdir ''${!output}
+      for g in $(basename $f)*.{cnr,cnn,cns} ; do
+        cp $g ''${!output}/sample-''${g#*-}
+      done
+      cnt=$((cnt+1))
+      ln -s ''${!output} $out/$output
+    done
   '';
   passthru.multicore = true;
 }

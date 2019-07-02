@@ -51,7 +51,7 @@ let
 
   cnvkitResults = rec {
     cnvs = cnvkit.callCNV {} (with tnpairResult.alignments; { normals = [ normal ]; tumours = [ tumour ];});
-    plot = cnvkit.scatterPlot {} cnvs;
+    plot = cnvkit.scatterPlot {} cnvs.out1;
   };
 
   alignments = {
