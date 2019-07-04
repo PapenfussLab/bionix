@@ -19,8 +19,8 @@ let
     (samtools.markdup {})
   ];
 
-in linkDrv [
-  (ln (strelka.callSomatic {} {normal = preprocess normal; tumour = preprocess tumour;}) "strelka")
-  (ln (preprocess normal) "normal.bam")
-  (ln (preprocess tumour) "tumour.bam")
-]
+in linkOutputs {
+  strelka = strelka.callSomatic {} {normal = preprocess normal; tumour = preprocess tumour;};
+  "normal.bam" = preprocess normal;
+  "tumour.bam" = preprocess tumour;
+}

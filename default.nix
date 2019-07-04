@@ -51,19 +51,19 @@ let
     def = f: defs: attrs: f (defs // attrs);
     pipe = let g = fs: with builtins; let h = head fs; t = tail fs; in if t != [] then x: (g t (h x)) else h; in g;
 
-    link = {src, dst}: ''
-      d=$(dirname ${dst})
-      if [ ! -e $out/$d ] ; then
-        mkdir -p $out/$d
-      fi
-      ln -s ${src} $out/${dst}
-    '';
-    mkLinks = nixpkgs.lib.concatMapStringsSep "\n" link;
-    linkDrv = x: nixpkgs.stdenvNoCC.mkDerivation {
-      name = "link";
-      buildCommand = mkLinks x;
+    linkOutputs = x: with lib; nixpkgs.stdenvNoCC.mkDerivation {
+      name = "link-outputs";
+      outputs = [ "out" ] ++ attrNames x;
+      nativeBuildInputs = [ pkgs.perl ];
+      buildCommand = let
+        recurse = x: if x ? type && x.type == "derivation" then x else
+          if builtins.typeOf x == "set" then linkOutputs x
+          else error "linkOutputs: unsupported type";
+        link = dst: src: ''
+          ln -s ${recurse src} $(perl -e 'print $ENV{"${dst}"}') ; ln -s ${recurse src} $out/${dst}
+        '';
+      in "mkdir $out \n" + (concatStringsSep "\n" (mapAttrsToList link x));
     };
-    ln = x: y: { src = x; dst = y; };
 
     # Fetching files of specific type
     fetchFastQ = attrs: with types; tagFiletype (filetype.fq {}) (fetchurl attrs);

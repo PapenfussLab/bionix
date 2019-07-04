@@ -54,37 +54,36 @@ let
     plot = cnvkit.scatterPlot {} cnvs;
   };
 
-  testNaming = linkDrv [
-    (ln (facets.callCNV {} {vcf = tnpairResult.platypusVars; bams = with tnpairResult.alignments; [ normal tumour ];}) "facets")
-    (ln cnvkitResults.cnvs "cnvkit")
-    (ln cnvkitResults.plot "cnvkit.pdf")
-    (ln tnpairResult.octopusVars "octopus.vcf")
-    (ln tnpairResult.octopusSomatic "octopus-somatic.vcf")
-    (ln tnpairResult.variants "strelka")
-    (ln tnpairResult.glvariants "strelka-gl")
-    (ln tnpairResult.variants.indels "strelka.indels.vcf")
-    (ln tnpairResult.variants.snvs "strelka.snvs.vcf")
-    (ln tnpairResult.glvariants.variants "strelka.gl.vcf")
-    (ln (bowtie.align {inherit ref;} tnpair.normal.files) "alignments/bowtie-normal.bam")
-    (ln (bwa.mem {inherit ref;} tnpair.normal.files) "alignments/bwa-mem.bam")
-    (ln (bwa.mem2 {inherit ref;} tnpair.normal.files) "alignments/bwa-mem2.bam")
-    (ln (minimap2.align {inherit ref; preset = "sr"; } tnpair.normal.files) "alignments/minimap2-normal.bam")
-    (ln (snap.align {inherit ref; } tnpair.normal.files) "alignments/snap-normal.bam")
-    (ln (gridss.callVariants {} (with tnpairResult.alignments; [normal tumour])) "gridss")
-    (ln (gridss.call (with tnpairResult.alignments; [normal tumour])) "gridss2")
-    (ln (gridss.callAndAssemble (with tnpairResult.alignments; [normal tumour])) "gridss3")
-    (ln (samtools.merge {} tnpairResult.shards) "alignments/merged-shards.bam")
-    (ln (samtools.merge {} [tnpairResult.alignments.tumour tnpairResult.alignments.normal]) "alignments/merged.bam")
-    (ln (samtools.merge {} [(nameSort tnpairResult.alignments.tumour) (nameSort tnpairResult.alignments.normal)]) "alignments/merged-namesorted.bam")
-    (ln (samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.tumour)) "alignments/${tnpair.tumour.name}.cram")
-    #(ln (samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.normal)) "alignments/${tnpair.normal.name}.cram")
-    (ln (flagstat tnpairResult.alignments.tumour) "alignments/${tnpair.tumour.name}.flagstat")
-    #(ln (flagstat tnpairResult.alignments.normal) "alignments/${tnpair.normal.name}.flagstat")
-    (ln (check-fastqc tnpair.tumour.files.input1) "fastqc/${tnpair.tumour.name}.1")
-    #(ln (check-fastqc tnpair.normal.files.input1) "fastqc/${tnpair.normal.name}.1")
-    #(ln (check-fastqc tnpair.normal.files.input2) "fastqc/${tnpair.normal.name}.2")
-    #(ln (check-fastqc tnpair.tumour.files.input2) "fastqc/${tnpair.tumour.name}.2")
-    (ln (check-fastp tnpair.tumour.files) "fastp/${tnpair.tumour.name}")
-  ];
+  alignments = {
+    "bowtie-normal.bam" = bowtie.align {inherit ref;} tnpair.normal.files;
+    "bwa-mem.bam" = bwa.mem {inherit ref;} tnpair.normal.files;
+    "bwa-mem2.bam" = bwa.mem2 {inherit ref;} tnpair.normal.files;
+    "minimap2-normal.bam" = minimap2.align {inherit ref; preset = "sr"; } tnpair.normal.files;
+    "snap-normal.bam" = snap.align {inherit ref; } tnpair.normal.files;
+    "${tnpair.tumour.name}.flagstat" = flagstat tnpairResult.alignments.tumour;
+  };
+
+  testNaming = linkOutputs {
+    facets = facets.callCNV {} {vcf = tnpairResult.platypusVars; bams = with tnpairResult.alignments; [ normal tumour ];};
+    cnvkit = cnvkitResults.cnvs;
+    "cnvkit.pdf" = cnvkitResults.plot;
+    "octopus.vcf" = tnpairResult.octopusVars;
+    "octopus-somatic.vcf" = tnpairResult.octopusSomatic;
+    strelka = tnpairResult.variants;
+    strelka-gl = tnpairResult.glvariants;
+    strelka-indels = tnpairResult.variants.indels;
+    "strelka.snvs.vcf" = tnpairResult.variants.snvs;
+    "strelka.gl.vcf" = tnpairResult.glvariants.variants;
+    gridss = gridss.callVariants {} (with tnpairResult.alignments; [normal tumour]);
+    gridss2 = gridss.call (with tnpairResult.alignments; [normal tumour]);
+    gridss3 = gridss.callAndAssemble (with tnpairResult.alignments; [normal tumour]);
+    "merged-shards.bam" = samtools.merge {} tnpairResult.shards;
+    "merged.bam" = samtools.merge {} [tnpairResult.alignments.tumour tnpairResult.alignments.normal];
+    "merged-namesorted.bam" = samtools.merge {} [(nameSort tnpairResult.alignments.tumour) (nameSort tnpairResult.alignments.normal)];
+    "${tnpair.tumour.name}.cram" = samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.tumour);
+    "${tnpair.tumour.name}.fastqc.1" = check-fastqc tnpair.tumour.files.input1;
+    "${tnpair.tumour.name}.fastp" = check-fastp tnpair.tumour.files;
+    inherit alignments;
+  };
 
 in testNaming
