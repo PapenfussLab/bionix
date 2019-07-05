@@ -46,10 +46,9 @@ rec {
         '';
         passthru.filetype = filetype.vcf { ref = seq; };
       };
-      ensembl = {
-        cdna = stage rec {
+      ensembl = let version = "94"; in {
+        cdna = stage {
           name = "ensembl-grch38-cdna-${version}";
-          version = "94";
           src = pkgs.fetchurl {
             url = "ftp://ftp.ensembl.org/pub/release-${version}/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz";
             sha256 = "1fc5d6p2wlwsm49wnmxmm3byjx5jvr6z9fpzrq7v7fpb086adl0h";
@@ -57,9 +56,8 @@ rec {
           buildCommand = "gunzip < $src > $out";
           passthru.filetype = filetype.fa {};
         };
-        ncrna = stage rec {
+        ncrna = stage {
           name = "ensembl-grch38-ncrna-${version}";
-          version = "94";
           src = pkgs.fetchurl {
             url = "ftp://ftp.ensembl.org/pub/release-${version}/fasta/homo_sapiens/ncrna/Homo_sapiens.GRCh38.ncrna.fa.gz";
             sha256 = "1cpasykwriila52nqgvw6d3mjyh6d9qi613hvhn4h1dxkqzgnjff";
@@ -116,10 +114,11 @@ rec {
         buildCommand = "gunzip < $src > $out";
         passthru.filetype = filetype.fa {};
       };
-      ensembl = {
-        cdna = stage rec {
+      ensembl = let
+        version = "94";
+      in {
+        cdna = stage {
           name = "ensembl-grcm38-cdna-${version}";
-          version = "94";
           src = pkgs.fetchurl {
             url = "ftp://ftp.ensembl.org/pub/release-${version}/fasta/mus_musculus/cdna/Mus_musculus.GRCm38.cdna.all.fa.gz";
             sha256 = "0khp9l6s35lav2xqp7vkk6ybnz4wjihn7lapjf2lbpnbzjb4hp6d";
@@ -127,7 +126,7 @@ rec {
           buildCommand = "gunzip < $src > $out";
           passthru.filetype = filetype.fa {};
         };
-        ncrna = stage rec {
+        ncrna = stage {
           name = "ensembl-grcm38-ncrna-${version}";
           version = "94";
           src = pkgs.fetchurl {
