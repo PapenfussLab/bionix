@@ -65,6 +65,22 @@ rec {
           buildCommand = "gunzip < $src > $out";
           passthru.filetype = filetype.fa {};
         };
+        gtf = stage {
+          name = "ensembl-grch38-gtf-${version}";
+          src = pkgs.fetchurl {
+            url = "ftp://ftp.ensembl.org/pub/release-${version}/gtf/homo_sapiens/Homo_sapiens.GRCh38.${version}.gtf.gz";
+            sha256 = "124swjp6bhhl0wjhfq16675s3fqyny293mhrjwvzkiybpgfwzpi7";
+          };
+          buildCommand = "gunzip < $src > $out";
+        };
+        gff3 = stage {
+          name = "ensembl-grch38-gff-${version}";
+          src = pkgs.fetchurl {
+            url = "ftp://ftp.ensembl.org/pub/release-${version}/gff3/homo_sapiens/Homo_sapiens.GRCh38.${version}.gff3.gz";
+            sha256 = "0r2npkpq7z0dd74fl8q3kzv0860chfx3v319z6libl5qy9rspdmi";
+          };
+          buildCommand = "gunzip < $src > $out";
+        };
       };
       snpeff = {
         db = pkgs.stdenv.mkDerivation rec {
@@ -135,6 +151,22 @@ rec {
           };
           buildCommand = "gunzip < $src > $out";
           passthru.filetype = filetype.fa {};
+        };
+        gtf = stage {
+          name = "ensembl-grcm38-gtf-${version}";
+          src = pkgs.fetchurl {
+            url = "ftp://ftp.ensembl.org/pub/release-${version}/gtf/mus_musculus/Mus_musculus.GRCm38.${version}.gtf.gz";
+            sha256 = "0i61jq5i5bcini5nxqxxp3rnz2xzgychvzdn0k451f5rv053lp3v";
+          };
+          buildCommand = "gunzip < $src > $out";
+        };
+        gff3 = stage {
+          name = "ensembl-grcm38-gff-${version}";
+          src = pkgs.fetchurl {
+            url = "ftp://ftp.ensembl.org/pub/release-${version}/gff3/mus_musculus/Mus_musculus.GRCm38.${version}.gff3.gz";
+            sha256 = "15fmdpx6g96fygwhs10jwrb2q5p9y64bc3d4clg856k57qzzgprg";
+          };
+          buildCommand = "gunzip < $src > $out";
         };
       };
     };
