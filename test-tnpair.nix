@@ -64,6 +64,7 @@ let
   };
 
   testNaming = linkOutputs {
+    kallisto = kallisto.quant {inherit ref;} (attrValues tnpair.tumour.files);
     facets = facets.callCNV {} {vcf = tnpairResult.platypusVars; bams = with tnpairResult.alignments; [ normal tumour ];};
     cnvkit = cnvkitResults.cnvs;
     "cnvkit.pdf" = cnvkitResults.plot;
