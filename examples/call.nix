@@ -4,13 +4,13 @@
 # marking duplicates. Finally platypus is called over all samples.
 {bionix ? import ./.. {}
 ,inputs
-,ref ? null}:
+,ref ? bionix.ref.grch38.seq }:
 
 with bionix;
 
 let
   preprocess = pipe [
-    (bwa.align {ref = if ref == null then bionix.ref.grch38.seq else ref;})
+    (bwa.align { inherit ref; })
     (samtools.fixmate {})
     (samtools.sort {})
     (samtools.markdup {})
