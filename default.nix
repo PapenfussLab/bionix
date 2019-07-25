@@ -83,7 +83,7 @@ let
         stripCommand = ''
 
         function rewrite {
-          sed -i 's|/nix/store/[^-]*|/nix/store/00000000000000000000000000000000|g' $1
+          sed -i 's|[A-Za-z0-9+/]\{32\}-bionix|00000000000000000000000000000000-bionix|g' $1
         }
         function rewriteOutput {
           if [ -f ''${!1} ] ; then
