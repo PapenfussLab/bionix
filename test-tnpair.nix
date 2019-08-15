@@ -84,6 +84,7 @@ let
     "${tnpair.tumour.name}.cram" = samtools.view { outfmt = types.toCram; } (tnpairResult.alignments.tumour);
     "${tnpair.tumour.name}.fastqc.1" = check-fastqc tnpair.tumour.files.input1;
     "${tnpair.tumour.name}.fastp" = check-fastp tnpair.tumour.files;
+    snver = snver.call { ploidy=1; } (with tnpairResult.alignments; [ normal tumour ]);
     inherit alignments;
   };
 
