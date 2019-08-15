@@ -86,6 +86,7 @@ let
     "${tnpair.tumour.name}.fastqc.1" = check-fastqc tnpair.tumour.files.input1;
     "${tnpair.tumour.name}.fastp" = check-fastp tnpair.tumour.files;
     snver = snver.call { ploidy=1; } (with tnpairResult.alignments; [ normal tumour ]);
+    mosdepth = mosdepth.plot {} { inputs = mapAttrsToList (_: mosdepth.depth {}) tnpairResult.alignments; names = [ "seq1" "seq2" ]; };
     inherit alignments;
   };
 
