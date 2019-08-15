@@ -87,6 +87,7 @@ let
     "${tnpair.tumour.name}.fastp" = check-fastp tnpair.tumour.files;
     snver = snver.call { ploidy=1; } tnpairResult.alignments;
     mosdepth = mosdepth.plot {} { inputs = mapAttrsToList (_: mosdepth.depth {}) tnpairResult.alignments; names = [ "seq1" "seq2" ]; };
+    xenomapper = xenomapper.allocate {} { primary = nameSort tnpairResult.alignments.tumour; secondary = nameSort tnpairResult.alignments.tumour; };
     inherit alignments;
   };
 
