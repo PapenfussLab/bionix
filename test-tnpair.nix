@@ -61,6 +61,7 @@ let
     "minimap2-normal.bam" = minimap2.align {inherit ref; preset = "sr"; } tnpair.normal.files;
     "snap-normal.bam" = snap.align {inherit ref; } tnpair.normal.files;
     "${tnpair.tumour.name}.flagstat" = flagstat tnpairResult.alignments.tumour;
+    "hisat2-normal.bam" = hisat2.align {inherit ref;} tnpair.normal.files;
   };
 
   testNaming = linkOutputs {

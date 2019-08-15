@@ -38,6 +38,7 @@ let
     fastp = callBionix ./tools/fastp.nix {};
     octopus = callBionix ./tools/octopus.nix {};
     snver = callBionix ./tools/snver.nix {};
+    hisat2 = callBionix ./tools/hisat2.nix {};
 
     slurm = attrs: bionix.extend (self: super: with self; rec {
       slurmDefs = { ppn = 1; mem = 1; walltime = "24:00:00"; partition = null; slurmFlags = null; salloc = "/usr/bin/salloc"; srun = "/usr/bin/srun"; } // attrs;
