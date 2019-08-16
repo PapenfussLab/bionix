@@ -29,12 +29,12 @@ stage {
     cp snver.failed.log $log
     ln -s $log $out/snver.failed.log
     cp snver.filter.vcf $filter
-    ln -s $log $out/snver.filter.vcf
+    ln -s $filter $out/snver.filter.vcf
     cp snver.indel.filter.vcf $indelfilter
-    ln -s $log $out/snver.indel.filter.vcf
+    ln -s $indelfilter $out/snver.indel.filter.vcf
     cp snver.indel.raw.vcf $indelraw
-    ln -s $log $out/snver.indel.raw.vcf
+    ln -s $indelraw $out/snver.indel.raw.vcf
     cp snver.raw.vcf $raw
-    ln -s $log $out/snver.raw.vcf
+    ln -s $raw $out/snver.raw.vcf
   '';
 }
