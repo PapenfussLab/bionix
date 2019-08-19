@@ -10,9 +10,9 @@ with lib;
 with types;
 
 let
-  config = pkgs.writeText "pool.txt" (concatMapStringsSep "\n" (x: "${x}\t${toString ploidy}\t1") inputs);
+  config = pkgs.writeText "pool.txt" (concatMapStringsSep "\n" (x: "${x}\t${toString ploidy}\t1") (attrValues inputs));
   getref = f: matchFiletype "SNVer-call" { bam = {ref, ...}: ref; } f;
-  refs = map getref inputs;
+  refs = mapAttrsToList (_: getref) inputs;
   ref = head refs;
 in
 
@@ -24,6 +24,10 @@ stage {
   outputs = [ "out" "log" "raw" "filter" "indelfilter" "indelraw" ];
   buildCommand = ''
     SNVerPool -i / -c ${config} -r ${ref} -o snver
+
+    for f in *.vcf ; do
+      ${concatStringsSep "\n" (mapAttrsToList (x: y: "sed -i 's|//${y}|${x}|' $f") inputs)}
+    done
 
     mkdir $out
     cp snver.failed.log $log
