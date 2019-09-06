@@ -26,7 +26,7 @@ let
 out = stage {
   name = "strelka-callSomatic";
   buildInputs = with pkgs; [ strelka ];
-  outputs = [ "indels" "snvs" ];
+  outputs = [ "out" "indels" "snvs" ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx indexAttrs ref} ref.fa.fai
@@ -56,6 +56,8 @@ out = stage {
     done
     mv somatic.indels.vcf $indels
     mv somatic.snvs.vcf $snvs
+
+    ln -s $snvs $out
   '';
   passthru.multicore = true;
   passthru.filetype = types.filetype.vcf {ref = ref;};
