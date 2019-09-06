@@ -48,6 +48,7 @@ out = stage {
       g=$(basename $f .gz)
       sed -i '/^##fileDate/d' $g
       sed -i '/^##startTime/d' $g
+      sed -i '/^##cmd/d' $g
     done
     mv variants.vcf $out
   '';

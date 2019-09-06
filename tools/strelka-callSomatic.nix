@@ -52,6 +52,7 @@ out = stage {
       g=$(basename $f .gz)
       sed -i '/^##fileDate/d' $g
       sed -i '/^##startTime/d' $g
+      sed -i '/^##cmd/d' $g
     done
     mv somatic.indels.vcf $indels
     mv somatic.snvs.vcf $snvs
