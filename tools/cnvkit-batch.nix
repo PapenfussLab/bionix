@@ -22,7 +22,7 @@ assert (all sorted (normals ++ tumours));
 
 stage {
   name = "cnvkit";
-  buildInputs = with pkgs; [ python3Packages.cnvkit ];
+  buildInputs = with pkgs; [ python2Packages.cnvkit ];
   outputs = [ "out" ] ++ builtins.genList (x: "out${toString (x + 1)}") (length tumours);
   buildCommand = ''
     ln -s ${ref} ref.fa
