@@ -24,7 +24,6 @@ let
 out = stage {
   name = "strelka-call";
   buildInputs = with pkgs; [ strelka ];
-  outputs = [ "out" "variants" ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx indexAttrs ref} ref.fa.fai
@@ -50,12 +49,9 @@ out = stage {
       sed -i '/^##fileDate/d' $g
       sed -i '/^##startTime/d' $g
     done
-    mv variants.vcf $variants
-    ln -s $variants variants.vcf
-    mkdir $out
-    cp -r * $out
+    mv variants.vcf $out
   '';
   passthru.multicore = true;
+  passthru.filetype = types.filetype.vcf {ref = ref;};
 };
-ft = {filetype = types.filetype.vcf {ref = ref;};};
-in out // { variants = out.variants // ft; }
+in out
