@@ -71,11 +71,10 @@ let
     "cnvkit.pdf" = cnvkitResults.plot;
     "octopus.vcf" = tnpairResult.octopusVars;
     "octopus-somatic.vcf" = tnpairResult.octopusSomatic;
-    strelka = tnpairResult.variants;
-    strelka-gl = tnpairResult.glvariants;
-    strelka-indels = tnpairResult.variants.indels;
-    "strelka.snvs.vcf" = tnpairResult.variants.snvs;
-    "strelka.gl.vcf" = tnpairResult.glvariants.variants;
+    #strelka = tnpairResult.variants;
+    #strelka-indels = tnpairResult.variants.indels;
+    #"strelka.snvs.vcf" = tnpairResult.variants.snvs;
+    "strelka.gl.vcf" = tnpairResult.glvariants;
     gridss = gridss.callVariants {} (with tnpairResult.alignments; [normal tumour]);
     gridss2 = gridss.call (with tnpairResult.alignments; [normal tumour]);
     gridss3 = gridss.callAndAssemble (with tnpairResult.alignments; [normal tumour]);
