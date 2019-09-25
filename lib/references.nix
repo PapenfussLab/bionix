@@ -15,6 +15,18 @@ rec {
       buildCommand = "gunzip < $src > $out";
       passthru.filetype = filetype.fa {};
     };
+    dbsnp = stage {
+      name = "dbsnp-b151_GRCh37p13";
+      src = pkgs.fetchurl {
+        url = "ftp://ftp.ncbi.nlm.nih.gov/snp/organisms/human_9606_b151_GRCh37p13/VCF/common_all_20180423.vcf.gz";
+        sha256 = "0jf71h5wy82xhgsjkvp05mj2grjrjlnswmr0wz4lb87g3ip3c2mm";
+      };
+      buildInputs = with pkgs; [ gawk ];
+      buildCommand = ''
+      gunzip < $src | awk '/^[^#]/{print "chr" $0;next}{print}' > $out
+        '';
+        passthru.filetype = filetype.vcf { ref = seq; };
+      };
     ensembl = let version = "74"; in {
       cdna = stage {
         name = "ensembl-grch37-cdna-${version}";
