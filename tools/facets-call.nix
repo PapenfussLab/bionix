@@ -14,11 +14,6 @@ stage {
   name = "facets";
   buildInputs = [ facets.app ];
   buildCommand = ''
-    # Facets requires lexical sorting on the VCF files
-    grep '^#' ${vcf} > input.vcf
-    grep -v '^#' ${vcf} | LC_ALL=C sort -t $'\t' -k1,1 -k2,2n >> input.vcf || true
-
-    # Now actually run facets
-    snp-pileup input.vcf $out ${concatStringsSep " " bams}
+    snp-pileup ${vcf} $out ${concatStringsSep " " bams}
   '';
 }
