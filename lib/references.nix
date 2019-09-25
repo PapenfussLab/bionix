@@ -4,13 +4,70 @@ with bionix;
 with types;
 
 rec {
+  grch37 = rec {
+    seq = stage rec {
+      name = "seq-grch37.${version}";
+      version = "19";
+      src = pkgs.fetchurl {
+        url = "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_${version}/GRCh37.p13.genome.fa.gz";
+        sha256 = "1midmq3kaci3nizg37nqzv9syfasimgxxvg8az8gz0fi1ksljw53";
+      };
+      buildCommand = "gunzip < $src > $out";
+      passthru.filetype = filetype.fa {};
+    };
+    ensembl = let version = "74"; in {
+      cdna = stage {
+        name = "ensembl-grch37-cdna-${version}";
+        src = pkgs.fetchurl {
+          url = "ftp://ftp.ensembl.org/pub/release-${version}/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.${version}.cdna.all.fa.gz";
+          sha256 = "1m62hiw17zcxg3sza0aq53885wb8g202j8lc1ilhmkg2izzbyihj";
+        };
+        buildCommand = "gunzip < $src > $out";
+        passthru.filetype = filetype.fa {};
+      };
+      gtf = stage {
+        name = "ensembl-grch37-gtf-${version}";
+        src = pkgs.fetchurl {
+          url = "ftp://ftp.ensembl.org/pub/release-${version}/gtf/homo_sapiens/Homo_sapiens.GRCh37.${version}.gtf.gz";
+          sha256 = "1m62hiw17zcxg3sza0aq53885wb8g202j8lc1ilhmkg2izzbyihj";
+        };
+        buildCommand = "gunzip < $src > $out";
+      };
+    };
+    snpeff = {
+      db = pkgs.stdenv.mkDerivation rec {
+        name = "GRCh37.87";
+        src = pkgs.fetchurl {
+          url = "mirror://sourceforge/project/snpeff/databases/v4_3/snpEff_v4_3_${name}.zip";
+          sha256 = "0ybbj4470ilc4csmgfjqd6hqq4krwjws97ywjnqrhbi4dcq3h3bg";
+        };
+        buildInputs = with pkgs; [ unzip ];
+        buildCommand = ''
+          unzip ${src}
+          mv data/${name} $out
+        '';
+      };
+      dbnsfp = {
+        db = pkgs.requireFile {
+          name = "dbNSFP.txt.gz";
+          message = "download the dbNSFP database manually from https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlSTY5dDJjcHVRZ3M and add to nix store";
+          sha256 = "0gfzbid3pc10zds7ya50w4qfynsxgpyh7dx35vhm5f3h64mw75pm";
+        };
+        index = pkgs.requireFile {
+          name = "dbNSFP.txt.gz.tbi";
+          message = "download the dbNSFP index manually from https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlOTV5RllpRjNHU2s and add to nix store";
+          sha256 = "0bwwigbnz32mmc8bczidjf68vv8x8i28zwkl2kgcbpj542zk5q86";
+        };
+      };
+    };
+  };
   grch38 = grch38-p12;
   grch38-p12 = rec {
     seq = stage rec {
       name = "seq-grch38.${version}";
-      version = "p12";
+      version = "32";
       src = pkgs.fetchurl {
-        url = "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_28/GRCh38.p12.genome.fa.gz";
+        url = "ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_${version}/GRCh38.p13.genome.fa.gz";
         sha256 = "0ji2ggpmgnbpwbhq8mirj6h3lyy02nl2rnz7n892iq5cqpsblh4z";
       };
       buildCommand = "gunzip < $src > $out";
