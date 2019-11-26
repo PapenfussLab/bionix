@@ -4,8 +4,8 @@ with bionix;
 
 rec {
   jar = pkgs.fetchurl {
-    url = "https://github.com/PapenfussLab/gridss/releases/download/v2.7.2/gridss-2.7.2-gridss-jar-with-dependencies.jar";
-    sha256 = "17i9h77vy3prn2a737lzpy1ssmb4h1j78pmxj0ph68dxsbkcl3fy";
+    url = "https://github.com/PapenfussLab/gridss/releases/download/v2.7.3/gridss-2.7.3-gridss-jar-with-dependencies.jar";
+    sha256 = "0gzqilx7f7cjchkmsb2fn5vcx4pxvxdngwmsnwhhjr96pgsw0j9d";
   };
 
   /* Generate configuration file for GRIDSS. Takes attribute sets to GRIDSS ini style format.
