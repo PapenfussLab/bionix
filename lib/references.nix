@@ -48,10 +48,10 @@ rec {
     };
     snpeff = {
       db = pkgs.stdenv.mkDerivation rec {
-        name = "GRCh37.87";
+        name = "GRCh37.75";
         src = pkgs.fetchurl {
           url = "mirror://sourceforge/project/snpeff/databases/v4_3/snpEff_v4_3_${name}.zip";
-          sha256 = "0ybbj4470ilc4csmgfjqd6hqq4krwjws97ywjnqrhbi4dcq3h3bg";
+          sha256 = "19c8wwx91vq47z7j7f455vsv8jw067x5rd7449d1z0nln82zpmhm";
         };
         buildInputs = with pkgs; [ unzip ];
         buildCommand = ''
