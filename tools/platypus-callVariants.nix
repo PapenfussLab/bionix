@@ -28,7 +28,6 @@ stage {
     ln -s ${bionix.samtools.faidx indexAttrs ref} ref.fa.fai
     ${concatMapStringsSep "\n" (p: "ln -s ${p} ${filename p}.bam") inputs}
     ${concatMapStringsSep "\n" (p: "ln -s ${bionix.samtools.index bamIndexAttrs p} ${filename p}.bai") inputs}
-    ls -l
     platypus callVariants \
       --nCPU=$NIX_BUILD_CORES \
       --refFile=ref.fa \
