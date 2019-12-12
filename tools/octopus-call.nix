@@ -10,7 +10,7 @@ with types;
 inputs:
 
 let
-  getref = f: matchFiletype "octopus-callSomatic" { bam = {ref, ...}: ref; cram = {ref, ...}: ref;} f;
+  getref = f: matchFiletype "octopus-call" { bam = {ref, ...}: ref; cram = {ref, ...}: ref;} f;
   refs = map getref inputs;
   ref = head refs;
 
