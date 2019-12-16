@@ -74,6 +74,9 @@ let
     strelka-indels = tnpairResult.variants.indels;
     "strelka.snvs.vcf" = tnpairResult.variants.snvs;
     "strelka.gl.vcf" = tnpairResult.glvariants;
+    manta = manta.call {} (with tnpairResult.alignments; {normals = [normal tumour]; });
+    mantaTN = manta.call {} (with tnpairResult.alignments; {normals = [normal]; tumour = tumour;});
+    mantaT = manta.call {} (with tnpairResult.alignments; {tumour = tumour;});
     gridss = gridss.callVariants {} (with tnpairResult.alignments; [normal tumour]);
     gridss2 = gridss.call (with tnpairResult.alignments; [normal tumour]);
     gridss3 = gridss.callAndAssemble (with tnpairResult.alignments; [normal tumour]);
