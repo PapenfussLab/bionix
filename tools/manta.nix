@@ -3,5 +3,5 @@
 with bionix;
 
 {
-  call = callBionix ./manta-call.nix;
+  call = callBionixE ./manta-call.nix;
 }

@@ -34,7 +34,8 @@ stage {
       --runDir=$TMPDIR \
       --referenceFasta=ref.fa \
       ${flags}
-    ./runWorkflow.py
+    ./runWorkflow.py -j $NIX_BUILD_CORES
     cp -r results $out
   '';
+  passthru.multicore = true;
 }
