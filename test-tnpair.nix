@@ -41,10 +41,7 @@ let
     glvariants = strelka.call {} (builtins.attrValues alignments);
     platypusVars = platypus.call {} (builtins.attrValues alignments);
     octopusVars = octopus.call {} (builtins.attrValues alignments);
-    shards = pipe [
-      (shard.fastQPair 2)
-      (map (bwa.align {inherit ref;}))
-    ] normal.files;
+    shards = map (bwa.align {inherit ref;}) (shard.fastQPair 2 normal.files);
   };
 
   tnpairResult = processPair tnpair;
