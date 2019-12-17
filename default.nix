@@ -42,6 +42,7 @@ let
     xenomapper = callBionix ./tools/xenomapper.nix {};
     manta = callBionix ./tools/manta.nix {};
     delly = callBionix ./tools/delly.nix {};
+    lumpy = callBionix ./tools/lumpy.nix {};
 
     slurm = attrs: bionix.extend (self: super: with self; rec {
       slurmDefs = { ppn = 1; mem = 1; walltime = "24:00:00"; partition = null; slurmFlags = null; salloc = "/usr/bin/salloc"; srun = "/usr/bin/srun"; } // attrs;

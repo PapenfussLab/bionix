@@ -72,6 +72,7 @@ let
     "strelka.snvs.vcf" = tnpairResult.variants.snvs;
     "strelka.gl.vcf" = tnpairResult.glvariants;
     delly = delly.call {} (with tnpairResult.alignments; [normal tumour]);
+    lumpy = lumpy.call {} (with tnpairResult.alignments; [normal tumour]);
     manta = manta.call {} (with tnpairResult.alignments; {normals = [normal tumour]; });
     mantaTN = manta.call {} (with tnpairResult.alignments; {normals = [normal]; tumour = tumour;});
     mantaT = manta.call {} (with tnpairResult.alignments; {tumour = tumour;});
