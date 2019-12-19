@@ -7,7 +7,7 @@ with lib;
 with types;
 
 let
-  getref = matchFiletype "manta-call" { bam = x: x.ref; };
+  getref = matchFiletype "lumpy-call" { bam = x: x.ref; };
   refs = map getref inputs;
   ref = head refs;
 
