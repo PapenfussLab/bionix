@@ -32,6 +32,6 @@ stage {
       --threads=$NIX_BUILD_CORES \
       ${flags}
   '';
-  passthru.filtype = filetype.vcf {ref = ref;};
+  passthru.filetype = filetype.vcf {ref = ref;};
   passthru.multicore = true;
 }
