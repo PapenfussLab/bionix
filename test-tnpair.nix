@@ -53,6 +53,7 @@ let
 
   alignments = {
     "bowtie-normal.bam" = bowtie.align {inherit ref;} tnpair.normal.files;
+    "last.maf" = lastal.align {inherit ref;} tnpair.normal.files;
     "bwa-mem.bam" = bwa.mem {inherit ref;} tnpair.normal.files;
     "bwa-mem2.bam" = bwa.mem2 {inherit ref;} tnpair.normal.files;
     "minimap2-normal.bam" = minimap2.align {inherit ref; preset = "sr"; } tnpair.normal.files;
