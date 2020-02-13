@@ -60,14 +60,12 @@ rec {
         '';
       };
       dbnsfp = {
-        db = pkgs.requireFile {
-          name = "dbNSFP.txt.gz";
-          message = "download the dbNSFP database manually from https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlSTY5dDJjcHVRZ3M and add to nix store";
+        db = fetchgdrive {
+          url = "https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlSTY5dDJjcHVRZ3M";
           sha256 = "0gfzbid3pc10zds7ya50w4qfynsxgpyh7dx35vhm5f3h64mw75pm";
         };
-        index = pkgs.requireFile {
-          name = "dbNSFP.txt.gz.tbi";
-          message = "download the dbNSFP index manually from https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlOTV5RllpRjNHU2s and add to nix store";
+        index = fetchgdrive {
+          url = "https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlOTV5RllpRjNHU2s";
           sha256 = "0bwwigbnz32mmc8bczidjf68vv8x8i28zwkl2kgcbpj542zk5q86";
         };
       };
@@ -146,14 +144,12 @@ rec {
         '';
       };
       dbnsfp = {
-        db = pkgs.requireFile {
-          name = "dbNSFP.txt.gz";
-          message = "download the dbNSFP database manually from https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlbTZodjlGUDZnTGc and add to nix store";
+        db = fetchgdrive {
+          url = "https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlbTZodjlGUDZnTGc";
           sha256 = "0gahnwkc7v2q6p6ixkhvsgqvvm6xf0c3bdh4nf0alih83h3wffd0";
         };
-        index = pkgs.requireFile {
-          name = "dbNSFP.txt.gz.tbi";
-          message = "download the dbNSFP index manually from https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlNVBJdFA5cFZRYkE and add to nix store";
+        index = fetchgdrive {
+          url = "https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlNVBJdFA5cFZRYkE";
           sha256 = "18blkly6gvg7r0sx968xlb1zl2kqg5j1kpbrm2r7ajlxlfyvrx3w";
         };
       };

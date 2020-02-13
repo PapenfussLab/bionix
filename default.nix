@@ -14,6 +14,7 @@ let
     callBionixE = p: exec (callBionix p);
 
     types = callBionix ./lib/types.nix {};
+    fetchgdrive = callBionix ./lib/google.nix {};
 
     bowtie = callBionix ./tools/bowtie.nix {};
     bwa = callBionix ./tools/bwa.nix {};
