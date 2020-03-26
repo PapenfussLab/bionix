@@ -7,9 +7,10 @@
 ,ref ? bionix.ref.grch38.seq }:
 
 with bionix;
+with lib;
 
 let
-  preprocess = pipe [
+  preprocess = flip pipe [
     (bwa.align { inherit ref; })
     (samtools.fixmate {})
     (samtools.sort {})

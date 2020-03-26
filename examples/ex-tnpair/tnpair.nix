@@ -11,7 +11,7 @@ with lib;
 let
   input = mapAttrs (_: fetchFastQGZ);
 
-  preprocess = pipe [
+  preprocess = flip pipe [
     input
     (bwa.align { ref = fetchFastA ref; })
     (samtools.fixmate {})

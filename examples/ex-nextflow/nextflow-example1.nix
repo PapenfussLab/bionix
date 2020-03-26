@@ -24,7 +24,7 @@ let
     '';
   };
 
-in pipe [
+in pipe input [
   splitSequences
   (each reverse)
-] input
+]
