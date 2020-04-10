@@ -1,11 +1,12 @@
 {bionix}:
 
 with bionix;
+with lib;
 
 rec {
   jar = pkgs.fetchurl {
-    url = "https://github.com/PapenfussLab/gridss/releases/download/v2.7.3/gridss-2.7.3-gridss-jar-with-dependencies.jar";
-    sha256 = "0gzqilx7f7cjchkmsb2fn5vcx4pxvxdngwmsnwhhjr96pgsw0j9d";
+    url = "https://github.com/PapenfussLab/gridss/releases/download/v2.8.3/gridss-2.8.3-gridss-jar-with-dependencies.jar";
+    sha256 = "1qdbl3pl51v53rq2ab50mb00bxswi1njak1dcdwqbwbw2bm1r6rh";
   };
 
   /* Generate configuration file for GRIDSS. Takes attribute sets to GRIDSS ini style format.
@@ -60,7 +61,7 @@ rec {
   Type: preprocessBam :: bam -> bam
   */
   preprocessBam = with samtools;
-    pipe [
+    flip pipe [
       (gridss.extractSVReads {})
       (sort {nameSort = true;})
       (gridss.computeSamTags {})
