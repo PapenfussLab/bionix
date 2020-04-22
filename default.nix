@@ -66,7 +66,7 @@ let
       buildCommand = let
         recurse = x: if x ? type && x.type == "derivation" then x else
           if builtins.typeOf x == "set" then linkOutputs x
-          else error "linkOutputs: unsupported type";
+          else abort "linkOutputs: unsupported type";
         link = dst: src: ''
           ln -s ${recurse src} $(perl -e 'print $ENV{"${dst}"}') ; ln -s ${recurse src} $out/${dst}
         '';
