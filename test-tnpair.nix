@@ -54,6 +54,7 @@ let
   alignments = {
     "bowtie-normal.bam" = bowtie.align {inherit ref;} tnpair.normal.files;
     "last.maf" = lastal.align {inherit ref;} tnpair.normal.files;
+    "whisper.bam" = whisper.align {inherit ref;} tnpair.normal.files;
     "bwa-mem.bam" = bwa.mem {inherit ref;} tnpair.normal.files;
     "bwa-mem2.bam" = bwa.mem2 {inherit ref;} tnpair.normal.files;
     "minimap2-normal.bam" = minimap2.align {inherit ref; preset = "sr"; } tnpair.normal.files;
@@ -92,4 +93,4 @@ let
     inherit alignments;
   };
 
-in testNaming
+in alignments."bwa-mem.bam"#testNaming
