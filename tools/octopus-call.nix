@@ -1,7 +1,14 @@
 { bionix
+, fast ? false
+, very-fast ? false
+, max-genotypes ? null
+, targets ? null
 , faidxAttrs ? {}
 , indexAttrs ? {}
 , flags ? ""}:
+
+assert !fast || !very-fast;
+assert max-genotypes == null || max-genotypes > 0;
 
 with bionix;
 with lib;
@@ -30,6 +37,11 @@ stage {
     '') inputs}
     octopus -R ref.fa -I *.bam -o $out \
       --threads=$NIX_BUILD_CORES \
+      ${optionalString fast "--fast"} \
+      ${optionalString very-fast "--very-fast"} \
+      ${optionalString (max-genotypes != null) "--max-genotypes ${toString max-genotypes}"} \
+      ${optionalString (targets != null) (if builtins.typeOf targets == "list" then "-T ${concatStringsSep "," targets}" else "-t ${targets}")} \
+      -N $normal \
       ${flags}
   '';
   passthru.filetype = filetype.vcf {ref = ref;};
