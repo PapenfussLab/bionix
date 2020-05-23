@@ -41,7 +41,6 @@ stage {
       ${optionalString very-fast "--very-fast"} \
       ${optionalString (max-genotypes != null) "--max-genotypes ${toString max-genotypes}"} \
       ${optionalString (targets != null) (if builtins.typeOf targets == "list" then "-T ${concatStringsSep "," targets}" else "-t ${targets}")} \
-      -N $normal \
       ${flags}
   '';
   passthru.filetype = filetype.vcf {ref = ref;};
