@@ -16,6 +16,8 @@ in
 
 assert inputIsHomogenous;
 
+if length inputs == 1 then head inputs else
+
 stage {
   name = "samtools-merge";
   buildInputs = with pkgs; [ samtools ];
