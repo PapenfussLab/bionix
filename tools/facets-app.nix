@@ -20,13 +20,13 @@ let
 
 in buildRPackage rec{
   name = "facets-${version}";
-  version = "0.5.6";
+  version = "0.5.14";
   requireX = false;
   src = fetchFromGitHub {
     owner = "mskcc";
     repo = "facets";
     rev = "v${version}";
-    sha256 = "0yqr23446y2h8xgbgj0r6sl4i778111drgsi06a2cqy530xcmbxs";
+    sha256 = "081afjynam22l7m11hg286gzx3lsivh11kyv5fvp3ni1a25adlsz";
   };
   buildInputs = [ R htslib zlib ];
   propagatedBuildInputs = [ pctGCdata ];
