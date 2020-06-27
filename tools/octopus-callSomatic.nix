@@ -42,6 +42,7 @@ assert (length (unique refs) == 1);
 stage {
   name = "octopus-callSomatic";
   buildInputs = with pkgs; [ octopus-caller samtools ];
+  outputs = [ "out" "evidence" ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${samtools.faidx faidxAttrs ref} ref.fai
@@ -50,7 +51,9 @@ stage {
       ln -s ${samtools.index indexAttrs i} $(basename ${i}).bai
     '') inputs}
     normal=$(samtools view -H ${normal} | awk -f ${smScript})
+    mkdir $evidence
     octopus -R ref.fa -I *.bam -o $out \
+      --bamout $evidence \
       --threads=$NIX_BUILD_CORES \
       ${optionalString fast "--fast"} \
       ${optionalString very-fast "--very-fast"} \

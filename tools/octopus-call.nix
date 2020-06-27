@@ -28,6 +28,7 @@ assert (length (unique refs) == 1);
 stage {
   name = "octopus-call";
   buildInputs = with pkgs; [ octopus-caller ];
+  outputs = [ "out" "evidence" ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${samtools.faidx faidxAttrs ref} ref.fai
@@ -35,7 +36,9 @@ stage {
       ln -s ${i} $(basename ${i}).bam
       ln -s ${samtools.index indexAttrs i} $(basename ${i}).bai
     '') inputs}
+    ${optionalString (length inputs > 1) "mkdir $evidence"}
     octopus -R ref.fa -I *.bam -o $out \
+      --bamout $evidence \
       --threads=$NIX_BUILD_CORES \
       ${optionalString fast "--fast"} \
       ${optionalString very-fast "--very-fast"} \
