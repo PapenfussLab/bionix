@@ -9,7 +9,7 @@ with types;
 
 stage {
   name = "cnvkit-scatter";
-  buildInputs = with pkgs; [ pkgs.python2Packages.cnvkit ];
+  buildInputs = with pkgs; [ pkgs.python3Packages.cnvkit ];
   buildCommand = ''
     cnvkit.py scatter -s ${input}/*.cn{s,r} -o plot.pdf
     cp plot.pdf $out
