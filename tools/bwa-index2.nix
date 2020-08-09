@@ -1,5 +1,6 @@
 { bionix
 , flags ? null
+, altRegex ? "^>.*_alt$"
 }:
 
 ref:
@@ -18,6 +19,7 @@ stage {
     bwa-mem2 index ${optionalString (flags != null) flags} ref.fa
     mkdir $out
     mv ref.fa.* $out
-    grep '^>[^ \t]*_alt$' ref.fa | tr -d '^>' > $out/idxbase.alt || true
+    grep -P '${altRegex}' ref.fa | tr -d '^>' > $out/idxbase.alt || true
   '';
+  stripStorePaths = false;
 }
