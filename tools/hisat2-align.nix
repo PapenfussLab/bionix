@@ -27,7 +27,7 @@ in stage {
     if [[ $cores -lt 1 ]] ; then
       cores=1
     fi
-    hisat2 ${optionalString (flags != null) flags} -p $cores -x ${hisat2.index indexAttrs ref}/ \
+    hisat2 ${optionalString (flags != null) flags} -p $cores -x ${hisat2.index indexAttrs ref}/index \
       ${if input2 != null then "-1 ${fq input1} -2 ${fq input2}" else "-U ${fq input1}"} \
       ${optionalString bamOutput "| samtools view -b"} \
       | samtools sort -n \

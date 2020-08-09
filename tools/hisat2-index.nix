@@ -21,7 +21,7 @@ stage {
     mkdir $out
     hisat2-build -p $NIX_BUILD_CORES ${optionalString (flags != null) flags} \
       ${optionalString (gtf != null) "--ss ${hisat2.extractSpliceSites extractSpliceSitesAttrs gtf} --exon ${hisat2.extractExons extractExonsAttrs gtf}"} \
-      ref.fa $out/
+      ref.fa $out/index
   '';
   passthru.multicore = true;
 }
