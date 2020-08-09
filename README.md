@@ -1,4 +1,4 @@
-<h1 align="center"> BioNix </h1>
+<h1 align="center"><img src="https://github.com/PapenfussLab/bionix/blob/assets/logo.png?raw=true" width="350" title="BioNix"></h1>
 
 BioNix is a tool for reproducible bioinformatics that unifies workflow
 engines, package managers, and containers. It is implemented as a
