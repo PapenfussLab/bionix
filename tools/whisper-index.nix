@@ -12,7 +12,7 @@ assert (matchFiletype "whisper-index" { fa = _: true; } ref);
 
 stage {
   name = "whisper-index";
-  buildInputs = [ whisper.app ];
+  buildInputs = with pkgs; [ whisper ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     mkdir $out

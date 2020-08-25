@@ -20,7 +20,7 @@ let
 
 in stage {
   name = "whisper-mem";
-  buildInputs = [ whisper.app ];
+  buildInputs = with pkgs; [ whisper ];
   buildCommand = ''
     ln -s ${fa ref} ref.fa
     for f in ${bionix.whisper.index indexAttrs ref}/* ; do
