@@ -6,6 +6,9 @@
 , flags ? null
 , config ? null
 , heapSize ? "31g"
+, workdirs ? []
+, jobIndex ? null
+, jobNodes ? null
 }:
 
 with bionix;
@@ -37,7 +40,8 @@ assert (homoRef);
 
 stage rec {
   name = "gridss-assemble";
-  buildInputs = with pkgs; [ jre bwa ];
+  buildInputs = with pkgs; [ jre bwa rsync ];
+  outputs = [ "out" "work" ];
   buildCommand = ''
     TMPDIR=$(pwd)
     ln -s ${ref} ref.fa
@@ -46,7 +50,8 @@ stage rec {
       ln -s $f
     done
     ${concatMapStringsSep "\n" linkInput inputs}
-	  java -Xmx${heapSize} -Dsamjdk.create_index=true \
+    ${concatMapStringsSep "\n" (w: "rsync -a --ignore-existing ${w}/ ./") workdirs}
+    java -Xmx${heapSize} -Dsamjdk.create_index=true \
       -cp ${bionix.gridss.jar} gridss.AssembleBreakends \
       VERBOSITY=WARNING \
       REFERENCE_SEQUENCE=ref.fa \
@@ -56,7 +61,13 @@ stage rec {
       ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
       WORKING_DIR=$TMPDIR/ \
       TMP_DIR=$TMPDIR/ \
+      ${optionalString (jobIndex != null) "JOB_INDEX=${toString jobIndex}"} \
+      ${optionalString (jobIndex != null) "JOB_NODES=${toString jobNodes}"} \
       ${optionalString (flags != null) flags}
+    rm -rf tmp
+    touch $out
+    cp -r $TMPDIR $work
+    chmod u+rwX -R $work
   '';
   passthru.filetype = filetype.bam { ref = ref; sorting = sort.name {}; };
   passthru.multicore = true;

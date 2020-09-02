@@ -43,6 +43,9 @@ rec {
   Type: assemble :: {config :: ini = null, heapSize :: String = "31g", ...} -> [bam] -> bam
   */
   assemble = callBionixE ./gridss-assemble.nix;
+  shardedAssemble = n: a: input:
+    let assemblies = genList (i: bionix.gridss.assemble (a // { jobNodes = n; jobIndex = i;}) input) n;
+    in if n <= 1 then bionix.gridss.assemble a input else bionix.gridss.assemble (a // {workdirs = map (a: a.work) assemblies;}) input;
 
   /* Invoke identifyVariants tool
   Type: identifyVariants :: {config :: ini = null, heapSize :: String = "4g", ...} -> [bam] -> VCF

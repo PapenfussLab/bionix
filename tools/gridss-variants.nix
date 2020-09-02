@@ -7,6 +7,7 @@
 , softClipsToSplitReadsAttrs ? { flags = "REALIGN_ENTIRE_READ=true"; }
 , config ? null
 , heapSize ? "4g"
+, shards ? 10
 }:
 
 with bionix;
@@ -43,7 +44,7 @@ let
     ln -s ${bionix.samtools.index indexAttrs input} $WRKDIR/$BASENAME.sv.bai
   '';
 
-  assembly = bionix.samtools.sort {} (softClipsToSplitReads softClipsToSplitReadsAttrs (bionix.gridss.assemble assemblyAttrs inputs));
+  assembly = bionix.samtools.sort {} (softClipsToSplitReads softClipsToSplitReadsAttrs (bionix.gridss.shardedAssemble shards assemblyAttrs inputs));
 
   mkLinks = ''
     ln -s ${ref} ref.fa
