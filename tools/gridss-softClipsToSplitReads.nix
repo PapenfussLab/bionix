@@ -30,12 +30,13 @@ stage rec {
     java -Xmx${heapSize} -Dsamjdk.create_index=false \
       -cp ${bionix.gridss.jar} gridss.SoftClipsToSplitReads \
       VERBOSITY=WARNING \
-			REFERENCE_SEQUENCE=ref.fa \
-			I=${input} \
-			O=$out \
+      REFERENCE_SEQUENCE=ref.fa \
+      I=${input} \
+      O=$out \
       ${optionalString alignerStreaming "ALIGNER_STREAMING=true"} \
       ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
-			WORKER_THREADS=$NIX_BUILD_CORES
+      WORKER_THREADS=$NIX_BUILD_CORES \
+      ${optionalString (flags != null) flags}
     '';
   passthru.filetype = filetype.bam { ref = ref; sorting = sort.none {}; };
   passthru.multicore = true;

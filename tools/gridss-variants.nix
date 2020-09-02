@@ -5,7 +5,6 @@
 , assemblyAttrs ? {}
 , collectMetricsAttrs ? {}
 , softClipsToSplitReadsAttrs ? { flags = "REALIGN_ENTIRE_READ=true"; }
-, flags ? null
 , config ? null
 , heapSize ? "4g"
 }:
@@ -91,7 +90,7 @@ rec {
     name = "gridss-annotateVariants";
     buildInputs = with pkgs; [ jre ];
     buildCommand = mkLinks + ''
-      ln -s ${bionix.gridss.identifyVariants {inherit bwaIndexAttrs faidxAttrs indexAttrs assemblyAttrs collectMetricsAttrs softClipsToSplitReadsAttrs flags config; } inputs} input.vcf
+      ln -s ${bionix.gridss.identifyVariants {inherit bwaIndexAttrs faidxAttrs indexAttrs assemblyAttrs collectMetricsAttrs softClipsToSplitReadsAttrs config; } inputs} input.vcf
       java -Xmx${heapSize} -Dsamjdk.create_index=true \
         -cp ${jar} gridss.AnnotateVariants \
         VERBOSITY=WARNING \

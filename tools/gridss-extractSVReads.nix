@@ -38,7 +38,8 @@ stage rec {
       O=$out \
       UNMAPPED_READS=${if unmappedReads then "true" else "false"} \
       ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
-      MIN_CLIP_LENGTH=${toString minClipLength}
+      MIN_CLIP_LENGTH=${toString minClipLength} \
+      ${optionalString (flags != null) flags}
   '';
   passthru.filetype = input.filetype;
 }

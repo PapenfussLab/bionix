@@ -22,13 +22,14 @@ stage rec {
   buildCommand = ''
     mkdir $out
     java -Xmx${heapSize} -cp ${bionix.gridss.jar} \
-			gridss.analysis.CollectGridssMetrics \
+      gridss.analysis.CollectGridssMetrics \
       ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
       VERBOSITY=WARNING \
-			I=${input}\
-			O=$out/input \
+      I=${input}\
+      O=$out/input \
       AS=true \
-			THRESHOLD_COVERAGE=${toString thresholdCoverage}
+      THRESHOLD_COVERAGE=${toString thresholdCoverage} \
+      ${optionalString (flags != null) flags}
 
     # Make the output deterministic by removing timestamps
     sed -i '/^# Started on:/d' $out/input.*_metrics

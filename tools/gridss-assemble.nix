@@ -55,7 +55,8 @@ stage rec {
       OUTPUT=$out \
       ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
       WORKING_DIR=$TMPDIR/ \
-      TMP_DIR=$TMPDIR/
+      TMP_DIR=$TMPDIR/ \
+      ${optionalString (flags != null) flags}
   '';
   passthru.filetype = filetype.bam { ref = ref; sorting = sort.name {}; };
   passthru.multicore = true;
