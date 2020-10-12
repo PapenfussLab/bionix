@@ -38,4 +38,5 @@ stage {
       --input_file:tumour tumour.bam \
       --out $out
   '';
+  passthru.filetype = types.filetype.vcf { inherit ref; };
 }

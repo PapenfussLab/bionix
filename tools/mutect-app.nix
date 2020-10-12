@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1pq7iv720bp970qsyyshwk98xdb7naw566y6gk9cpj6bmm08z9v3";
   };
 
-  buildInputs = [ makeWrapper jre unzip ];
+  buildInputs = [ makeWrapper unzip ];
 
   unpackPhase = ''
     unzip $src -d $TMPDIR
