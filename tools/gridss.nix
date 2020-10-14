@@ -5,8 +5,8 @@ with lib;
 
 rec {
   jar = pkgs.fetchurl {
-    url = "https://github.com/PapenfussLab/gridss/releases/download/v2.9.4/gridss-2.9.4-gridss-jar-with-dependencies.jar";
-    sha256 = "0bnj27c5dv217fpkwfb62g0lgwy86drmfyvx8c3k6vs7vj4k90sp";
+    url = "https://github.com/PapenfussLab/gridss/releases/download/v2.10.0/gridss-2.10.0-gridss-jar-with-dependencies.jar";
+    sha256 = "M49RQtfUE0ud5+PP1kGGrfhC2BcGhKnC0Kkw+3jSDc0=";
   };
 
   /* Generate configuration file for GRIDSS. Takes attribute sets to GRIDSS ini style format.
