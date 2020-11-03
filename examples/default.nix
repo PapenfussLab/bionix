@@ -1,6 +1,6 @@
 # This example uses the pipelines specified in the call.nix file on the
 # synthetic data in this directory.
-{bionix ? import ./.. {}}:
+{bionix ? import <bionix> {}}:
 
 with bionix;
 
@@ -16,7 +16,7 @@ let
       };
 
       input2 =  fetchFastQ {
-      url = "https://github.com/PapenfussLab/bionix/raw/master/examples/sample1-2.fq";
+        url = "https://github.com/PapenfussLab/bionix/raw/master/examples/sample1-2.fq";
         sha256 = "0czk85km6a91y0fn4b7f9q7ps19b5jf7jzwbly4sgznps7ir2kdk";
       };
     }
