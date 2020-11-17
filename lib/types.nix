@@ -11,7 +11,7 @@ let
     sha256 = "0vhk1y7gilgn2pgvj4813bh2ljpw4pvrph8k8b0fsg56dbm8mqxa";
   };
   nix-adt = import "${nix-adt-src}";
-  inherit (nix-adt.checked) make-type match any std none;
+  inherit (nix-adt.unchecked) make-type match any std none;
   inherit (std) option;
 
   idft = sym: ft: _: abort "unhandled filetype (${ft}) for ${sym}";
