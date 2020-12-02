@@ -5,7 +5,7 @@ let
     config = { _module.args.pkgs = lib.mkDefault pkgs; };
   };
 
-  modules = [ ./bwa.nix ./base.nix ];
+  modules = [ ./samtools.nix ./bwa.nix ./base.nix ];
 
   rawModules = lib.evalModules {
     modules = [ configuration ] ++ modules ++ [ pkgsModule ];

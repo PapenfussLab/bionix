@@ -3,8 +3,7 @@
 
   outputs = { self }: rec {
     lib = {
-      bionixConfiguration = { configuration
-        , pkgs }:
+      bionixConfiguration = { configuration, pkgs }:
         import ./modules.nix {
           inherit pkgs;
           configuration = { ... }: { imports = [ configuration ]; };
