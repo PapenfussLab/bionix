@@ -79,15 +79,15 @@ rec {
         '';
       };
       dbnsfp = {
-        db = fetchgdrive {
+        db = pkgs.fetchurl {
           url =
-            "https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlSTY5dDJjcHVRZ3M";
-          sha256 = "0gfzbid3pc10zds7ya50w4qfynsxgpyh7dx35vhm5f3h64mw75pm";
+            "https://snpeff.blob.core.windows.net/databases/dbs/GRCh37/dbNSFP_4.1a/dbNSFP4.1a.txt.gz";
+          sha256 = "19xarymf3ah9jzn0ginzl96g2zinvrqbxcbjlm9simj9zmcakzvb";
         };
-        index = fetchgdrive {
+        index = pkgs.fetchurl {
           url =
-            "https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlOTV5RllpRjNHU2s";
-          sha256 = "0bwwigbnz32mmc8bczidjf68vv8x8i28zwkl2kgcbpj542zk5q86";
+            "https://snpeff.blob.core.windows.net/databases/dbs/GRCh37/dbNSFP_4.1a/dbNSFP4.1a.txt.gz.tbi";
+          sha256 = "1cpkvr8gysn5yn72jfjl6q08hyqk6vc7ap7ifbj4055sxzmxy71p";
         };
       };
     };
@@ -185,15 +185,15 @@ rec {
         '';
       };
       dbnsfp = {
-        db = fetchgdrive {
+        db = pkgs.fetchurl {
           url =
-            "https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlbTZodjlGUDZnTGc";
-          sha256 = "0gahnwkc7v2q6p6ixkhvsgqvvm6xf0c3bdh4nf0alih83h3wffd0";
+            "https://snpeff.blob.core.windows.net/databases/dbs/GRCh38/dbNSFP_4.1a/dbNSFP4.1a.txt.gz";
+          sha256 = "04f2xqndq0r04inykfxfm27p7zpr5p0l6qim51c3lmm3hv0bpfdc";
         };
-        index = fetchgdrive {
+        index = pkgs.fetchurl {
           url =
-            "https://drive.google.com/uc?export=download&id=0B7Ms5xMSFMYlNVBJdFA5cFZRYkE";
-          sha256 = "18blkly6gvg7r0sx968xlb1zl2kqg5j1kpbrm2r7ajlxlfyvrx3w";
+            "https://snpeff.blob.core.windows.net/databases/dbs/GRCh38/dbNSFP_4.1a/dbNSFP4.1a.txt.gz.tbi";
+          sha256 = "0jmmydfnngkywricf1g6vjlg3dp11c9a4f2drimg3pkw9wy8fmpn";
         };
       };
     };
