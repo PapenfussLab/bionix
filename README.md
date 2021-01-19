@@ -14,7 +14,7 @@ contributing (see bottom of this page).
 BioNix requires no dependencies beyond [Nix](http://nixos.org/nix),
 which may be installed by:
 ```{sh}
-curl https://nixos.org/nix/install | sh
+curl -L https://nixos.org/nix/install | sh
 ```
 If you do not have root access a variety of [rootless
 install](https://nixos.wiki/wiki/Nix_Installation_Guide#Installing_without_root_permissions)
