@@ -7,26 +7,26 @@
 let
   pctGCdata = buildRPackage rec {
     name = "pctGCdata-${version}";
-    version = "0.2.0";
+    version = "0.3.0";
     requireX = false;
     src = fetchFromGitHub {
       owner = "mskcc";
       repo = "pctGCdata";
-      rev = "v${version}";
-      sha256 = "1qq0fmm3zwz6rv0ka82850ww0qj50621gln9i0gfs8k3wyqil4l8";
+      rev = "a7385f38783ee0b2acfefe479a64550148927b45";
+      sha256 = "g0/TlV/a23UuogBc/0m6QTDaHXxFGtmdOSQTiPRGNbE=";
     };
     buildInputs = [ R ];
   };
 
 in buildRPackage rec{
   name = "facets-${version}";
-  version = "0.5.14";
+  version = "0.6.1";
   requireX = false;
   src = fetchFromGitHub {
     owner = "mskcc";
     repo = "facets";
     rev = "v${version}";
-    sha256 = "081afjynam22l7m11hg286gzx3lsivh11kyv5fvp3ni1a25adlsz";
+    sha256 = "sha256-GbEvhdkS+lCcJclCNtdXJgku6+WhXsUiSp4p2uhtqUs=";
   };
   buildInputs = [ R htslib zlib ];
   propagatedBuildInputs = [ pctGCdata ];
