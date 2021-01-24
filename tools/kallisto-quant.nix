@@ -70,7 +70,8 @@ stage {
     chmod 644 repack.h5
     ${noStamp}
     cp repack.h5 $out/abundance.h5
-    sed -i $out/run_info.json -e '/start_time/d'
+    sed -i $out/run_info.json -e '/"start_time"/d'
+    sed -i $out/run_info.json -e '/"call"/d'
   '';
   passthru.multicore = true;
 }
