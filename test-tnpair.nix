@@ -93,4 +93,4 @@ let
     inherit alignments;
   };
 
-in alignments."bwa-mem.bam"#testNaming
+in testNaming
