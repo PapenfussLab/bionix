@@ -72,8 +72,8 @@ rec {
       (sort {})
     ];
 
-  /* Call SVs: entire pipeline including preprocessing. It is recommended to use this function rather than the individual above tools.
-  Type: [bam] -> GRIDSS result
+  /* Call SVs: entire pipeline including preprocessing. It is recommended to use this function rather than the individual tools above.
+  Type: call :: [bam] -> GRIDSS result
   */
   call = inputs: gridss.annotateVariants {} (map gridss.preprocessBam inputs);
 

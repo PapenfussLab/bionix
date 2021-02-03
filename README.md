@@ -114,5 +114,4 @@ distributed machines. See the
 For general questions, issues, and
 [contributing](https://git-send-email.io), please
 [email](mailto:bionix@cua0.org) or [subscribe
-to](mailto:bionix+subscribe@cua0.org) our mailing list. You may also
-chat with us at [#bionix:cua0.org](http://matrix.to/#/#bionix:cua0.org).
+to](mailto:bionix+subscribe@cua0.org) our mailing list.
