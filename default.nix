@@ -50,24 +50,18 @@ let
       whisper = callBionix ./tools/whisper.nix { };
       star = callBionix ./tools/star.nix { };
 
-      slurm = attrs:
-        bionix.extend (self: super:
-          with self; rec {
-            slurmDefs = {
-              ppn = 1;
-              mem = 1;
-              walltime = "24:00:00";
-              partition = null;
-              slurmFlags = null;
-              salloc = "/usr/bin/salloc";
-              srun = "/usr/bin/srun";
-            } // attrs;
-            slurm = attrs:
-              (callPackage ./lib/slurm.nix { }) (slurmDefs // attrs);
-            exec = f: x: y:
-              slurm (builtins.intersectAttrs slurmDefs x) (super.exec f
-                (builtins.removeAttrs x (builtins.attrNames slurmDefs)) y);
-          });
+      slurm-run = callPackage ./lib/slurm.nix { };
+      slurm-exec = f: x: y:
+        slurm-run x (f (builtins.removeAttrs x [
+          "ppn"
+          "mem"
+          "walltime"
+          "partition"
+          "slurmFlags"
+          "salloc"
+          "srun"
+        ]) y);
+      slurm = bionix.extend (self: super: { exec = super.slurm-run; });
       qsub = attrs:
         bionix.extend (self: super:
           with self; rec {
@@ -190,7 +184,8 @@ let
 
   overlayByType = {
     lambda = bionix: overlay:
-      bionix.extend overlay;
+      bionix.extend
+      (self: super: nixpkgs.lib.recursiveUpdate super (overlay self super));
     path = bionix: path: overlay bionix (import path);
   };
   overlay = bionix: overlay:

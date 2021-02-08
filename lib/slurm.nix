@@ -5,7 +5,7 @@ with lib;
 let escape = x: if builtins.typeOf x == "string" then escapeShellArg x else x;
 
 in { ppn, mem, walltime, partition ? null, slurmFlags ? null
-, salloc ? "/usr/bin/salloc", srun ? "/usr/bin/srun" }:
+, salloc ? "/usr/bin/salloc", srun ? "/usr/bin/srun", ... }:
 drv:
 let ppnReified = if drv.multicore then ppn else 1;
 in overrideDerivation drv ({ args, builder, name, ... }: {
