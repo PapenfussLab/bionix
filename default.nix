@@ -190,8 +190,7 @@ let
 
   overlayByType = {
     lambda = bionix: overlay:
-      bionix.extend
-      (self: super: nixpkgs.lib.recursiveUpdate super (overlay self super));
+      bionix.extend overlay;
     path = bionix: path: overlay bionix (import path);
   };
   overlay = bionix: overlay:
