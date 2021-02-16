@@ -3,7 +3,8 @@
 This directory has a few example workflows in bionix along with example
 data. A basic workflow is defined in `call.nix`, and an example of
 applying it to the sample data is in `default.nix`. To build the
-`default.nix` workflow, run ```nix build``` from this directory.
+`default.nix` workflow, run ```nix build -I bionix=../``` from this directory.
+Note that the location of BioNix 
 
 ## NextFlow and WDL translations
 
@@ -12,12 +13,12 @@ from the NextFlow and WDL documentation respectively.
 
 The NextFlow translated example does not come with example data. It can be built with
 ```
-nix build -f nextflow-example1.nix --arg input /path/to/sample.fa
+nix build -f nextflow-example1.nix -I bionix=../.. --arg input /path/to/sample.fa
 ```
 
 The WDL example requires no extra data and can be built with
 ```
-nix build -f wdl-scatter-gather.nix
+nix build -f wdl-scatter-gather.nix -I bionix=../..
 ```
 
 ## Example script wrapper
