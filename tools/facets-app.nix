@@ -12,8 +12,8 @@ let
     src = fetchFromGitHub {
       owner = "mskcc";
       repo = "pctGCdata";
-      rev = "a7385f38783ee0b2acfefe479a64550148927b45";
-      sha256 = "g0/TlV/a23UuogBc/0m6QTDaHXxFGtmdOSQTiPRGNbE=";
+      rev = "v0.3.0";
+      sha256 = "sha256-g0/TlV/a23UuogBc/0m6QTDaHXxFGtmdOSQTiPRGNbE=";
     };
     buildInputs = [ R ];
   };
