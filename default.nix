@@ -104,6 +104,7 @@ let
           in ''
             mkdir $out 
           '' + (concatStringsSep "\n" (mapAttrsToList link x));
+          passthru.linkInputs = x;
         };
 
       # Fetching files of specific type
