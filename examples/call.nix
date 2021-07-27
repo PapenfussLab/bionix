@@ -12,6 +12,7 @@ with lib;
 let
   preprocess = flip pipe [
     (bwa.align { inherit ref; })
+    (samtools.sort { nameSort = true; })
     (samtools.fixmate {})
     (samtools.sort {})
     (samtools.markdup {})

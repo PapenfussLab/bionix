@@ -11,7 +11,7 @@ let
 
   ref = fetchfa ./examples/ref.fa;
 
-  alignWithRG = rg: bwa.align { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";};
+  alignWithRG = rg: x: nameSort (bwa.align { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'";} x);
   sort = samtools.sort {};
   nameSort = samtools.sort {nameSort = true;};
   flagstat = samtools.flagstat {};
@@ -41,7 +41,7 @@ let
     glvariants = strelka.call {} (builtins.attrValues alignments);
     platypusVars = platypus.call {} (builtins.attrValues alignments);
     octopusVars = octopus.call {} (builtins.attrValues alignments);
-    shards = map (bwa.align {inherit ref;}) (shard.fastQPair 2 normal.files);
+    shards = map (x: nameSort (bwa.align {inherit ref;} x)) (shard.fastQPair 2 normal.files);
   };
 
   tnpairResult = processPair tnpair;

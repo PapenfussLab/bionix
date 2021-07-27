@@ -12,6 +12,7 @@ let
   preprocess = s: pipe s [
     fetch
     (align { preset = "sr"; ref = ref.grch38.seq; flags = "-R'@RG\\tID:${s.type}\\tSM:${s.type}'"; })
+    (sort { nameSort = true; })
     (fixmate {})
     (sort { })
     (markdup { })

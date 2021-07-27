@@ -33,6 +33,6 @@ in stage {
      --readFilesIn ${fq input1} ${optionalString (input2 != null) (fq input2)}
      ${if bamOutput then "samtools view -b Aligned.out.sam > $out" else "cp Aligned.out.sam $out"}
   '';
-  passthru.filetype = if bamOutput then filetype.bam {ref = ref; sorting = sort.name {};} else filetype.sam {ref = ref; sorting = sort.name {};};
+  passthru.filetype = if bamOutput then filetype.bam {ref = ref; sorting = sort.none {};} else filetype.sam {ref = ref; sorting = sort.name {};};
   passthru.multicore = true;
 }

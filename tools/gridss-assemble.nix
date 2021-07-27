@@ -70,6 +70,6 @@ stage rec {
     touch $out
     cp -r out.gridss.working $work
   '';
-  passthru.filetype = filetype.bam { ref = ref; sorting = sort.name {}; };
+  passthru.filetype = filetype.bam { ref = ref; sorting = sort.none {}; };
   passthru.multicore = true;
 }
