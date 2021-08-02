@@ -60,7 +60,7 @@ rec {
   /* As annotateVariants except include assembly in output */
   annotateAndAssemble = exec (attrs: input: ((callBionix ./gridss-variants.nix attrs) input).annotateAndAssemble);
 
-  /* Preprocess BAM files to extract SV reads and convert soft clips to split reads
+  /* Preprocess BAM files to extract SV reads and compute required stats
   Type: preprocessBam :: bam -> bam
   */
   preprocessBam = with samtools;
@@ -68,7 +68,6 @@ rec {
       (gridss.extractSVReads {})
       (sort {nameSort = true;})
       (gridss.computeSamTags {})
-      (gridss.softClipsToSplitReads {})
       (sort {})
     ];
 
