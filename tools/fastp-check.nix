@@ -16,7 +16,7 @@ let
   out =
     stage {
         name = "fastp";
-        buildInputs = [ fastp.app ];
+        buildInputs = [ pkgs.fastp ];
         outputs = [ "out" "fastq1" "json" ] ++ (if input2 != null then [ "fastq2" ] else []);
         buildCommand = ''
             mkdir -p $out
