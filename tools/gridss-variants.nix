@@ -1,14 +1,7 @@
-{ bionix
-, bwaIndexAttrs ? {}
-, faidxAttrs ? {}
-, indexAttrs ? {}
-, assemblyAttrs ? {}
-, collectMetricsAttrs ? {}
+{ bionix, bwaIndexAttrs ? { }, faidxAttrs ? { }, indexAttrs ? { }
+, assemblyAttrs ? { }, collectMetricsAttrs ? { }
 , softClipsToSplitReadsAttrs ? { flags = "REALIGN_ENTIRE_READ=true"; }
-, config ? null
-, heapSize ? "4g"
-, shards ? 10
-}:
+, config ? null, heapSize ? "4g", shards ? 10 }:
 
 with bionix;
 with lib;
@@ -44,7 +37,9 @@ let
     ln -s ${bionix.samtools.index indexAttrs input} $WRKDIR/$BASENAME.sv.bai
   '';
 
-  assembly = bionix.samtools.sort {} (softClipsToSplitReads softClipsToSplitReadsAttrs (bionix.gridss.shardedAssemble shards assemblyAttrs inputs));
+  assembly = bionix.samtools.sort { }
+    (softClipsToSplitReads softClipsToSplitReadsAttrs
+      (bionix.gridss.shardedAssemble shards assemblyAttrs inputs));
 
   mkLinks = ''
     ln -s ${ref} ref.fa
@@ -54,13 +49,12 @@ let
     done
     ${concatMapStringsSep "\n" (linkSV) inputs}
     ${linkSV assembly}
-    ${concatMapStringsSep "\n" (linkInput collectMetrics collectMetricsAttrs) inputs}
+    ${concatMapStringsSep "\n" (linkInput collectMetrics collectMetricsAttrs)
+    inputs}
     ${linkInput collectMetrics collectMetricsAttrs assembly}
   '';
 
-in
-
-assert (all sorted inputs);
+in assert (all sorted inputs);
 assert (homoRef);
 
 rec {
@@ -74,16 +68,21 @@ rec {
         REFERENCE_SEQUENCE=ref.fa \
         ${concatMapStringsSep " " (i: "INPUT='${i}'") inputs} \
         ASSEMBLY=${assembly} \
+        WORKER_THREADS=$NIX_BUILD_CORES \
         OUTPUT_VCF=out.vcf \
-        ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
+        ${
+          optionalString (config != null)
+          ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)
+        } \
         WORKING_DIR=$TMPDIR/ \
         TMP_DIR=$TMPDIR/
 
       mv out.vcf $out
-      '';
+    '';
     passthru = {
       filetype = filetype.vcf { ref = ref; };
       gridss.assembly = assembly;
+      multicore = true;
     };
   };
 
@@ -91,7 +90,12 @@ rec {
     name = "gridss-annotateVariants";
     buildInputs = with pkgs; [ jre ];
     buildCommand = mkLinks + ''
-      ln -s ${bionix.gridss.identifyVariants {inherit bwaIndexAttrs faidxAttrs indexAttrs assemblyAttrs collectMetricsAttrs softClipsToSplitReadsAttrs config; } inputs} input.vcf
+      ln -s ${
+        bionix.gridss.identifyVariants {
+          inherit bwaIndexAttrs faidxAttrs indexAttrs assemblyAttrs
+            collectMetricsAttrs softClipsToSplitReadsAttrs config;
+        } inputs
+      } input.vcf
       java -Xmx${heapSize} -Dsamjdk.create_index=true \
         -cp ${jar} gridss.AnnotateVariants \
         VERBOSITY=WARNING \
@@ -100,15 +104,20 @@ rec {
         ASSEMBLY=${assembly} \
         INPUT_VCF=input.vcf \
         OUTPUT_VCF=out.vcf \
+        WORKER_THREADS=$NIX_BUILD_CORES \
         WORKING_DIR=$TMPDIR/ \
-        ${optionalString (config != null) ("OPTIONS_FILE=" +  bionix.gridss.gridssConfig config)} \
+        ${
+          optionalString (config != null)
+          ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)
+        } \
         TMP_DIR=$TMPDIR/
 
       mv out.vcf $out
-      '';
+    '';
     passthru = {
       filetype = filetype.vcf { ref = ref; };
       gridss.assembly = assembly;
+      multicore = true;
     };
   };
 
