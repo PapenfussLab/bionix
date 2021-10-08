@@ -41,7 +41,7 @@ this pipeline and the other examples.
   `tools/platypus-callVariants.nix`.
 - The Nix expression for the `platypus` software itself can be found in
   [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/science/biology/platypus/default.nix).
-  
+
 ## Constructing workflows
 
 Writing workflows requires some familiarity with the Nix
@@ -109,9 +109,12 @@ distributed machines. See the
 [manual](https://nixos.org/nix/manual/#chap-distributed-builds) and
 [wiki](https://nixos.wiki/wiki/Distributed_build) for more information.
 
+## Citing
+
+1. Bedő, J., Di Stefano, L., & Papenfuss, A. T. (2020). Unifying package managers, workflow engines, and containers: Computational reproducibility with BioNix. GigaScience, 9(11). https://doi.org/10.1093/gigascience/giaa121
+
 ## Getting help and contributing
 
-For general questions, issues, and
-[contributing](https://git-send-email.io), please
-[email](mailto:bionix@cua0.org) or [subscribe
-to](mailto:bionix+subscribe@cua0.org) our mailing list.
+For general questions, issues, and [contributing](https://git-send-email.io),
+please [email](mailto:bionix@cua0.org) or [subscribe to](mailto:bionix+subscribe@cua0.org)
+our mailing list. There is also a chat room on [Matrix](https://matrix.to/#/#bionix:vk3.wtf).
