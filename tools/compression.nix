@@ -1,4 +1,4 @@
-{bionix}:
+{ bionix }:
 
 with bionix;
 with types;
@@ -8,42 +8,51 @@ let
   gunzip = callBionixE ./compression-gunzip.nix;
   bunzip2 = callBionixE ./compression-bunzip2.nix;
 
-in {
-  uncompress = attrs: f: matchFiletype "uncompress" {
-    fa = _: f;
-    fq = _: f;
-    bam = _: f;
-    sam = _: f;
-    cram = _: f;
-    vcf = _: f;
-    bed = _: f;
-    gz = _: gunzip attrs f;
-    bz2 = _: bunzip2 attrs f;
-  } f;
+in
+{
+  uncompress = attrs: f: matchFiletype "uncompress"
+    {
+      fa = _: f;
+      fq = _: f;
+      bam = _: f;
+      sam = _: f;
+      cram = _: f;
+      vcf = _: f;
+      bed = _: f;
+      gz = _: gunzip attrs f;
+      bz2 = _: bunzip2 attrs f;
+    }
+    f;
 
   gzip = attrs: f:
     let gz = gzip attrs f;
-    in types.matchFiletype "compressed" {
-      fa = _: gz;
-      fq = _: gz;
-      bam = _: gz;
-      sam = _: gz;
-      cram = _: gz;
-      vcf = _: gz;
-      bed = _: gz;
-      gz = x: x;
-    } f;
+    in
+    types.matchFiletype "compressed"
+      {
+        fa = _: gz;
+        fq = _: gz;
+        bam = _: gz;
+        sam = _: gz;
+        cram = _: gz;
+        vcf = _: gz;
+        bed = _: gz;
+        gz = x: x;
+      }
+      f;
 
   bzip2 = attrs: f:
     let bz2 = bzip2 attrs f;
-    in types.matchFiletype "compressed" {
-      fa = _: gz;
-      fq = _: gz;
-      bam = _: gz;
-      sam = _: gz;
-      cram = _: gz;
-      vcf = _: gz;
-      bed = _: gz;
-      bz2 = x: x;
-    } f;
+    in
+    types.matchFiletype "compressed"
+      {
+        fa = _: gz;
+        fq = _: gz;
+        bam = _: gz;
+        sam = _: gz;
+        cram = _: gz;
+        vcf = _: gz;
+        bed = _: gz;
+        bz2 = x: x;
+      }
+      f;
 }

@@ -1,7 +1,8 @@
 # This is a translation of the Nextflow example found at
 # https://www.nextflow.io/example1.html
-{ bionix ? import ./../.. {}
-, input ? ./sample.fa}:
+{ bionix ? import ./../.. { }
+, input ? ./sample.fa
+}:
 
 with bionix;
 with lib;
@@ -24,7 +25,8 @@ let
     '';
   };
 
-in pipe input [
+in
+pipe input [
   splitSequences
   (each reverse)
 ]

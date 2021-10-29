@@ -1,5 +1,5 @@
-{bionix
-, indexFlags ? {}
+{ bionix
+, indexFlags ? { }
 , bias ? false
 , bootstrapSamples ? 0
 , seed ? 42
@@ -10,7 +10,8 @@
 , rfStranded ? false
 , fragmentLength ? null
 , fragmentSD ? null
-, ref}:
+, ref
+}:
 
 with bionix;
 with lib;
@@ -21,7 +22,7 @@ inputs:
 
 let
   inherit (bionix.types) matchFiletype';
-  isFastQ = matchFiletype' "kallisto-quant" {fq = _: true; gz = isFastQ; };
+  isFastQ = matchFiletype' "kallisto-quant" { fq = _: true; gz = isFastQ; };
 
   empty = ./kallisto-quant-empty.h5;
 
@@ -45,7 +46,7 @@ let
 
 in
 
-assert (all (x: isFastQ (x.filetype)) inputs);
+assert (all (x: isFastQ x.filetype) inputs);
 
 stage {
   name = "kallisto-quant";

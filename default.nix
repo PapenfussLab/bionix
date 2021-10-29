@@ -5,10 +5,11 @@ let
 
   bionix = nixpkgs.lib.makeExtensible (self:
     let callBionix = file: attrs: import file ({ bionix = self; } // attrs);
-    in with self; {
-      callBionix = callBionix;
+    in
+    with self; {
+      inherit callBionix;
       id = x: x;
-      exec = f: x: y: f x y;
+      exec = id;
       exec' = f: exec (_: f) { };
       exec'' = f: exec' (_: f) { };
       callBionixE = p: exec (callBionix p);
@@ -52,15 +53,17 @@ let
 
       slurm-run = callPackage ./lib/slurm.nix { };
       slurm-exec = f: x: y:
-        slurm-run x (f (builtins.removeAttrs x [
-          "ppn"
-          "mem"
-          "walltime"
-          "partition"
-          "slurmFlags"
-          "salloc"
-          "srun"
-        ]) y);
+        slurm-run x (f
+          (builtins.removeAttrs x [
+            "ppn"
+            "mem"
+            "walltime"
+            "partition"
+            "slurmFlags"
+            "salloc"
+            "srun"
+          ])
+          y);
       slurm = bionix.extend (self: super: { exec = super.slurm-run; });
       qsub = attrs:
         bionix.extend (self: super:
@@ -78,7 +81,8 @@ let
             qsub = attrs: (callPackage ./lib/qsub.nix { }) (qsubDefs // attrs);
             exec = f: x: y:
               qsub (builtins.intersectAttrs qsubDefs x) (super.exec f
-                (builtins.removeAttrs x (builtins.attrNames qsubDefs)) y);
+                (builtins.removeAttrs x (builtins.attrNames qsubDefs))
+                y);
           });
       def = f: defs: attrs: f (defs // attrs);
 
@@ -88,22 +92,24 @@ let
           name = "link-outputs";
           outputs = [ "out" ] ++ attrNames x;
           nativeBuildInputs = [ pkgs.perl ];
-          buildCommand = let
-            recurse = x:
-              if x ? type && x.type == "derivation" then
-                x
-              else if builtins.typeOf x == "set" then
-                linkOutputs x
-              else
-                abort "linkOutputs: unsupported type";
-            link = dst: src: ''
-              ln -s ${recurse src} $(perl -e 'print $ENV{"${dst}"}') ; ln -s ${
-                recurse src
-              } $out/${dst}
-            '';
-          in ''
-            mkdir $out 
-          '' + (concatStringsSep "\n" (mapAttrsToList link x));
+          buildCommand =
+            let
+              recurse = x:
+                if x ? type && x.type == "derivation" then
+                  x
+                else if builtins.typeOf x == "set" then
+                  linkOutputs x
+                else
+                  abort "linkOutputs: unsupported type";
+              link = dst: src: ''
+                ln -s ${recurse src} $(perl -e 'print $ENV{"${dst}"}') ; ln -s ${
+                  recurse src
+                } $out/${dst}
+              '';
+            in
+            ''
+              mkdir $out 
+            '' + (concatStringsSep "\n" (mapAttrsToList link x));
           passthru.linkInputs = x;
         };
 
@@ -127,15 +133,15 @@ let
       # Export nixpkgs and standard library lib
       pkgs = nixpkgs;
       lib = nixpkgs.lib // {
-        types = types;
+        inherit types;
         shard = callBionix ./lib/shard.nix { };
       };
       stage = x@{ name, stripStorePaths ? true, multicore ? false, ... }:
         (if stripStorePaths then strip else x: x)
-        (nixpkgs.stdenvNoCC.mkDerivation (x // {
-          name = "bionix-" + name;
-          inherit multicore;
-        }));
+          (nixpkgs.stdenvNoCC.mkDerivation (x // {
+            name = "bionix-" + name;
+            inherit multicore;
+          }));
       strip = drv:
         let
           stripCommand = ''
@@ -156,7 +162,8 @@ let
               rewriteOutput $o
             done
           '';
-        in drv.overrideAttrs (attrs:
+        in
+        drv.overrideAttrs (attrs:
           if attrs ? buildCommand then {
             buildCommand = attrs.buildCommand + stripCommand;
           } else {
@@ -186,13 +193,15 @@ let
   overlayByType = {
     lambda = bionix: overlay:
       bionix.extend
-      (self: super: nixpkgs.lib.recursiveUpdate super (overlay self super));
+        (self: super: nixpkgs.lib.recursiveUpdate super (overlay self super));
     path = bionix: path: overlay bionix (import path);
   };
   overlay = bionix: overlay:
     let overlayType = builtins.typeOf overlay;
-    in if overlayByType ? ${overlayType} then
-      overlayByType.${overlayType} bionix overlay
+    in
+    if overlayByType ? "${overlayType}" then
+      overlayByType."${overlayType}" bionix overlay
     else
       builtins.throw ("cannot overlay type " + overlayType);
-in with nixpkgs.lib; foldl overlay bionix overlays
+in
+with nixpkgs.lib; foldl overlay bionix overlays

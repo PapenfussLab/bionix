@@ -1,6 +1,7 @@
-{bionix
+{ bionix
 , kmerSize ? 31
-, unique ? false}:
+, unique ? false
+}:
 
 with bionix;
 with lib;

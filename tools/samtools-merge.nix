@@ -10,8 +10,8 @@ with lib;
 
 let
   inherit (bionix.types) matchFiletype matchSorting;
-  inputIsHomogenous = length (unique (map (matchFiletype "samtools-merge" {bam = x: x // {sorting = matchSorting "samtools-merge" {coord = _: "coord"; name = _: "name"; } x;};}) inputs)) == 1;
-  nameSorted = matchFiletype "samtools-merge" { bam = x: matchSorting "samtools-merge" {coord = _: false; name = _: true;} x;} (lib.head inputs);
+  inputIsHomogenous = length (unique (map (matchFiletype "samtools-merge" { bam = x: x // { sorting = matchSorting "samtools-merge" { coord = _: "coord"; name = _: "name"; } x; }; }) inputs)) == 1;
+  nameSorted = matchFiletype "samtools-merge" { bam = matchSorting "samtools-merge" { coord = _: false; name = _: true; }; } (lib.head inputs);
 in
 
 assert inputIsHomogenous;

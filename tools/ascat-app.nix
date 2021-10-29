@@ -1,4 +1,4 @@
-{stdenv, callPackage, buildPerlPackage, fetchurl, fetchFromGitHub, perlPackages, R, bwa, samtools, pkgconfig, zlib, htslib, curl, bzip2, lzma, gnutls, nettle, gmp, p11-kit, libtasn1, perl, psmisc, time, vcftools, rWrapper, rPackages}:
+{ stdenv, callPackage, buildPerlPackage, fetchurl, fetchFromGitHub, perlPackages, R, bwa, samtools, pkgconfig, zlib, htslib, curl, bzip2, lzma, gnutls, nettle, gmp, p11-kit, libtasn1, perl, psmisc, time, vcftools, rWrapper, rPackages }:
 
 let
   ascat = fetchurl {
@@ -98,7 +98,7 @@ let
       url = "mirror://cpan/authors/id/C/CD/CDRAUG/${name}.tar.gz";
       sha256 = "0yvhgifs8g9rwdcq84zw4b005nq2jml6c75zgjscv6d2pd3lj1ss";
     };
-    propagatedBuildInputs = with perlPackages; [DBI DataStag Error GD Graph HTTPMessage HTTPMessage IOstringy IOString IPCRun LWP ListMoreUtils SetScalar TestMost TestRequiresInternet URI XMLDOM XMLDOMXPath XMLLibXML XMLLibXML libxml_perl XMLSAX XMLSAXBase XMLSAXWriter XMLTwig XMLWriter YAML DBFile ];
+    propagatedBuildInputs = with perlPackages; [ DBI DataStag Error GD Graph HTTPMessage HTTPMessage IOstringy IOString IPCRun LWP ListMoreUtils SetScalar TestMost TestRequiresInternet URI XMLDOM XMLDOMXPath XMLLibXML XMLLibXML libxml_perl XMLSAX XMLSAXBase XMLSAXWriter XMLTwig XMLWriter YAML DBFile ];
     nativeBuildInputs = with perlPackages; [ TestException TestWarn TestDifferences TestDeep ];
   };
 
@@ -108,7 +108,7 @@ let
       url = "mirror://cpan/authors/id/C/CM/CMUNGALL/${name}.tar.gz";
       sha256 = "0ncf4l39ka23nb01jlm6rzxdb5pqbip01x0m38bnvf1gim825caa";
     };
-    propagatedBuildInputs = with perlPackages; [IOString Graph XMLLibXSLT ];
+    propagatedBuildInputs = with perlPackages; [ IOString Graph XMLLibXSLT ];
   };
 
   XMLDOMXPath = buildPerlPackage rec {
@@ -117,7 +117,7 @@ let
       url = "mirror://cpan/authors/id/M/MI/MIROD/${name}.tar.gz";
       sha256 = "1si9m1pqih3ibbd6jnw69fh98dd4krxpx90p65x9j4aja55afwq1";
     };
-    propagatedBuildInputs= with perlPackages; [XMLDOM XMLXPathEngine];
+    propagatedBuildInputs = with perlPackages; [ XMLDOM XMLXPathEngine ];
     doCheck = false;
   };
 
@@ -215,10 +215,10 @@ let
     name = "alleleCount.pl-${version}";
     version = "4.0.1";
     src = fetchFromGitHub {
-    owner = "cancerit";
-    repo = "alleleCount";
-    rev = "v${version}";
-    sha256 = "0nkwnjqglgshzhlmz1r0khdjai9mfz4ih8bzrzg0g18d1725k6gp";
+      owner = "cancerit";
+      repo = "alleleCount";
+      rev = "v${version}";
+      sha256 = "0nkwnjqglgshzhlmz1r0khdjai9mfz4ih8bzrzg0g18d1725k6gp";
     };
     preConfigure = ''
       cd perl
@@ -266,4 +266,5 @@ let
     ];
   };
 
-in ascatNGS
+in
+ascatNGS

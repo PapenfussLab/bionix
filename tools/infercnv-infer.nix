@@ -1,12 +1,14 @@
-{bionix
-,flags ? null}:
+{ bionix
+, flags ? null
+}:
 
 with bionix;
 with lib;
 
-{ref
-,expr
-,pos}:
+{ ref
+, expr
+, pos
+}:
 
 stage {
   name = "inferCNV";

@@ -26,7 +26,7 @@ rec {
       buildInputs = with pkgs; [ gawk ];
       buildCommand = ''
         gunzip < $src | awk '/^[^#]/{print "chr" $0;next}{print}' > $out
-          '';
+      '';
       passthru.filetype = filetype.vcf { ref = seq; };
     };
     encode.blacklist = stage {
@@ -42,28 +42,30 @@ rec {
       '';
     };
 
-    ensembl = let version = "74";
-    in {
-      cdna = stage {
-        name = "ensembl-grch37-cdna-${version}";
-        src = pkgs.fetchurl {
-          url =
-            "ftp://ftp.ensembl.org/pub/release-${version}/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.${version}.cdna.all.fa.gz";
-          sha256 = "1m62hiw17zcxg3sza0aq53885wb8g202j8lc1ilhmkg2izzbyihj";
+    ensembl =
+      let version = "74";
+      in
+      {
+        cdna = stage {
+          name = "ensembl-grch37-cdna-${version}";
+          src = pkgs.fetchurl {
+            url =
+              "ftp://ftp.ensembl.org/pub/release-${version}/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh37.${version}.cdna.all.fa.gz";
+            sha256 = "1m62hiw17zcxg3sza0aq53885wb8g202j8lc1ilhmkg2izzbyihj";
+          };
+          buildCommand = "gunzip < $src > $out";
+          passthru.filetype = filetype.fa { };
         };
-        buildCommand = "gunzip < $src > $out";
-        passthru.filetype = filetype.fa { };
-      };
-      gtf = stage {
-        name = "ensembl-grch37-gtf-${version}";
-        src = pkgs.fetchurl {
-          url =
-            "ftp://ftp.ensembl.org/pub/release-${version}/gtf/homo_sapiens/Homo_sapiens.GRCh37.${version}.gtf.gz";
-          sha256 = "1m62hiw17zcxg3sza0aq53885wb8g202j8lc1ilhmkg2izzbyihj";
+        gtf = stage {
+          name = "ensembl-grch37-gtf-${version}";
+          src = pkgs.fetchurl {
+            url =
+              "ftp://ftp.ensembl.org/pub/release-${version}/gtf/homo_sapiens/Homo_sapiens.GRCh37.${version}.gtf.gz";
+            sha256 = "1m62hiw17zcxg3sza0aq53885wb8g202j8lc1ilhmkg2izzbyihj";
+          };
+          buildCommand = "gunzip < $src > $out";
         };
-        buildCommand = "gunzip < $src > $out";
       };
-    };
     snpeff = {
       db = pkgs.stdenv.mkDerivation rec {
         name = "GRCh37.75";
@@ -114,7 +116,7 @@ rec {
       buildInputs = with pkgs; [ gawk ];
       buildCommand = ''
         gunzip < $src | awk '/^[^#]/{print "chr" $0;next}{print}' > $out
-          '';
+      '';
       passthru.filetype = filetype.vcf { ref = seq; };
     };
     encode.blacklist = stage {
@@ -129,47 +131,49 @@ rec {
         gunzip < $bed | awk '{print $1 ":" $2 "-" $3}' > $out
       '';
     };
-    ensembl = let version = "97";
-    in {
-      cdna = stage {
-        name = "ensembl-grch38-cdna-${version}";
-        src = pkgs.fetchurl {
-          url =
-            "ftp://ftp.ensembl.org/pub/release-${version}/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz";
-          sha256 = "1m6hvnvlrsi6bzcmq0lnv0igy3in1a7jp723yc74g4g6zjp3cy8c";
+    ensembl =
+      let version = "97";
+      in
+      {
+        cdna = stage {
+          name = "ensembl-grch38-cdna-${version}";
+          src = pkgs.fetchurl {
+            url =
+              "ftp://ftp.ensembl.org/pub/release-${version}/fasta/homo_sapiens/cdna/Homo_sapiens.GRCh38.cdna.all.fa.gz";
+            sha256 = "1m6hvnvlrsi6bzcmq0lnv0igy3in1a7jp723yc74g4g6zjp3cy8c";
+          };
+          buildCommand = "gunzip < $src > $out";
+          passthru.filetype = filetype.fa { };
         };
-        buildCommand = "gunzip < $src > $out";
-        passthru.filetype = filetype.fa { };
-      };
-      ncrna = stage {
-        name = "ensembl-grch38-ncrna-${version}";
-        src = pkgs.fetchurl {
-          url =
-            "ftp://ftp.ensembl.org/pub/release-${version}/fasta/homo_sapiens/ncrna/Homo_sapiens.GRCh38.ncrna.fa.gz";
-          sha256 = "1r0dmybn31wf6xc90z2c08ngivkv39hqa8wqg3vik6s4spwpdhj0";
+        ncrna = stage {
+          name = "ensembl-grch38-ncrna-${version}";
+          src = pkgs.fetchurl {
+            url =
+              "ftp://ftp.ensembl.org/pub/release-${version}/fasta/homo_sapiens/ncrna/Homo_sapiens.GRCh38.ncrna.fa.gz";
+            sha256 = "1r0dmybn31wf6xc90z2c08ngivkv39hqa8wqg3vik6s4spwpdhj0";
+          };
+          buildCommand = "gunzip < $src > $out";
+          passthru.filetype = filetype.fa { };
         };
-        buildCommand = "gunzip < $src > $out";
-        passthru.filetype = filetype.fa { };
-      };
-      gtf = stage {
-        name = "ensembl-grch38-gtf-${version}";
-        src = pkgs.fetchurl {
-          url =
-            "ftp://ftp.ensembl.org/pub/release-${version}/gtf/homo_sapiens/Homo_sapiens.GRCh38.${version}.gtf.gz";
-          sha256 = "068ab5jf87il301jcr0576c4q0smv6kxpv94gnrm3qzl6kvmaawd";
+        gtf = stage {
+          name = "ensembl-grch38-gtf-${version}";
+          src = pkgs.fetchurl {
+            url =
+              "ftp://ftp.ensembl.org/pub/release-${version}/gtf/homo_sapiens/Homo_sapiens.GRCh38.${version}.gtf.gz";
+            sha256 = "068ab5jf87il301jcr0576c4q0smv6kxpv94gnrm3qzl6kvmaawd";
+          };
+          buildCommand = "gunzip < $src > $out";
         };
-        buildCommand = "gunzip < $src > $out";
-      };
-      gff3 = stage {
-        name = "ensembl-grch38-gff-${version}";
-        src = pkgs.fetchurl {
-          url =
-            "ftp://ftp.ensembl.org/pub/release-${version}/gff3/homo_sapiens/Homo_sapiens.GRCh38.${version}.gff3.gz";
-          sha256 = "1xvhsn938mw0032qgc9dvw3k2xrhpx77b8ms03fkrs2s67f7zli7";
+        gff3 = stage {
+          name = "ensembl-grch38-gff-${version}";
+          src = pkgs.fetchurl {
+            url =
+              "ftp://ftp.ensembl.org/pub/release-${version}/gff3/homo_sapiens/Homo_sapiens.GRCh38.${version}.gff3.gz";
+            sha256 = "1xvhsn938mw0032qgc9dvw3k2xrhpx77b8ms03fkrs2s67f7zli7";
+          };
+          buildCommand = "gunzip < $src > $out";
         };
-        buildCommand = "gunzip < $src > $out";
       };
-    };
     snpeff = {
       db = pkgs.stdenv.mkDerivation rec {
         name = "GRCh38.86";
@@ -221,48 +225,50 @@ rec {
       buildCommand = "gunzip < $src > $out";
       passthru.filetype = filetype.fa { };
     };
-    ensembl = let version = "94";
-    in {
-      cdna = stage {
-        name = "ensembl-grcm38-cdna-${version}";
-        src = pkgs.fetchurl {
-          url =
-            "ftp://ftp.ensembl.org/pub/release-${version}/fasta/mus_musculus/cdna/Mus_musculus.GRCm38.cdna.all.fa.gz";
-          sha256 = "0khp9l6s35lav2xqp7vkk6ybnz4wjihn7lapjf2lbpnbzjb4hp6d";
+    ensembl =
+      let version = "94";
+      in
+      {
+        cdna = stage {
+          name = "ensembl-grcm38-cdna-${version}";
+          src = pkgs.fetchurl {
+            url =
+              "ftp://ftp.ensembl.org/pub/release-${version}/fasta/mus_musculus/cdna/Mus_musculus.GRCm38.cdna.all.fa.gz";
+            sha256 = "0khp9l6s35lav2xqp7vkk6ybnz4wjihn7lapjf2lbpnbzjb4hp6d";
+          };
+          buildCommand = "gunzip < $src > $out";
+          passthru.filetype = filetype.fa { };
         };
-        buildCommand = "gunzip < $src > $out";
-        passthru.filetype = filetype.fa { };
-      };
-      ncrna = stage {
-        name = "ensembl-grcm38-ncrna-${version}";
-        version = "94";
-        src = pkgs.fetchurl {
-          url =
-            "ftp://ftp.ensembl.org/pub/release-${version}/fasta/mus_musculus/ncrna/Mus_musculus.GRCm38.ncrna.fa.gz";
-          sha256 = "0d997gm8p2b89rm5d46m2x4vz9lijxarfr2lzylnbi8gyqrbagdd";
+        ncrna = stage {
+          name = "ensembl-grcm38-ncrna-${version}";
+          version = "94";
+          src = pkgs.fetchurl {
+            url =
+              "ftp://ftp.ensembl.org/pub/release-${version}/fasta/mus_musculus/ncrna/Mus_musculus.GRCm38.ncrna.fa.gz";
+            sha256 = "0d997gm8p2b89rm5d46m2x4vz9lijxarfr2lzylnbi8gyqrbagdd";
+          };
+          buildCommand = "gunzip < $src > $out";
+          passthru.filetype = filetype.fa { };
         };
-        buildCommand = "gunzip < $src > $out";
-        passthru.filetype = filetype.fa { };
-      };
-      gtf = stage {
-        name = "ensembl-grcm38-gtf-${version}";
-        src = pkgs.fetchurl {
-          url =
-            "ftp://ftp.ensembl.org/pub/release-${version}/gtf/mus_musculus/Mus_musculus.GRCm38.${version}.gtf.gz";
-          sha256 = "0i61jq5i5bcini5nxqxxp3rnz2xzgychvzdn0k451f5rv053lp3v";
+        gtf = stage {
+          name = "ensembl-grcm38-gtf-${version}";
+          src = pkgs.fetchurl {
+            url =
+              "ftp://ftp.ensembl.org/pub/release-${version}/gtf/mus_musculus/Mus_musculus.GRCm38.${version}.gtf.gz";
+            sha256 = "0i61jq5i5bcini5nxqxxp3rnz2xzgychvzdn0k451f5rv053lp3v";
+          };
+          buildCommand = "gunzip < $src > $out";
         };
-        buildCommand = "gunzip < $src > $out";
-      };
-      gff3 = stage {
-        name = "ensembl-grcm38-gff-${version}";
-        src = pkgs.fetchurl {
-          url =
-            "ftp://ftp.ensembl.org/pub/release-${version}/gff3/mus_musculus/Mus_musculus.GRCm38.${version}.gff3.gz";
-          sha256 = "15fmdpx6g96fygwhs10jwrb2q5p9y64bc3d4clg856k57qzzgprg";
+        gff3 = stage {
+          name = "ensembl-grcm38-gff-${version}";
+          src = pkgs.fetchurl {
+            url =
+              "ftp://ftp.ensembl.org/pub/release-${version}/gff3/mus_musculus/Mus_musculus.GRCm38.${version}.gff3.gz";
+            sha256 = "15fmdpx6g96fygwhs10jwrb2q5p9y64bc3d4clg856k57qzzgprg";
+          };
+          buildCommand = "gunzip < $src > $out";
         };
-        buildCommand = "gunzip < $src > $out";
       };
-    };
   };
 
   mm10 = mm10-p4;

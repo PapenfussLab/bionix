@@ -1,5 +1,5 @@
 { clangStdenv, fetchFromGitHub, zlib }:
-  clangStdenv.mkDerivation rec {
+clangStdenv.mkDerivation rec {
   pname = "bwa-mem2";
   version = "2.1";
   src = fetchFromGitHub {

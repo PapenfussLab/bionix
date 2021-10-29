@@ -2,7 +2,7 @@
 , ref
 , bamOutput ? true
 , flags ? null
-, indexAttrs ? {}
+, indexAttrs ? { }
 }:
 
 { input1
@@ -18,7 +18,8 @@ let
   fa = f: matchFiletype "bowtie2-ref" { fa = _: f; } f;
   fq = f: matchFiletype "bowtie2-input" { fq = _: f; gz = matchFiletype' "bowtie2-input" { fq = _: f; }; } f;
 
-in stage {
+in
+stage {
   name = "bowtie2-align";
   buildInputs = with pkgs; [ bowtie2 bc samtools ];
   buildCommand = ''
@@ -32,6 +33,6 @@ in stage {
       ${optionalString bamOutput "| samtools view -b"} \
       > $out
   '';
-  passthru.filetype = if bamOutput then filetype.bam {ref = ref; sorting = sort.none {};} else filetype.sam {ref = ref; sorting = sort.name {};};
+  passthru.filetype = if bamOutput then filetype.bam { inherit ref; sorting = sort.none { }; } else filetype.sam { inherit ref; sorting = sort.name { }; };
   passthru.multicore = true;
 }

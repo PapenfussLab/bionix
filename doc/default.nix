@@ -1,4 +1,4 @@
-{ bionix ? import ./.. {} }:
+{ bionix ? import ./.. { } }:
 
 with bionix;
 

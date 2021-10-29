@@ -1,7 +1,14 @@
-{ bionix, bwaIndexAttrs ? { }, faidxAttrs ? { }, indexAttrs ? { }
-, assemblyAttrs ? { }, collectMetricsAttrs ? { }
+{ bionix
+, bwaIndexAttrs ? { }
+, faidxAttrs ? { }
+, indexAttrs ? { }
+, assemblyAttrs ? { }
+, collectMetricsAttrs ? { }
 , softClipsToSplitReadsAttrs ? { flags = "REALIGN_ENTIRE_READ=true"; }
-, config ? null, heapSize ? "4g", shards ? 10 }:
+, config ? null
+, heapSize ? "4g"
+, shards ? 10
+}:
 
 with bionix;
 with lib;
@@ -47,15 +54,16 @@ let
     for f in ${bionix.bwa.index bwaIndexAttrs ref}/*; do
       ln -s $f
     done
-    ${concatMapStringsSep "\n" (linkSV) inputs}
+    ${concatMapStringsSep "\n" linkSV inputs}
     ${linkSV assembly}
     ${concatMapStringsSep "\n" (linkInput collectMetrics collectMetricsAttrs)
     inputs}
     ${linkInput collectMetrics collectMetricsAttrs assembly}
   '';
 
-in assert (all sorted inputs);
-assert (homoRef);
+in
+assert (all sorted inputs);
+assert homoRef;
 
 rec {
   identify = stage rec {
@@ -80,7 +88,7 @@ rec {
       mv out.vcf $out
     '';
     passthru = {
-      filetype = filetype.vcf { ref = ref; };
+      filetype = filetype.vcf { inherit ref; };
       gridss.assembly = assembly;
       multicore = true;
     };
@@ -115,7 +123,7 @@ rec {
       mv out.vcf $out
     '';
     passthru = {
-      filetype = filetype.vcf { ref = ref; };
+      filetype = filetype.vcf { inherit ref; };
       gridss.assembly = assembly;
       multicore = true;
     };

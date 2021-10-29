@@ -2,7 +2,7 @@
 , ref
 , bamOutput ? true
 , flags ? null
-, indexAttrs ? {}
+, indexAttrs ? { }
 }:
 
 { input1
@@ -18,7 +18,8 @@ let
   fa = f: matchFiletype "hisat2-ref" { fa = _: f; } f;
   fq = f: matchFiletype "hisat2-input" { fq = _: f; gz = matchFiletype' "hisat2-input" { fq = _: "<(gunzip < ${f})"; }; } f;
 
-in stage {
+in
+stage {
   name = "hisat2-align";
   buildInputs = with pkgs; [ hisat2 bc samtools ];
   buildCommand = ''
@@ -33,6 +34,6 @@ in stage {
       | samtools sort -n \
       > $out
   '';
-  passthru.filetype = if bamOutput then filetype.bam {ref = ref; sorting = sort.none {};} else filetype.sam {ref = ref; sorting = sort.name {};};
+  passthru.filetype = if bamOutput then filetype.bam { inherit ref; sorting = sort.none { }; } else filetype.sam { inherit ref; sorting = sort.name { }; };
   passthru.multicore = true;
 }

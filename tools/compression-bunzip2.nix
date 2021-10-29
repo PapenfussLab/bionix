@@ -1,4 +1,4 @@
-{bionix}:
+{ bionix }:
 
 with bionix;
 

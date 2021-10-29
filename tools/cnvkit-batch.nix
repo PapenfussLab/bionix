@@ -1,17 +1,18 @@
-{bionix
-,targets ? null
-,annotations ? null
-,flags ? null
-,indexAttrs ? {}}:
+{ bionix
+, targets ? null
+, annotations ? null
+, flags ? null
+, indexAttrs ? { }
+}:
 
-{normals ? [], tumours}:
+{ normals ? [ ], tumours }:
 
 with bionix;
 with lib;
 with types;
 
 let
-  getref = f: matchFiletype "cnvkit-batch" { bam = {ref, ...}: ref; } f;
+  getref = matchFiletype "cnvkit-batch" { bam = { ref, ... }: ref; };
   refs = map getref normals ++ map getref tumours;
   ref = head refs;
   sorted = matchFileSorting "cnvkit-batch" { coord = _: true; };

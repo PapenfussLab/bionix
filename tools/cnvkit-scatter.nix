@@ -1,5 +1,6 @@
-{bionix
-,flags ? null}:
+{ bionix
+, flags ? null
+}:
 
 input:
 

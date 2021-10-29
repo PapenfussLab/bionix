@@ -2,7 +2,7 @@
 , ref
 , bamOutput ? true
 , flags ? null
-, indexAttrs ? {}
+, indexAttrs ? { }
 }:
 
 { input1
@@ -18,7 +18,8 @@ let
   fa = f: matchFiletype "star-ref" { fa = _: f; } f;
   fq = f: matchFiletype "star-input" { fq = _: f; gz = matchFiletype' "star-input" { fq = _: "<(gunzip < ${f})"; }; } f;
 
-in stage {
+in
+stage {
   name = "star-align";
   buildInputs = with pkgs; [ star bc samtools ];
   buildCommand = ''
@@ -33,6 +34,6 @@ in stage {
      --readFilesIn ${fq input1} ${optionalString (input2 != null) (fq input2)}
      ${if bamOutput then "samtools view -b Aligned.out.sam > $out" else "cp Aligned.out.sam $out"}
   '';
-  passthru.filetype = if bamOutput then filetype.bam {ref = ref; sorting = sort.none {};} else filetype.sam {ref = ref; sorting = sort.name {};};
+  passthru.filetype = if bamOutput then filetype.bam { inherit ref; sorting = sort.none { }; } else filetype.sam { inherit ref; sorting = sort.name { }; };
   passthru.multicore = true;
 }

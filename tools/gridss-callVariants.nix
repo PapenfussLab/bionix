@@ -1,7 +1,7 @@
 { bionix
 , blacklist ? null
-, bwaIndexAttrs ? {}
-, faidxAttrs ? {}
+, bwaIndexAttrs ? { }
+, faidxAttrs ? { }
 , flags ? null
 , config ? null
 , heapSize ? "31g"
@@ -32,22 +32,22 @@ stage rec {
     done
     mkdir $out
     java -ea -Xmx${heapSize} \
-	    -Dreference_fasta="ref.fa" \
-	    -Dsamjdk.create_index=true \
-	    -Dsamjdk.use_async_io_read_samtools=true \
-	    -Dsamjdk.use_async_io_write_samtools=true \
-	    -Dsamjdk.use_async_io_write_tribble=true \
-	    -Dgridss.gridss.output_to_temp_file=true \
-	    -cp ${bionix.gridss.jar} gridss.CallVariants \
+      -Dreference_fasta="ref.fa" \
+      -Dsamjdk.create_index=true \
+      -Dsamjdk.use_async_io_read_samtools=true \
+      -Dsamjdk.use_async_io_write_samtools=true \
+      -Dsamjdk.use_async_io_write_tribble=true \
+      -Dgridss.gridss.output_to_temp_file=true \
+      -cp ${bionix.gridss.jar} gridss.CallVariants \
       VERBOSITY=WARNING \
       WORKER_THREADS=$NIX_BUILD_CORES \
-	    TMP_DIR=. \
-	    WORKING_DIR=. \
+      TMP_DIR=. \
+      WORKING_DIR=. \
       ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
-	    REFERENCE_SEQUENCE="ref.fa" \
+      REFERENCE_SEQUENCE="ref.fa" \
       ${concatMapStringsSep " " (i: "INPUT=\"${i}\"") inputs} \
-	    OUTPUT="$out/gridss.vcf" \
-	    ASSEMBLY="$out/gridss.bam" \
+      OUTPUT="$out/gridss.vcf" \
+      ASSEMBLY="$out/gridss.bam" \
       ${optionalString (blacklist != null) ("BLACKLIST=" + blacklist)} \
       ${optionalString (flags != null) flags}
 

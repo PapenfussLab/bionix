@@ -1,4 +1,4 @@
-{bionix}:
+{ bionix }:
 
 with bionix;
 with lib;
@@ -25,30 +25,30 @@ rec {
   matchFiletype = sym: y: x: if x ? filetype then matchFiletype' sym y x.filetype else abort "unknown filetype for ${sym}";
   matchFiletype' = sym: y: x: match x (defError (idft sym) y filetype);
   filetype = make-type "filetype" {
-    fa = {};
-    fq = {};
-    bam = {ref = any; sorting = sort;};
-    sam = {ref = any; sorting = sort;};
-    cram = {ref = any; sorting = sort;};
-    vcf = {ref = any;};
-    bed = {ref = any;};
+    fa = { };
+    fq = { };
+    bam = { ref = any; sorting = sort; };
+    sam = { ref = any; sorting = sort; };
+    cram = { ref = any; sorting = sort; };
+    vcf = { ref = any; };
+    bed = { ref = any; };
     gz = filetype;
     bz2 = filetype;
   };
 
-  toCram = matchFiletype "bam2cram" { bam = filetype.cram; sam = filetype.cram; cram = filetype.cram; };
-  toBam = matchFiletype "bam2cram" { bam = filetype.bam; sam = filetype.bam; cram = filetype.bam; };
-  toSam = matchFiletype "bam2cram" { bam = filetype.sam; sam = filetype.sam; cram = filetype.sam; };
+  toCram = matchFiletype "bam2cram" { bam = filetype.cram; sam = filetype.cram; inherit (filetype) cram; };
+  toBam = matchFiletype "bam2cram" { inherit (filetype) bam; sam = filetype.bam; cram = filetype.bam; };
+  toSam = matchFiletype "bam2cram" { bam = filetype.sam; inherit (filetype) sam; cram = filetype.sam; };
 
   matchSorting = sym: y: x: match x.sorting (defError (idst sym) y sort);
   matchFileSorting = sym: y: let f = matchSorting sym y; in matchFiletype sym { bam = f; sam = f; cram = f; };
   sort = make-type "sort" {
-    none = {};
-    coord = {};
-    name = {};
+    none = { };
+    coord = { };
+    name = { };
   };
-  coordSort = f: matchFiletype "coordSort" { bam = x: filetype.bam (x // {sorting = sort.coord {};}); } {filetype = f;};
-  nameSort = f: matchFiletype "nameSort" { bam = x: filetype.bam (x // {sorting = sort.name {};}); } {filetype = f;};
+  coordSort = f: matchFiletype "coordSort" { bam = x: filetype.bam (x // { sorting = sort.coord { }; }); } { filetype = f; };
+  nameSort = f: matchFiletype "nameSort" { bam = x: filetype.bam (x // { sorting = sort.name { }; }); } { filetype = f; };
 
   gunzip = matchFiletype "gunzip" { gz = x: x; };
   bunzip2 = matchFiletype "bunzip2" { bz2 = x: x; };

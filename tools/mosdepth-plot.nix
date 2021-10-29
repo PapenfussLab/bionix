@@ -7,7 +7,8 @@ with bionix;
 with lib;
 
 { inputs
-, names ? []}:
+, names ? [ ]
+}:
 
 stage {
   name = "mosdepth-plot";

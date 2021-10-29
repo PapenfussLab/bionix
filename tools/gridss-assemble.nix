@@ -1,12 +1,12 @@
 { bionix
-, bwaIndexAttrs ? {}
-, faidxAttrs ? {}
-, indexAttrs ? {}
-, collectMetricsAttrs ? {}
+, bwaIndexAttrs ? { }
+, faidxAttrs ? { }
+, indexAttrs ? { }
+, collectMetricsAttrs ? { }
 , flags ? null
 , config ? null
 , heapSize ? "31g"
-, workdirs ? []
+, workdirs ? [ ]
 , jobIndex ? null
 , jobNodes ? null
 }:
@@ -36,7 +36,7 @@ let
 in
 
 assert (all sorted inputs);
-assert (homoRef);
+assert homoRef;
 
 stage rec {
   name = "gridss-assemble";
@@ -70,6 +70,6 @@ stage rec {
     touch $out
     cp -r out.gridss.working $work
   '';
-  passthru.filetype = filetype.bam { ref = ref; sorting = sort.none {}; };
+  passthru.filetype = filetype.bam { inherit ref; sorting = sort.none { }; };
   passthru.multicore = true;
 }

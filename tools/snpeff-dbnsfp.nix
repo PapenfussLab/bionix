@@ -1,7 +1,8 @@
-{bionix
-,dbnsfp
-,heapSize ? "31g"
-,flags ? ""}:
+{ bionix
+, dbnsfp
+, heapSize ? "31g"
+, flags ? ""
+}:
 
 input:
 

@@ -4,11 +4,12 @@ let
   bionix = import <bionix> {
     overlays = [
       (_: super:
-        super."${if tmpDir == null then "slurm" else "qsub"}" {
-          ppn = 24;
-          mem = 7;
-          walltime = "3:00:00";
-        } // super.lib.optionalAttrs (tmpDir != null) { inherit tmpDir; })
+        super."${if tmpDir == null then "slurm" else "qsub"}"
+          {
+            ppn = 24;
+            mem = 7;
+            walltime = "3:00:00";
+          } // super.lib.optionalAttrs (tmpDir != null) { inherit tmpDir; })
 
       (self: super:
         with super; {
@@ -27,4 +28,5 @@ let
         })
     ];
   };
-in import ./. { inherit bionix; }
+in
+import ./. { inherit bionix; }

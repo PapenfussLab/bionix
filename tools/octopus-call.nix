@@ -18,7 +18,7 @@ with types;
 inputs:
 
 let
-  getref = f: matchFiletype "octopus-call" { bam = { ref, ... }: ref; cram = { ref, ... }: ref; } f;
+  getref = matchFiletype "octopus-call" { bam = { ref, ... }: ref; cram = { ref, ... }: ref; };
   refs = map getref inputs;
   ref = head refs;
 
@@ -63,6 +63,6 @@ stage {
       ${optionalString (targets != null) (handleTarget targets)} \
       ${flags}
   '';
-  passthru.filetype = filetype.vcf { ref = ref; };
+  passthru.filetype = filetype.vcf { inherit ref; };
   passthru.multicore = true;
 }

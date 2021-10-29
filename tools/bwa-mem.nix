@@ -2,7 +2,7 @@
 , ref
 , bamOutput ? true
 , flags ? null
-, indexAttrs ? {}
+, indexAttrs ? { }
 }:
 
 { input1
@@ -18,7 +18,8 @@ let
   fa = f: matchFiletype "bwa-ref" { fa = _: f; } f;
   fq = f: matchFiletype "bwa-input" { fq = _: f; gz = matchFiletype' "bwa-input" { fq = _: f; }; } f;
 
-in stage {
+in
+stage {
   name = "bwa-mem";
   buildInputs = with pkgs; [ bwa bc ] ++ optional bamOutput samtools;
   buildCommand = ''
@@ -35,6 +36,6 @@ in stage {
       ${optionalString bamOutput "| samtools view -b"} \
       > $out
   '';
-  passthru.filetype = if bamOutput then filetype.bam {ref = ref; sorting = sort.none {};} else filetype.sam {ref = ref; sorting = sort.name {};};
+  passthru.filetype = if bamOutput then filetype.bam { inherit ref; sorting = sort.none { }; } else filetype.sam { inherit ref; sorting = sort.name { }; };
   passthru.multicore = true;
 }

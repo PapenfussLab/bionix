@@ -1,6 +1,6 @@
-{ bionix, indexAttrs ? {}, faidxAttrs ? {}, flags ? "" }:
+{ bionix, indexAttrs ? { }, faidxAttrs ? { }, flags ? "" }:
 
-{ normals ? [], tumour ? null }:
+{ normals ? [ ], tumour ? null }:
 
 with bionix;
 with lib;
@@ -8,7 +8,7 @@ with types;
 
 let
   getref = matchFiletype "manta-call" { bam = x: x.ref; };
-  refs = map getref normals ++ optionals (tumour != null) [(getref tumour)];
+  refs = map getref normals ++ optionals (tumour != null) [ (getref tumour) ];
   ref = head refs;
 
   renameAndIndex = f: stage {

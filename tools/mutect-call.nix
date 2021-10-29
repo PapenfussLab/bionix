@@ -1,21 +1,22 @@
-{bionix
+{ bionix
 , cosmic
-, dbsnp}:
+, dbsnp
+}:
 
 with bionix;
 with lib;
 
 let
   inherit (types) matchFiletype;
-  getVCFref = matchFiletype "mutect-call" {vcf = {ref}: ref;};
-  getBAMref = matchFiletype "mutect-call" {bam = {ref, ...}: ref;};
+  getVCFref = matchFiletype "mutect-call" { vcf = { ref }: ref; };
+  getBAMref = matchFiletype "mutect-call" { bam = { ref, ... }: ref; };
   refs = map getVCFref [ cosmic dbsnp ];
   ref = head refs;
 in
 
 assert (length (unique refs) == 1);
 
-{normal, tumour}:
+{ normal, tumour }:
 
 assert (ref == getBAMref normal && ref == getBAMref tumour);
 

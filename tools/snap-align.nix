@@ -2,7 +2,7 @@
 , ref
 , bamOutput ? true
 , flags ? null
-, indexAttrs ? {}
+, indexAttrs ? { }
 }:
 
 { input1
@@ -18,7 +18,8 @@ let
   fa = f: matchFiletype "snap-ref" { fa = _: f; } f;
   fq = f: matchFiletype "snap-input" { fq = _: f; gz = matchFiletype' "snap-input" { fq = _: f; }; } f;
 
-in stage {
+in
+stage {
   name = "snap-align";
   buildInputs = with pkgs; [ bionix.snap.app bc ] ++ optional bamOutput samtools;
   buildCommand = ''
@@ -32,6 +33,6 @@ in stage {
       ${optionalString (flags != null) flags} \
       | samtools sort -n > $out
   '';
-  passthru.filetype = if bamOutput then filetype.bam {ref = ref; sorting = sort.none {};} else filetype.sam {ref = ref; sorting = sort.name {};};
+  passthru.filetype = if bamOutput then filetype.bam { inherit ref; sorting = sort.none { }; } else filetype.sam { inherit ref; sorting = sort.name { }; };
   passthru.multicore = true;
 }

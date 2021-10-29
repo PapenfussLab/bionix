@@ -1,6 +1,6 @@
 { bionix
-, indexAttrs ? {}
-, bamIndexAttrs ? {}
+, indexAttrs ? { }
+, bamIndexAttrs ? { }
 , flags ? null
 }:
 
@@ -13,7 +13,7 @@ with types;
 
 let
   filename = path: last (splitString "/" path);
-  getref = f: matchFiletype "platypus-callVariants" { bam = {ref, ...}: ref; } f;
+  getref = matchFiletype "platypus-callVariants" { bam = { ref, ... }: ref; };
   refs = map getref inputs;
   ref = head refs;
 in
@@ -38,6 +38,6 @@ stage {
     # Remove timestamps from output
     sed -i '/^##fileDate/d' $out
   '';
-  passthru.filetype = filetype.vcf {ref = ref;};
+  passthru.filetype = filetype.vcf { inherit ref; };
   passthru.multicore = true;
 }

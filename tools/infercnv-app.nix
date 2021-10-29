@@ -1,21 +1,22 @@
-{stdenv
-  ,fetchurl
-  ,fetchFromGitHub
-  ,callPackage
-  ,nettools
-  ,rPackages
-  ,rWrapper
-  ,R
-  ,jre
-  ,python
-  ,pythonPackages
-  ,darwin
-  ,gettext
-  ,gfortran
-,makeWrapper}:
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, callPackage
+, nettools
+, rPackages
+, rWrapper
+, R
+, jre
+, python
+, pythonPackages
+, darwin
+, gettext
+, gfortran
+, makeWrapper
+}:
 
 let
-  buildRPackage = rPackages.buildRPackage;
+  inherit (rPackages) buildRPackage;
 
   GMD = buildRPackage rec {
     name = "GMD-${version}";
@@ -59,7 +60,7 @@ let
       owner = "broadinstitute";
       repo = "inferCNV";
       rev = "cf442af0db6191fa8ba57c4921ac2d1f98c2c39d";
-        sha256 = "0cv8qiaqpd6b4152dplnzvgv77cmk961rmvzr27qgmlaazc5hblh";
+      sha256 = "0cv8qiaqpd6b4152dplnzvgv77cmk961rmvzr27qgmlaazc5hblh";
     };
     propagatedBuildInputs = with rPackages; [ R GMD NGCHMR RColorBrewer gplots optparse logging ];
   };
@@ -75,9 +76,10 @@ let
     sha256 = "1pz710ig8nnydz329ry8fydccbrp3arp614dgba3bcyy9flm3gnw";
   };
 
-in stdenv.mkDerivation rec {
-  name = inferCNV.name;
-  src = inferCNV.src;
+in
+stdenv.mkDerivation rec {
+  inherit (inferCNV) name;
+  inherit (inferCNV) src;
   buildInputs = [ r makeWrapper py ];
   propagatedBuildInputs = [ jre ];
   installPhase = ''

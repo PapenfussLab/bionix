@@ -2,7 +2,7 @@
 , flags ? null
 }:
 
-{primary, secondary}:
+{ primary, secondary }:
 
 with bionix;
 with lib;
@@ -10,8 +10,8 @@ with types;
 
 let
 
-  isSortedBam = matchFiletype "xenomapper-allocate" {bam = matchSorting "xenomapper-allocate" { coord = _: false; name = _: true; none = _: false; }; };
-  outs = [ "primary_specific" "primary_multi" "secondary_specific" "secondary_multi" "unassigned" "unresolved"];
+  isSortedBam = matchFiletype "xenomapper-allocate" { bam = matchSorting "xenomapper-allocate" { coord = _: false; name = _: true; none = _: false; }; };
+  outs = [ "primary_specific" "primary_multi" "secondary_specific" "secondary_multi" "unassigned" "unresolved" ];
 
 in
 

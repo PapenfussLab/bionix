@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, zlib}:
+{ stdenv, fetchFromGitHub, zlib }:
 
 stdenv.mkDerivation rec {
   name = "snap-git";

@@ -5,34 +5,35 @@ with bionix;
 let
   gen = callBionixE ./sambamba-generic.nix;
 
-in {
+in
+{
   /* Sort aligned reads
-  Type: { nameSort :: bool, ... } -> bam -> bam
+    Type: { nameSort :: bool, ... } -> bam -> bam
   */
   sort = callBionixE ./sambamba-sort.nix;
 
   /* Build an index
-  Type: { ... } -> bam -> index
+    Type: { ... } -> bam -> index
   */
-  index = def gen {tool = "index"; };
+  index = def gen { tool = "index"; };
 
   /* Merge bam files
-  Type: { ... } -> [bam] -> bam
+    Type: { ... } -> [bam] -> bam
   */
-  merge = def gen {tool = "merge"; };
+  merge = def gen { tool = "merge"; };
 
   /* Slice a region out of a bam file
-  Type: { region, ... } -> bam -> bam
+    Type: { region, ... } -> bam -> bam
   */
-  slice = def gen {tool = "slice"; };
+  slice = def gen { tool = "slice"; };
 
   /* Compute flag statistics
-  Type: { ... } -> bam -> flagstat
+    Type: { ... } -> bam -> flagstat
   */
-  flagstat = def gen {tool = "flagstat"; };
+  flagstat = def gen { tool = "flagstat"; };
 
   /* Mark duplicates
-  Type: { ... } -> bam -> bam
+    Type: { ... } -> bam -> bam
   */
-  markdup = def gen {tool = "markdup"; };
+  markdup = def gen { tool = "markdup"; };
 }

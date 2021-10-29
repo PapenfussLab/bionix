@@ -1,4 +1,4 @@
-{bionix ? import <bionix> {}, pair, fetch}:
+{ bionix ? import <bionix> { }, pair, fetch }:
 
 with bionix;
 with lib;
@@ -13,7 +13,7 @@ let
     fetch
     (align { preset = "sr"; ref = ref.grch38.seq; flags = "-R'@RG\\tID:${s.type}\\tSM:${s.type}'"; })
     (sort { nameSort = true; })
-    (fixmate {})
+    (fixmate { })
     (sort { })
     (markdup { })
   ];
@@ -28,21 +28,26 @@ let
 
   bams = mapAttrs (_: preprocess) pair;
 
-  variants = let
-    somatic = strelka.callSomatic { } bams; in mapAttrs (_: flip pipe [
-      (compression.uncompress { })
-      (snpeff.annotate { db = ref.grch38.snpeff.db; })
-      dropErrors
-      (snpeff.dbnsfp { dbnsfp = ref.grch38.snpeff.dbnsfp; })
-    ]) {
-      "snvs.vcf" = somatic.snvs;
-      "indels.vcf" = somatic.snvs;
-      "germline.vcf" = strelka.call { } [bams.normal];
-    };
+  variants =
+    let
+      somatic = strelka.callSomatic { } bams; in
+    mapAttrs
+      (_: flip pipe [
+        (compression.uncompress { })
+        (snpeff.annotate { inherit (ref.grch38.snpeff) db; })
+        dropErrors
+        (snpeff.dbnsfp { inherit (ref.grch38.snpeff) dbnsfp; })
+      ])
+      {
+        "snvs.vcf" = somatic.snvs;
+        "indels.vcf" = somatic.snvs;
+        "germline.vcf" = strelka.call { } [ bams.normal ];
+      };
 
   cnvs = cnvkit.callCNV { } { normals = [ bams.normal ]; tumours = [ bams.tumour ]; };
 
-in linkOutputs {
+in
+linkOutputs {
   inherit variants;
   alignments = linkOutputs (mapAttrs' (n: nameValuePair (n + ".bam")) bams);
   cnvkit = cnvs;

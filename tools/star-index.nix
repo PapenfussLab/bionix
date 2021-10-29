@@ -1,8 +1,8 @@
 { bionix
 , gtf
 , flags ? null
-, extractSpliceSitesAttrs ? {}
-, extractExonsAttrs ? {}
+, extractSpliceSitesAttrs ? { }
+, extractExonsAttrs ? { }
 , overhang ? 100
 }:
 

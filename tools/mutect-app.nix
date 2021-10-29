@@ -1,16 +1,19 @@
-{stdenv, fetchurl, makeWrapper, unzip, fetchFromGitHub}:
+{ stdenv, fetchurl, makeWrapper, unzip, fetchFromGitHub }:
 
 let
-  oldnix = import (fetchFromGitHub {
-    owner = "NixOS";
-    repo = "nixpkgs";
-    rev = "83a893c38a83877588e3ca7ccfeabaa973c30acd";
-    sha256 = "0q7214hag7h95irvhkdb648m09b9jspb0raw1qjrx7y4grzb165h";
-  }) {};
+  oldnix = import
+    (fetchFromGitHub {
+      owner = "NixOS";
+      repo = "nixpkgs";
+      rev = "83a893c38a83877588e3ca7ccfeabaa973c30acd";
+      sha256 = "0q7214hag7h95irvhkdb648m09b9jspb0raw1qjrx7y4grzb165h";
+    })
+    { };
 
   jre = oldnix.openjdk7;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "mutect-${version}";
   version = "1.1.5";
 

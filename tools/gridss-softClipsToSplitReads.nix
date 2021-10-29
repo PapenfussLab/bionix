@@ -1,6 +1,6 @@
 { bionix
-, bwaIndexAttrs ? {}
-, faidxAttrs ? {}
+, bwaIndexAttrs ? { }
+, faidxAttrs ? { }
 , alignerStreaming ? false
 , flags ? null
 , config ? null
@@ -37,7 +37,7 @@ stage rec {
       ${optionalString (config != null) ("OPTIONS_FILE=" + bionix.gridss.gridssConfig config)} \
       WORKER_THREADS=$NIX_BUILD_CORES \
       ${optionalString (flags != null) flags}
-    '';
-  passthru.filetype = filetype.bam { ref = ref; sorting = sort.none {}; };
+  '';
+  passthru.filetype = filetype.bam { inherit ref; sorting = sort.none { }; };
   passthru.multicore = true;
 }

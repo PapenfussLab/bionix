@@ -1,5 +1,5 @@
 { bionix
-, indexAttrs ? {}
+, indexAttrs ? { }
 , flags ? null
 }:
 

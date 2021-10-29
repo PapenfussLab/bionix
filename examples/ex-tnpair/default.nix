@@ -45,6 +45,7 @@ let
 
   fetch = s: mapAttrs (_: fetchFastQGZ) s.inputs;
 
-in import ./tnpair.nix {
+in
+import ./tnpair.nix {
   inherit pair fetch bionix;
 }

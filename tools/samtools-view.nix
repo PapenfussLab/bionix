@@ -15,8 +15,9 @@ assert (matchFiletype "samtools-view" { bam = _: true; sam = _: true; cram = _: 
 let
   outfmtR = if outfmt != null then (if builtins.typeOf outfmt == "string" then { "bam" = toBam; "cram" = toCram; "sam" = toSam; }."${outfmt}" else outfmt) input else input.filetype;
   fa = ref: matchFiletype "samtools-view-ref" { fa = _: ref; } ref;
-  outfmtFlags = matchFiletype "samtools-view-outfmt" { bam = _: "-O BAM"; sam = _: "-O SAM"; cram = x: "-O CRAM -T ${fa x.ref}"; } {filetype = outfmtR;};
-in stage {
+  outfmtFlags = matchFiletype "samtools-view-outfmt" { bam = _: "-O BAM"; sam = _: "-O SAM"; cram = x: "-O CRAM -T ${fa x.ref}"; } { filetype = outfmtR; };
+in
+stage {
   name = "samtools-view";
   buildInputs = with pkgs; [ samtools ];
   buildCommand = ''

@@ -31,7 +31,7 @@ let
   '';
 
   inputs = [ normal ] ++ tumours;
-  getref = f: matchFiletype "octopus-callSomatic" { bam = { ref, ... }: ref; cram = { ref, ... }: ref; } f;
+  getref = matchFiletype "octopus-callSomatic" { bam = { ref, ... }: ref; cram = { ref, ... }: ref; };
   refs = map getref inputs;
   ref = head refs;
 
@@ -77,6 +77,6 @@ stage {
       -N $normal \
       ${flags}
   '';
-  passthru.filetype = filetype.vcf { ref = ref; };
+  passthru.filetype = filetype.vcf { inherit ref; };
   passthru.multicore = true;
 }

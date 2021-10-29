@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, autoreconfHook, htslib}:
+{ stdenv, fetchFromGitHub, autoreconfHook, htslib }:
 
 stdenv.mkDerivation rec {
   name = "crumble-${version}";

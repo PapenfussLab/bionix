@@ -11,7 +11,7 @@ with types;
 
 let
   config = pkgs.writeText "pool.txt" (concatMapStringsSep "\n" (x: "${x}\t${toString ploidy}\t1") (attrValues inputs));
-  getref = f: matchFiletype "SNVer-call" { bam = {ref, ...}: ref; } f;
+  getref = matchFiletype "SNVer-call" { bam = { ref, ... }: ref; };
   refs = mapAttrsToList (_: getref) inputs;
   ref = head refs;
 in

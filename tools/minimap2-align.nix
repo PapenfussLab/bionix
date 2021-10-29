@@ -18,7 +18,8 @@ let
   fa = f: matchFiletype "minimap2-ref" { fa = _: f; } f;
   fq = f: matchFiletype "minimap2-input" { fq = _: f; gz = matchFiletype' "minimap2-input" { fq = _: f; }; } f;
 
-in stage {
+in
+stage {
   name = "minimap2-align";
   buildInputs = with pkgs; [ minimap2 bc ] ++ optional bamOutput samtools;
   buildCommand = ''
@@ -32,6 +33,6 @@ in stage {
       ${optionalString bamOutput "| samtools view -b"} \
       > $out
   '';
-  passthru.filetype = if bamOutput then filetype.bam {ref = ref; sorting = sort.none {};} else filetype.sam {ref = ref; sorting = sort.none {};};
+  passthru.filetype = if bamOutput then filetype.bam { inherit ref; sorting = sort.none { }; } else filetype.sam { inherit ref; sorting = sort.none { }; };
   passthru.multicore = true;
 }

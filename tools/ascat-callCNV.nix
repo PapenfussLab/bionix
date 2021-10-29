@@ -1,12 +1,12 @@
 { bionix
 , ref
 , gc
-, indexAttrs ? {}
-, bamIndexAttrs ? {}
+, indexAttrs ? { }
+, bamIndexAttrs ? { }
 , flags ? null
 }:
 
-{tumour, normal, gender}:
+{ tumour, normal, gender }:
 
 with bionix;
 with lib;

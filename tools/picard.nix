@@ -3,8 +3,8 @@
 with bionix;
 
 {
-    /* Mark duplicates
+  /* Mark duplicates
     Type: { ... } -> bam -> bam
-    */
-    markDuplicates = callBionixE ./picard-markDuplicates.nix;
+  */
+  markDuplicates = callBionixE ./picard-markDuplicates.nix;
 }

@@ -1,5 +1,10 @@
-{ bionix, bwaIndexAttrs ? { }, faidxAttrs ? { }, flags ? null, config ? null
-, heapSize ? "1G" }:
+{ bionix
+, bwaIndexAttrs ? { }
+, faidxAttrs ? { }
+, flags ? null
+, config ? null
+, heapSize ? "1G"
+}:
 
 with bionix;
 with lib;
@@ -11,7 +16,8 @@ let
   ref = matchFiletype "gridss-computeSamTags" { bam = x: x.ref; } input;
   sorted = matchFileSorting "gridss-computeSamTags" { name = _: true; } input;
 
-in assert (sorted);
+in
+assert sorted;
 
 stage rec {
   name = "gridss-computeSamTags";

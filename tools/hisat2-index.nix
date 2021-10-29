@@ -1,8 +1,8 @@
 { bionix
 , gtf ? null
 , flags ? null
-, extractSpliceSitesAttrs ? {}
-, extractExonsAttrs ? {}
+, extractSpliceSitesAttrs ? { }
+, extractExonsAttrs ? { }
 }:
 
 ref:

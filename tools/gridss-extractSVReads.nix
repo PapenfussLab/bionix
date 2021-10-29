@@ -1,10 +1,10 @@
 { bionix
-, dictIndexAttrs ? {}
-, faidxAttrs ? {}
+, dictIndexAttrs ? { }
+, faidxAttrs ? { }
 , flags ? null
 , unmappedReads ? false
 , minClipLength ? 5
-, collectMetricsAttrs ? {}
+, collectMetricsAttrs ? { }
 , config ? null
 }:
 

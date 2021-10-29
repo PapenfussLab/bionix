@@ -1,7 +1,8 @@
-{bionix
-,db
-,heapSize ? "31g"
-,flags ? ""}:
+{ bionix
+, db
+, heapSize ? "31g"
+, flags ? ""
+}:
 
 input:
 

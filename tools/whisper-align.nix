@@ -2,7 +2,7 @@
 , ref
 , bamOutput ? true
 , flags ? null
-, indexAttrs ? {}
+, indexAttrs ? { }
 }:
 
 { input1
@@ -18,7 +18,8 @@ let
   fa = f: matchFiletype "whisper-ref" { fa = _: f; } f;
   fq = f: matchFiletype "whisper-input" { fq = _: f; gz = matchFiletype' "whisper-input" { fq = _: f; }; } f;
 
-in stage {
+in
+stage {
   name = "whisper-mem";
   buildInputs = with pkgs; [ whisper ];
   buildCommand = ''
@@ -34,6 +35,6 @@ in stage {
       ${optionalString (input2 != null) (fq input2)} \
       > $out
   '';
-  passthru.filetype = if bamOutput then filetype.bam {ref = ref; sorting = sort.none {};} else filetype.sam {ref = ref; sorting = sort.name {};};
+  passthru.filetype = if bamOutput then filetype.bam { inherit ref; sorting = sort.none { }; } else filetype.sam { inherit ref; sorting = sort.name { }; };
   passthru.multicore = true;
 }

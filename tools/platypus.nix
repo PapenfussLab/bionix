@@ -4,7 +4,7 @@ with bionix;
 
 {
   /* Call variants 
-  Type: { ... } -> [bam] -> vcf
+    Type: { ... } -> [bam] -> vcf
   */
   call = callBionixE ./platypus-callVariants.nix;
 }

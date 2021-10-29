@@ -1,7 +1,7 @@
 { bionix
 , ref
 , flags ? null
-, indexAttrs ? {}
+, indexAttrs ? { }
 }:
 
 { input1
@@ -16,10 +16,11 @@ let
   fa = f: matchFiletype "last-ref" { fa = _: f; } f;
   fq = f: matchFiletype "last-input" { fq = _: f; } f;
   fqfa = f: matchFiletype "last-input" { fq = _: f; fa = _: f; } f;
-  Q = f: matchFiletype "last-input" { fq = _: 1; fa = _: 0; } f;
-  parallel = f: matchFiletype "last-input" { fq = _: "parallel-fastq"; fa = _: "parallel-fasta"; } f;
+  Q = matchFiletype "last-input" { fq = _: 1; fa = _: 0; };
+  parallel = matchFiletype "last-input" { fq = _: "parallel-fastq"; fa = _: "parallel-fasta"; };
 
-in stage {
+in
+stage {
   name = "last-align";
   buildInputs = with pkgs; [ last ];
   buildCommand = ''

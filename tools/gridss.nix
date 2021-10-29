@@ -10,60 +10,65 @@ rec {
   };
 
   /* Generate configuration file for GRIDSS. Takes attribute sets to GRIDSS ini style format.
-     Type: genConfig :: attrSet -> ini file
+    Type: genConfig :: attrSet -> ini file
   */
   genConfig = callBionix ./gridss-configFile.nix { };
 
   /* Invoke the callVariants tool
-     Type: callVariants :: {blacklist :: drv = null, config :: ini = null, heapSize :: String = "31g", ...} -> [bam] -> variants
+    Type: callVariants :: {blacklist :: drv = null, config :: ini = null, heapSize :: String = "31g", ...} -> [bam] -> variants
   */
   callVariants = callBionixE ./gridss-callVariants.nix;
 
   /* Invoke computeSamTags tool
-     Type: computeSamTags :: {config :: ini = null, heapSize :: String = "1G", ...} -> bam -> bam
+    Type: computeSamTags :: {config :: ini = null, heapSize :: String = "1G", ...} -> bam -> bam
   */
   computeSamTags = callBionixE ./gridss-computeSamTags.nix;
 
   /* Invoke softClipsToSplitReads tool
-     Type: softClipsToSplitReads :: {alignerStreaming :: Bool = false, config :: ini = null, heapSize :: String = "2G", ...} -> bam -> bam
+    Type: softClipsToSplitReads :: {alignerStreaming :: Bool = false, config :: ini = null, heapSize :: String = "2G", ...} -> bam -> bam
   */
   softClipsToSplitReads = callBionixE ./gridss-softClipsToSplitReads.nix;
 
   /* Invoke collectMetrics tool
-     Type: collectMetrics :: {thresholdCoverage :: Int = 10000, config :: ini = null, heapSize :: String = "1G", ...} -> bam -> metrics
+    Type: collectMetrics :: {thresholdCoverage :: Int = 10000, config :: ini = null, heapSize :: String = "1G", ...} -> bam -> metrics
   */
   collectMetrics = callBionixE ./gridss-collectMetrics.nix;
 
   /* Invoke extractSVReads tool
-     Type: extractSVReads :: {unmappedReads :: Bool = false, minClipLength :: Int = 5, config :: ini = null, ...} -> bam -> bam
+    Type: extractSVReads :: {unmappedReads :: Bool = false, minClipLength :: Int = 5, config :: ini = null, ...} -> bam -> bam
   */
   extractSVReads = callBionixE ./gridss-extractSVReads.nix;
 
   /* Invoke assembly tool
-     Type: assemble :: {config :: ini = null, heapSize :: String = "31g", ...} -> [bam] -> bam
+    Type: assemble :: {config :: ini = null, heapSize :: String = "31g", ...} -> [bam] -> bam
   */
   assemble = callBionixE ./gridss-assemble.nix;
   shardedAssemble = n: a: input:
     let
-      assemblies = genList (i:
-        bionix.gridss.assemble (a // {
-          jobNodes = n;
-          jobIndex = i;
-        }) input) n;
-    in if n <= 1 then
+      assemblies = genList
+        (i:
+          bionix.gridss.assemble
+            (a // {
+              jobNodes = n;
+              jobIndex = i;
+            })
+            input)
+        n;
+    in
+    if n <= 1 then
       bionix.gridss.assemble a input
     else
       bionix.gridss.assemble (a // { workdirs = map (a: a.work) assemblies; })
-      input;
+        input;
 
   /* Invoke identifyVariants tool
-     Type: identifyVariants :: {config :: ini = null, heapSize :: String = "4g", ...} -> [bam] -> VCF
+    Type: identifyVariants :: {config :: ini = null, heapSize :: String = "4g", ...} -> [bam] -> VCF
   */
   identifyVariants = exec
     (attrs: input: ((callBionix ./gridss-variants.nix attrs) input).identify);
 
   /* Invoke annotateVariants tool
-     Type: annotateVariants :: {config :: ini = null, heapSize :: String = "4g", ...} -> [bam] -> VCF
+    Type: annotateVariants :: {config :: ini = null, heapSize :: String = "4g", ...} -> [bam] -> VCF
   */
   annotateVariants = exec
     (attrs: input: ((callBionix ./gridss-variants.nix attrs) input).annotate);
@@ -73,7 +78,7 @@ rec {
     ((callBionix ./gridss-variants.nix attrs) input).annotateAndAssemble);
 
   /* Preprocess BAM files to extract SV reads
-     Type: preprocessBam :: bam -> bam
+    Type: preprocessBam :: bam -> bam
   */
   preprocessBam = with samtools;
     flip pipe [
@@ -84,7 +89,7 @@ rec {
     ];
 
   /* Call SVs: entire pipeline including preprocessing. It is recommended to use this function rather than the individual above tools.
-     Type: [bam] -> GRIDSS result
+    Type: [bam] -> GRIDSS result
   */
   call = inputs: gridss.annotateVariants { } (map gridss.preprocessBam inputs);
 

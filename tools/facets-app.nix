@@ -1,8 +1,9 @@
-{buildRPackage
-,fetchFromGitHub
-,R
-,htslib
-,zlib}:
+{ buildRPackage
+, fetchFromGitHub
+, R
+, htslib
+, zlib
+}:
 
 let
   pctGCdata = buildRPackage rec {
@@ -18,7 +19,8 @@ let
     buildInputs = [ R ];
   };
 
-in buildRPackage rec{
+in
+buildRPackage rec{
   name = "facets-${version}";
   version = "0.6.1";
   requireX = false;

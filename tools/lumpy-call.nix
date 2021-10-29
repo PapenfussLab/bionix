@@ -21,7 +21,8 @@ let
       '';
     };
 
-in assert (length (unique refs) == 1);
+in
+assert (length (unique refs) == 1);
 
 stage {
   name = "lumpy";
@@ -36,5 +37,5 @@ stage {
       ${flags} \
       -o $out
   '';
-  passthru.filetype = filetype.vcf { ref = ref; };
+  passthru.filetype = filetype.vcf { inherit ref; };
 }

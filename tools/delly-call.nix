@@ -1,4 +1,4 @@
-{ bionix, flags ? "", faidxAttrs ? {}, indexAttrs ? {}}:
+{ bionix, flags ? "", faidxAttrs ? { }, indexAttrs ? { } }:
 
 inputs:
 
@@ -41,6 +41,6 @@ stage {
   '';
   passthru = {
     multicore = true;
-    filetype = filetype.vcf { ref = ref; };
+    filetype = filetype.vcf { inherit ref; };
   };
 }
