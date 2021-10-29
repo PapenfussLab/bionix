@@ -3,9 +3,10 @@
 , very-fast ? false
 , max-genotypes ? null
 , targets ? null
-, faidxAttrs ? {}
-, indexAttrs ? {}
-, flags ? ""}:
+, faidxAttrs ? { }
+, indexAttrs ? { }
+, flags ? ""
+}:
 
 assert !fast || !very-fast;
 assert max-genotypes == null || max-genotypes > 0;
@@ -14,7 +15,7 @@ with bionix;
 with lib;
 with types;
 
-{normal, tumours}:
+{ normal, tumours }:
 
 let
   smScript = pkgs.writeText "smScript.awk" ''
@@ -29,10 +30,24 @@ let
     }
   '';
 
-  inputs = [normal] ++ tumours;
-  getref = f: matchFiletype "octopus-callSomatic" { bam = {ref, ...}: ref; cram = {ref, ...}: ref;} f;
+  inputs = [ normal ] ++ tumours;
+  getref = f: matchFiletype "octopus-callSomatic" { bam = { ref, ... }: ref; cram = { ref, ... }: ref; } f;
   refs = map getref inputs;
   ref = head refs;
+
+  handleTarget = x:
+    let
+      type = builtins.typeOf x;
+      handler = handlers."${type}" or (builtins.throw "octopus-callSomatic:unhandled target type:${type}");
+      handlers = {
+        string = "-T '${x}'";
+        list =
+          let file = pkgs.writeText "regions.txt" (concatStringsSep "\n" x);
+          in "-t ${file}";
+        path = "-t ${x}";
+      };
+    in
+    handler;
 
 in
 
@@ -58,10 +73,10 @@ stage {
       ${optionalString fast "--fast"} \
       ${optionalString very-fast "--very-fast"} \
       ${optionalString (max-genotypes != null) "--max-genotypes ${toString max-genotypes}"} \
-      ${optionalString (targets != null) (if builtins.typeOf targets == "list" then "-T ${concatStringsSep "," targets}" else "-t ${targets}")} \
+      ${optionalString (targets != null) (handleTarget targets)} \
       -N $normal \
       ${flags}
   '';
-  passthru.filetype = filetype.vcf {ref = ref;};
+  passthru.filetype = filetype.vcf { ref = ref; };
   passthru.multicore = true;
 }
