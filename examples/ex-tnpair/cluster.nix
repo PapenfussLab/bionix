@@ -3,13 +3,14 @@
 let
   bionix = import <bionix> {
     overlays = [
-      (_: super:
-        super."${if tmpDir == null then "slurm" else "qsub"}"
-          {
-            ppn = 24;
-            mem = 7;
-            walltime = "3:00:00";
-          } // super.lib.optionalAttrs (tmpDir != null) { inherit tmpDir; })
+      (_: super: with super;
+      {
+        exec = f: def (slurm-exec f) {
+          ppn = 24;
+          mem = 7;
+          walltime = "3:00:00";
+        };
+      })
 
       (self: super:
         with super; {
