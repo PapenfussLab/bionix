@@ -115,6 +115,6 @@ distributed machines. See the
 
 ## Getting help and contributing
 
-For general questions, issues, and [contributing](https://git-send-email.io),
-please [email](mailto:bionix@cua0.org) or [subscribe to](mailto:bionix+subscribe@cua0.org)
-our mailing list. There is also a chat room on [Matrix](https://matrix.to/#/#bionix:vk3.wtf).
+For general questions and reporting problem please open an issue. For real-time
+help there is a chat room at
+[#bionix:nixos.org](https://matrix.to/#/#bionix:nixos.org).
