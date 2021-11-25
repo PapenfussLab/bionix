@@ -4,7 +4,6 @@ This directory has a few example workflows in bionix along with example
 data. A basic workflow is defined in `call.nix`, and an example of
 applying it to the sample data is in `default.nix`. To build the
 `default.nix` workflow, run ```nix build -I bionix=../``` from this directory.
-Note that the location of BioNix 
 
 ## NextFlow and WDL translations
 
@@ -29,4 +28,3 @@ workflow using the Strelka variant caller. The script accepts a
 reference fasta along with paired normal and tumor fastq files and
 performs alignment, preprocessing, and variant calling with
 [`strelka`](https://github.com/Illumina/strelka).
-
