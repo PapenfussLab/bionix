@@ -47,7 +47,7 @@ this pipeline and the other examples.
 Writing workflows requires some familiarity with the Nix
 programming language and deployment system. Good introductions can be
 found [here](https://learnxinyminutes.com/docs/nix/) and
-[here](https://ebzzry.io/en/nix/).
+[here](https://github.com/tazjin/nix-1p).
 
 To understand how to construct workflows it is recommended to study the
 examples provided. Thanks to the flexibility of Nix, the workflows can
