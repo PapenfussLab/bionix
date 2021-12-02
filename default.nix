@@ -50,6 +50,7 @@ let
       lastal = callBionix ./tools/last.nix { };
       whisper = callBionix ./tools/whisper.nix { };
       star = callBionix ./tools/star.nix { };
+      genmap = callBionix ./tools/genmap.nix { };
 
       slurm-run = callPackage ./lib/slurm.nix { };
       slurm-exec = f: x: y:
