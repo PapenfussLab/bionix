@@ -4,10 +4,14 @@ with bionix;
 with lib;
 
 rec {
-  jar = pkgs.fetchurl {
-    url = "https://github.com/PapenfussLab/gridss/releases/download/v2.12.2/gridss-2.12.2-gridss-jar-with-dependencies.jar";
-    sha256 = "sha256-JlGFYs2ZJMa2TbCnM3yP10X/G5Fqqe5w4tdKzj7DHzM=";
-  };
+  jar =
+    let
+      version = "2.13.0";
+    in
+    pkgs.fetchurl {
+      url = "https://github.com/PapenfussLab/gridss/releases/download/v${version}/gridss-${version}-gridss-jar-with-dependencies.jar";
+      sha256 = "sha256-fjBBI9Tz8vHtAdctAhUp8mM9oh6WHPUUavEdjixUVfU=";
+    };
 
   /* Generate configuration file for GRIDSS. Takes attribute sets to GRIDSS ini style format.
     Type: genConfig :: attrSet -> ini file
