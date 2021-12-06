@@ -109,7 +109,7 @@ let
               '';
             in
             ''
-              mkdir $out 
+              mkdir $out
             '' + (concatStringsSep "\n" (mapAttrsToList link x));
           passthru.linkInputs = x;
         };
@@ -136,6 +136,7 @@ let
       lib = nixpkgs.lib // {
         inherit types;
         shard = callBionix ./lib/shard.nix { };
+        concatMapAttrsStringsSep = s: f: a: with nixpkgs.lib; concatStringsSep s (mapAttrsToList f a);
       };
       stage = x@{ name, stripStorePaths ? true, multicore ? false, ... }:
         (if stripStorePaths then strip else x: x)

@@ -3,6 +3,7 @@
 , bamOutput ? true
 , flags ? null
 , indexAttrs ? { }
+, RG ? { }
 }:
 
 { input1
@@ -33,6 +34,7 @@ stage {
     fi
     bwa-mem2 mem ${optionalString (flags != null) flags} -t $cores ref.fa ${fq input1} \
       ${optionalString (input2 != null) (fq input2)} \
+      ${optionalString (RG ? ID) "-R'@RG\\t${concatMapAttrsStringsSep "\\t" (k: v: "${k}:${v}") RG}'"} \
       ${optionalString bamOutput "| samtools view -b"} \
       > $out
   '';

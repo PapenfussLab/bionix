@@ -3,6 +3,7 @@
 , bamOutput ? true
 , flags ? null
 , indexAttrs ? { }
+, RG ? { }
 }:
 
 { input1
@@ -29,7 +30,9 @@ stage {
     fi
     bowtie2 -x ${bionix.bowtie.index indexAttrs ref}/ref ${optionalString (flags != null) flags} --threads $cores \
       ${if input2 != null then "-1 " + fq input1 + " -2 " + fq input2 else "-U " + fq input1} \
-      | samtools sort -n \
+      ${optionalString (RG ? ID) ''
+        --rg-id ${RG.ID} ${concatMapAttrsStringsSep " " (k: v: "--rg ${k}:${v}") (filterAttrs (k: _: k != "ID") RG)} \
+      ''} \
       ${optionalString bamOutput "| samtools view -b"} \
       > $out
   '';

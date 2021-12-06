@@ -3,6 +3,7 @@
 , bamOutput ? true
 , flags ? null
 , indexAttrs ? { }
+, RG ? { }
 }:
 
 { input1
@@ -17,7 +18,6 @@ with compression;
 let
   fa = f: matchFiletype "bwa-ref" { fa = _: f; } f;
   fq = f: matchFiletype "bwa-input" { fq = _: f; gz = matchFiletype' "bwa-input" { fq = _: f; }; } f;
-
 in
 stage {
   name = "bwa-mem";
@@ -33,6 +33,7 @@ stage {
     fi
     bwa mem ${optionalString (flags != null) flags} -t $cores ref.fa ${fq input1} \
       ${optionalString (input2 != null) (fq input2)} \
+      ${optionalString (RG ? ID) "-R'@RG\\t${concatMapAttrsStringsSep "\\t" (k: v: "${k}:${v}") RG}'"} \
       ${optionalString bamOutput "| samtools view -b"} \
       > $out
   '';

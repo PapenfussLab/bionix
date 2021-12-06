@@ -3,6 +3,7 @@
 , bamOutput ? true
 , flags ? null
 , preset
+, RG ? { }
 }:
 
 { input1
@@ -30,6 +31,7 @@ stage {
     fi
     minimap2 ${optionalString (flags != null) flags} -t $cores -ax ${preset} ref.fa ${fq input1} \
       ${optionalString (input2 != null) (fq input2)} \
+      ${optionalString (RG ? ID) "-R'@RG\\t${concatMapAttrsStringsSep "\\t" (k: v: "${k}:${v}") RG}'"} \
       ${optionalString bamOutput "| samtools view -b"} \
       > $out
   '';
