@@ -11,7 +11,7 @@ let
 
   ref = fetchfa ./examples/ref.fa;
 
-  alignWithRG = rg: x: nameSort (bwa.align { inherit ref; flags = "-R'@RG\\tID:${rg}\\tSM:${rg}'"; } x);
+  alignWithRG = aligner: rg: x: nameSort (aligner { inherit ref; RG = { ID = rg; SM = rg; }; } x);
   sort = sambamba.sort { };
   nameSort = sambamba.sort { nameSort = true; };
   flagstat = samtools.flagstat { };
@@ -39,7 +39,9 @@ let
   };
 
   processPair = { tumour, normal }: rec {
-    alignments = mapAttrs (_: x: markdup (sort (fixmate (alignWithRG x.name x.files)))) { inherit normal tumour; };
+    alignments = mapAttrs (_: x: markdup (sort (fixmate (alignWithRG bwa.align x.name x.files)))) { inherit normal tumour; };
+    bowtie-alignments = mapAttrs (_: x: markdup (sort (fixmate (alignWithRG bowtie.align x.name x.files)))) { inherit normal tumour; };
+    bwa2-alignments = mapAttrs (_: x: markdup (sort (fixmate (alignWithRG bwa.mem2 x.name x.files)))) { inherit normal tumour; };
     variants = callVariants alignments;
     octopusSomatic = octopus.callSomatic { } { inherit (alignments) normal; tumours = [ alignments.tumour ]; };
     glvariants = strelka.call { } (builtins.attrValues alignments);
