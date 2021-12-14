@@ -57,6 +57,7 @@ let
 
   alignments = {
     "bowtie-normal.bam" = bowtie.align { inherit ref; } tnpair.normal.files;
+    "subread.bam" = subread.align { inherit ref; } tnpair.normal.files;
     "last.maf" = lastal.align { inherit ref; } tnpair.normal.files;
     "whisper.bam" = whisper.align { inherit ref; } tnpair.normal.files;
     "bwa-mem.bam" = bwa.mem { inherit ref; } tnpair.normal.files;

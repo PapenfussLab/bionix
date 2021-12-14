@@ -51,6 +51,7 @@ let
       whisper = callBionix ./tools/whisper.nix { };
       star = callBionix ./tools/star.nix { };
       genmap = callBionix ./tools/genmap.nix { };
+      subread = callBionix ./tools/subread.nix { };
 
       slurm-run = callPackage ./lib/slurm.nix { };
       slurm-exec = f: x: y:
