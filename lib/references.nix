@@ -192,12 +192,12 @@ rec {
         db = pkgs.fetchurl {
           url =
             "https://snpeff.blob.core.windows.net/databases/dbs/GRCh38/dbNSFP_4.1a/dbNSFP4.1a.txt.gz";
-          sha256 = "04f2xqndq0r04inykfxfm27p7zpr5p0l6qim51c3lmm3hv0bpfdc";
+          sha256 = "sha256-uYLfPNlI6+fBG6M4TGhlZdIT9/pHdj+aYryS3nmXcUI=";
         };
         index = pkgs.fetchurl {
           url =
             "https://snpeff.blob.core.windows.net/databases/dbs/GRCh38/dbNSFP_4.1a/dbNSFP4.1a.txt.gz.tbi";
-          sha256 = "0jmmydfnngkywricf1g6vjlg3dp11c9a4f2drimg3pkw9wy8fmpn";
+          sha256 = "sha256-WO7pwneNjVc2bl36JGZNtw4ef5QsyVycVW6HDqTrmBU=";
         };
       };
     };
