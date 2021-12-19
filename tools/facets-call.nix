@@ -1,6 +1,6 @@
-{ bionix }:
+{ bionix, vcf }:
 
-{ vcf, bams }:
+bams:
 
 with bionix;
 with types;
