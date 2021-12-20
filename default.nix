@@ -147,17 +147,15 @@ let
           }));
       strip = drv:
         let
+          strip-store-paths = nixpkgs.callPackage ./strip-store-paths { };
           stripCommand = ''
 
-            function rewrite {
-              sed -i 's|[A-Za-z0-9+/]\{32\}-bionix|00000000000000000000000000000000-bionix|g' $1
-            }
             function rewriteOutput {
               if [ -f ''${!1} ] ; then
-                rewrite ''${!1}
+                strip-store-paths ''${!1}
               else
                 for f in $(find ''${!1} -type f) ; do
-                  rewrite $f
+                  strip-store-paths $f
                 done
               fi
             }
@@ -167,12 +165,14 @@ let
           '';
         in
         drv.overrideAttrs (attrs:
-          if attrs ? buildCommand then {
-            buildCommand = attrs.buildCommand + stripCommand;
-          } else {
-            fixupPhase = (if attrs ? fixupPhase then attrs.fixupPhase else "")
+          { nativeBuildInputs = attrs.nativeBuildInputs or [ ] ++ [ strip-store-paths ]; } // (
+            if attrs ? buildCommand then {
+              buildCommand = attrs.buildCommand + stripCommand;
+            } else {
+              fixupPhase = (if attrs ? fixupPhase then attrs.fixupPhase else "")
               + stripCommand;
-          });
+            }
+          ));
 
       # splitting/joining
       splitFile = file: drv:
