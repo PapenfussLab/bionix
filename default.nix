@@ -151,7 +151,11 @@ let
           stripCommand = ''
 
             function rewriteOutput {
-              find ''${!1} -type f -print0 | xargs -0 -n1 strip-store-paths
+              if [ -f ''${!1} ] ; then
+                strip-store-paths ''${!1}
+              else
+                find ''${!1} -type f -print0 | xargs -0 -n1 strip-store-paths
+              fi
             }
             for o in $outputs ; do
               rewriteOutput $o
