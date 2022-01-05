@@ -7,6 +7,9 @@ pub const File = struct {
 
     pub fn init(fd: std.os.fd_t, allocator: std.mem.Allocator) !File {
         var stats = try std.os.fstat(fd);
+        if (stats.size == 0) {
+            return error.ZeroFile;
+        }
         var ptr = try std.os.mmap(null, @intCast(usize, stats.size), std.os.PROT.READ | std.os.PROT.WRITE, std.os.MAP.SHARED, fd, 0);
         return File{ .ptr = ptr, .len = @intCast(u64, stats.size), .allocator = allocator };
     }
@@ -32,7 +35,11 @@ pub fn main() !void {
 
     // mmap input
     var fd = try std.os.open(path, std.os.O.RDWR, 0);
-    var input = try File.init(fd, allocator);
+    var input = File.init(fd, allocator) catch |err| if (err == error.ZeroFile) {
+        return;
+    } else {
+        return err;
+    };
     defer input.deinit();
 
     // search for /nix/store
