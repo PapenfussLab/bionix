@@ -27,7 +27,9 @@ pub fn main() !void {
     const allocator = arena.allocator();
 
     const args = try std.process.argsAlloc(allocator);
-    if (args.len != 2) {
+    if (args.len == 1) {
+        std.os.exit(0);
+    } else if (args.len > 2) {
         std.debug.print("usage: {s} file\n", .{args[0]});
         std.os.exit(1);
     }
