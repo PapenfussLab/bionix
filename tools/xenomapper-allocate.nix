@@ -20,7 +20,7 @@ assert isSortedBam secondary;
 
 stage {
   name = "xenomapper-allocate";
-  buildInputs = with pkgs; [ samtools python3Packages.xenomapper ];
+  buildInputs = with pkgs; [ samtools xenomapper ];
   outputs = [ "out" ] ++ outs;
   buildCommand = ''
     xenomapper ${optionalString (flags != null) flags} \
