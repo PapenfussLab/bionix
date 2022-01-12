@@ -100,4 +100,6 @@ rec {
   # As call but include assemblies in output
   callAndAssemble = inputs:
     gridss.annotateAndAssemble { } (map gridss.preprocessBam inputs);
+
+  filterSomatic = callBionixE ./gridss-somatic-filter.nix;
 }

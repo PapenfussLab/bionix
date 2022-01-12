@@ -89,6 +89,7 @@ let
     gridss = gridss.callVariants { } (with tnpairResult.alignments; [ normal tumour ]);
     gridss2 = gridss.call (with tnpairResult.alignments; [ normal tumour ]);
     gridss3 = gridss.callAndAssemble (with tnpairResult.alignments; [ normal tumour ]);
+    gridssSomatic = gridss.filterSomatic { normalName = "mysample2"; } (gridss.call (with tnpairResult.alignments; [ normal tumour ]));
     "merged-shards.bam" = samtools.merge { } tnpairResult.shards;
     "merged.bam" = samtools.merge { } [ tnpairResult.alignments.tumour tnpairResult.alignments.normal ];
     "merged-namesorted.bam" = samtools.merge { } [ (nameSort tnpairResult.alignments.tumour) (nameSort tnpairResult.alignments.normal) ];
