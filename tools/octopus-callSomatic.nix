@@ -45,6 +45,7 @@ let
           let file = pkgs.writeText "regions.txt" (concatStringsSep "\n" x);
           in "-t ${file}";
         path = "-t ${x}";
+        set = "-t ${x}";
       };
     in
     handler;
