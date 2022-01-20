@@ -89,12 +89,8 @@ let
       def = f: defs: attrs: f (defs // attrs);
 
       linkOutputs = x:
-        with lib;
-        nixpkgs.stdenvNoCC.mkDerivation {
-          name = "link-outputs";
-          outputs = [ "out" ] ++ attrNames x;
-          nativeBuildInputs = [ pkgs.perl ];
-          buildCommand =
+        let
+          cmds =
             let
               recurse = x:
                 if x ? type && x.type == "derivation" then
@@ -104,14 +100,18 @@ let
                 else
                   abort "linkOutputs: unsupported type";
               link = dst: src: ''
-                ln -s ${recurse src} $(perl -e 'print $ENV{"${dst}"}') ; ln -s ${
-                  recurse src
-                } $out/${dst}
-              '';
+           ln -s ${recurse src} $(perl -e 'print $ENV{"${dst}"}') ; ln -s ${recurse src} $out/${dst}
+         '';
             in
             ''
-              mkdir $out
-            '' + (concatStringsSep "\n" (mapAttrsToList link x));
+         mkdir $out
+         ${lib.concatStringsSep "\n" (lib.mapAttrsToList link x)}
+       '';
+        in
+        pkgs.stdenvNoCC.mkDerivation {
+          name = "link-outputs";
+          nativeBuildInputs = [ pkgs.perl ];
+          buildCommand = "exec sh ${pkgs.writeScript "make-links" cmds}";
           passthru.linkInputs = x;
         };
 
