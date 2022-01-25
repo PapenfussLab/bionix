@@ -33,6 +33,7 @@ rec {
     vcf = { ref = any; };
     bed = { ref = any; };
     gz = filetype;
+    bgz = filetype;
     bz2 = filetype;
   };
 
