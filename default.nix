@@ -52,6 +52,7 @@ let
       star = callBionix ./tools/star.nix { };
       genmap = callBionix ./tools/genmap.nix { };
       subread = callBionix ./tools/subread.nix { };
+      hatchet = callBionix ./tools/hatchet.nix { };
 
       slurm-run = callPackage ./lib/slurm.nix { };
       slurm-exec = f: x: y:
@@ -100,13 +101,13 @@ let
                 else
                   abort "linkOutputs: unsupported type";
               link = dst: src: ''
-           ln -s ${recurse src} $(perl -e 'print $ENV{"${dst}"}') ; ln -s ${recurse src} $out/${dst}
-         '';
+                ln -s ${recurse src} $(perl -e 'print $ENV{"${dst}"}') ; ln -s ${recurse src} $out/${dst}
+              '';
             in
             ''
-         mkdir $out
-         ${lib.concatStringsSep "\n" (lib.mapAttrsToList link x)}
-       '';
+              mkdir $out
+              ${lib.concatStringsSep "\n" (lib.mapAttrsToList link x)}
+            '';
         in
         pkgs.stdenvNoCC.mkDerivation {
           name = "link-outputs";
