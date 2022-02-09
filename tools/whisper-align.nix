@@ -2,6 +2,7 @@
 , ref
 , bamOutput ? true
 , flags ? null
+, RG ? { }
 , indexAttrs ? { }
 }:
 
@@ -33,6 +34,7 @@ stage {
       -stdout \
       index ${fq input1} \
       ${optionalString (input2 != null) (fq input2)} \
+      ${optionalString (RG ? ID) "-rg '@RG\\t${concatMapAttrsStringsSep "\\t" (k: v: "${k}:${v}") RG}'"} \
       > $out
   '';
   passthru.filetype = if bamOutput then filetype.bam { inherit ref; sorting = sort.none { }; } else filetype.sam { inherit ref; sorting = sort.none { }; };
