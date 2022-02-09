@@ -35,7 +35,7 @@ stage {
       ${optionalString (input2 != null) (fq input2)} \
       > $out
   '';
-  passthru.filetype = if bamOutput then filetype.bam { inherit ref; sorting = sort.none { }; } else filetype.sam { inherit ref; sorting = sort.name { }; };
+  passthru.filetype = if bamOutput then filetype.bam { inherit ref; sorting = sort.none { }; } else filetype.sam { inherit ref; sorting = sort.none { }; };
   passthru.multicore = true;
   stripStorePaths = false;
 }
