@@ -37,4 +37,5 @@ stage {
   '';
   passthru.filetype = if bamOutput then filetype.bam { inherit ref; sorting = sort.none { }; } else filetype.sam { inherit ref; sorting = sort.none { }; };
   passthru.multicore = true;
+  stripStorePaths = false;
 }

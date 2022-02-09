@@ -72,4 +72,5 @@ stage rec {
   '';
   passthru.filetype = filetype.bam { inherit ref; sorting = sort.none { }; };
   passthru.multicore = true;
+  stripStorePaths = false;
 }
