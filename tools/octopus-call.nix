@@ -63,7 +63,11 @@ stage {
       ${optionalString (max-genotypes != null) "--max-genotypes ${toString max-genotypes}"} \
       ${optionalString (targets != null) (handleTarget targets)} \
       ${flags}
+
+    # Strip out octopus ARGV
+    sed -i '/^##octopus=/d' $out
   '';
   passthru.filetype = filetype.vcf { inherit ref; };
   passthru.multicore = true;
+  stripStorePaths = false;
 }

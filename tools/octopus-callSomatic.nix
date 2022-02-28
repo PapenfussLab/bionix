@@ -77,7 +77,11 @@ stage {
       ${optionalString (targets != null) (handleTarget targets)} \
       -N $normal \
       ${flags}
+
+    # Strip out octopus ARGV
+    sed -i '/^##octopus=/d' $out
   '';
   passthru.filetype = filetype.vcf { inherit ref; };
   passthru.multicore = true;
+  stripStorePaths = false;
 }
