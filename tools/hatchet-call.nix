@@ -125,6 +125,7 @@ stage
     passthru.multicore = true;
   } // (if gurobiLicense != null then {
     GRB_LICENSE_FILE = gurobiLicense;
+    HATCHET_COMPUTE_CN_SOLVER = "gurobi";
   } else {
     HATCHET_COMPUTE_CN_SOLVER = "cbc";
   }))
