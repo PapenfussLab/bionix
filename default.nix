@@ -54,6 +54,7 @@ let
       subread = callBionix ./tools/subread.nix { };
       hatchet = callBionix ./tools/hatchet.nix { };
       pizzly = callBionix ./tools/pizzly.nix { };
+      quip = callBionix ./tools/quip.nix { };
 
       slurm-run = callPackage ./lib/slurm.nix { };
       slurm-exec = f: x: y:

@@ -35,6 +35,7 @@ rec {
     gz = filetype;
     bgz = filetype;
     bz2 = filetype;
+    qp = filetype;
   };
 
   toCram = matchFiletype "bam2cram" { bam = filetype.cram; sam = filetype.cram; inherit (filetype) cram; };
