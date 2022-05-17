@@ -16,4 +16,5 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [autoreconfHook];
   buildInputs = [zlib];
+  patches = [ ./quip.patch ];
 }

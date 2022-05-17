@@ -1,0 +1,25 @@
+diff --git a/src/samfmt.c b/src/samfmt.c
+index 043ff7c..38bc217 100644
+--- a/src/samfmt.c
++++ b/src/samfmt.c
+@@ -413,16 +413,10 @@ short_read_t* quip_sam_read(quip_sam_in_t* in)
+     else in->r.seqname.n = 0;
+ 
+     if (in->f->header && in->b->core.mtid >= 0) {
+-        if (in->b->core.mtid == in->b->core.tid) {
+-            in->r.mate_seqname.n = 0;
+-            str_append_cstr(&in->r.mate_seqname, "=");
+-        }
+-        else {
+-            str_copy_cstr(
+-                &in->r.mate_seqname,
+-                in->f->header->target_name[in->b->core.mtid],
+-                strlen(in->f->header->target_name[in->b->core.mtid]));
+-        }
++        str_copy_cstr(
++            &in->r.mate_seqname,
++            in->f->header->target_name[in->b->core.mtid],
++            strlen(in->f->header->target_name[in->b->core.mtid]));
+     }
+     else in->r.mate_seqname.n = 0;
+ 
