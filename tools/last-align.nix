@@ -5,9 +5,7 @@
 , indexAttrs ? { }
 }:
 
-{ input1
-, input2 ? null
-}:
+input:
 
 with bionix;
 with lib;
@@ -23,13 +21,13 @@ stage {
       last-train -P $NIX_BUILD_CORES \
         ${optionalString (trainFlags != null) flags} \
         ${bionix.lastal.index indexAttrs ref}/index \
-        ${fq input1} ${optionalString (input2 != null) (fq input2)}\
+        ${fq input} -Q 1\
         > train
       lastal -P $NIX_BUILD_CORES \
         ${optionalString (flags != null) flags} \
         ${bionix.lastal.index indexAttrs ref}/index \
         -p train \
-        ${fq input1} ${optionalString (input2 != null) (fq input2)}\
+        ${fq input} -Q 1 \
         > tmp
     cp tmp $out
  '';
