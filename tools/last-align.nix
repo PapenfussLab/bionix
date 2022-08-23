@@ -1,6 +1,7 @@
 { bionix
 , ref
 , flags ? null
+, trainFlags ? null
 , indexAttrs ? { }
 }:
 
@@ -13,28 +14,24 @@ with lib;
 with types;
 
 let
-  fa = f: matchFiletype "last-ref" { fa = _: f; } f;
   fq = f: matchFiletype "last-input" { fq = _: f; } f;
-  fqfa = f: matchFiletype "last-input" { fq = _: f; fa = _: f; } f;
-  Q = matchFiletype "last-input" { fq = _: 1; fa = _: 0; };
-  parallel = matchFiletype "last-input" { fq = _: "parallel-fastq"; fa = _: "parallel-fasta"; };
-
 in
 stage {
   name = "last-align";
   buildInputs = with pkgs; [ last ];
   buildCommand = ''
-    ${if (input2 != null) then "fastq-interleave ${fq input1} ${fq input2}" else "cat ${fa input1}"} | \
-      ${parallel input1} -j $NIX_BUILD_CORES \
-      lastal -Q${toString (Q input1)} \
-        ${optionalString (input2 != null) "-i1"} \
+      last-train -P $NIX_BUILD_CORES \
+        ${optionalString (trainFlags != null) flags} \
+        ${bionix.lastal.index indexAttrs ref}/index \
+        ${fq input1} ${optionalString (input2 != null) (fq input2)}\
+        > train
+      lastal -P $NIX_BUILD_CORES \
         ${optionalString (flags != null) flags} \
         ${bionix.lastal.index indexAttrs ref}/index \
+        -p train \
+        ${fq input1} ${optionalString (input2 != null) (fq input2)}\
         > tmp
-  '' + (if input2 == null then ''
     cp tmp $out
-  '' else ''
-    last-pair-probs tmp > $out
-  '');
+ '';
   passthru.multicore = true;
 }
