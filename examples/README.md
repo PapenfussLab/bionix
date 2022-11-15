@@ -3,7 +3,7 @@
 This directory has a few example workflows in bionix along with example
 data. A basic workflow is defined in `call.nix`, and an example of
 applying it to the sample data is in `default.nix`. To build the
-`default.nix` workflow, run ```nix build -I bionix=../``` from this directory.
+`default.nix` workflow, run ```nix build -I bionix=../ -f .``` from this directory.
 
 ## NextFlow and WDL translations
 
