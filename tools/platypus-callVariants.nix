@@ -37,6 +37,9 @@ stage {
 
     # Remove timestamps from output
     sed -i '/^##fileDate/d' $out
+
+    # Remove platypusOptions from output
+    sed -i '/^##platypusOptions/d' $out
   '';
   passthru.filetype = filetype.vcf { inherit ref; };
   passthru.multicore = true;
