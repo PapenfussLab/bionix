@@ -13,4 +13,5 @@ with bionix;
   markdup = callBionixE ./samtools-markdup.nix;
   fixmate = callBionixE ./samtools-fixmate.nix;
   tabix = callBionixE ./samtools-tabix.nix;
+  queryRegion = callBionixE ./samtools-queryRegion.nix;
 }
