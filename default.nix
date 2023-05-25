@@ -55,6 +55,7 @@ let
       hatchet = callBionix ./tools/hatchet.nix { };
       pizzly = callBionix ./tools/pizzly.nix { };
       quip = callBionix ./tools/quip.nix { };
+      ampliconarchitect = callBionix ./tools/aa.nix { };
 
       slurm-run = callPackage ./lib/slurm.nix { };
       slurm-exec = f: x: y:
