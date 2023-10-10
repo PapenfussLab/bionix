@@ -104,7 +104,7 @@ let
                 else
                   abort "linkOutputs: unsupported type";
               link = dst: src: lib.optionalString (src != null) ''
-                ln -s ${recurse src} $(perl -e 'print $ENV{"${dst}"}') ; ln -s ${recurse src} $out/${dst}
+                ln -s ${recurse src} $out/${lib.escapeShellArg dst}
               '';
             in
             ''
