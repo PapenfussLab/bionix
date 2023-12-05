@@ -10,8 +10,8 @@ pub const File = struct {
         if (stats.size == 0) {
             return error.ZeroFile;
         }
-        var ptr = try std.os.mmap(null, @intCast(usize, stats.size), std.os.PROT.READ | std.os.PROT.WRITE, std.os.MAP.SHARED, fd, 0);
-        return File{ .ptr = ptr, .len = @intCast(u64, stats.size), .allocator = allocator };
+        var ptr = try std.os.mmap(null, @intCast(stats.size), std.os.PROT.READ | std.os.PROT.WRITE, std.os.MAP.SHARED, fd, 0);
+        return File{ .ptr = ptr, .len = @intCast(stats.size), .allocator = allocator };
     }
 
     pub fn deinit(self: *File) void {
