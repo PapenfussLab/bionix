@@ -6,11 +6,11 @@ pub const File = struct {
     allocator: std.mem.Allocator,
 
     pub fn init(fd: std.os.fd_t, allocator: std.mem.Allocator) !File {
-        var stats = try std.os.fstat(fd);
+        const stats = try std.os.fstat(fd);
         if (stats.size == 0) {
             return error.ZeroFile;
         }
-        var ptr = try std.os.mmap(null, @intCast(stats.size), std.os.PROT.READ | std.os.PROT.WRITE, std.os.MAP.SHARED, fd, 0);
+        const ptr = try std.os.mmap(null, @intCast(stats.size), std.os.PROT.READ | std.os.PROT.WRITE, std.os.MAP.SHARED, fd, 0);
         return File{ .ptr = ptr, .len = @intCast(stats.size), .allocator = allocator };
     }
 
@@ -27,31 +27,30 @@ pub fn main() !void {
     const allocator = arena.allocator();
 
     const args = try std.process.argsAlloc(allocator);
-    if (args.len == 1) {
-        std.os.exit(0);
-    } else if (args.len > 2) {
+    if (args.len != 2) {
         std.debug.print("usage: {s} file\n", .{args[0]});
-        std.os.exit(1);
+        std.process.exit(1);
     }
     const path = args[1];
 
     // mmap input
-    var fd = try std.os.open(path, std.os.O.RDWR, 0);
-    var input = File.init(fd, allocator) catch |err| if (err == error.ZeroFile) {
-        return;
-    } else {
-        return err;
-    };
-    defer input.deinit();
+    var file = try std.fs.cwd().openFile(path, .{ .mode = .read_write });
+    defer file.close();
+    const len = try file.getEndPos();
+    if (len == 0) {
+      return;
+    }
+    const ptr = try std.posix.mmap(null, len, std.posix.PROT.READ | std.posix.PROT.WRITE, .{ .TYPE = .SHARED }, file.handle, 0);
+    defer std.posix.munmap(ptr);
 
     // search for /nix/store
     var i: usize = 0;
     const needle = "/nix/store/";
-    while (std.mem.indexOfPos(u8, input.ptr, i, needle)) |idx| {
+    while (std.mem.indexOfPos(u8, ptr, i, needle)) |idx| {
         i = idx + needle.len;
-        var j = i + 32; // pos of - in a true path
-        if (j < input.len and input.ptr[j] == '-') {
-            std.mem.copy(u8, input.ptr[i..], "00000000000000000000000000000000");
+        const j = i + 32; // pos of - in a true path
+        if (j < len and ptr[j] == '-') {
+            std.mem.copyForwards(u8, ptr[i..], "00000000000000000000000000000000");
         }
     }
 }
