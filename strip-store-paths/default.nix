@@ -4,14 +4,15 @@ stdenv.mkDerivation {
   name = "strip-store-paths";
   nativeBuildInputs = [ zig ];
   src = ./strip-store-paths.zig;
+  
+  XDG_CACHE_HOME = "Cache";
 
   unpackPhase = ''
     cp $src strip-store-paths.zig
   '';
 
   buildPhase = ''
-    export HOME=$TMPDIR
-    zig build-exe -OReleaseFast strip-store-paths.zig
+    zig build-exe -OReleaseFast -mcpu=baseline strip-store-paths.zig
   '';
 
   installPhase = ''
