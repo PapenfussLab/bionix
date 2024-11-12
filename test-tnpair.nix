@@ -58,7 +58,6 @@ with lib; let
       tumours = [alignments.tumour];
     };
     glvariants = strelka.call {} (builtins.attrValues alignments);
-    platypusVars = platypus.call {} (builtins.attrValues alignments);
     octopusVars = octopus.call {} (builtins.attrValues alignments);
     shards = map (x: nameSort (bwa.align {inherit ref;} x)) (shard.fastQPair 2 normal.files);
   };
@@ -94,7 +93,7 @@ with lib; let
   testNaming = linkOutputs {
     crai = samtools.index {} (samtools.view {outfmt = types.toCram;} tnpairResult.alignments.tumour);
     kallisto = kallisto.quant {inherit ref;} (attrValues tnpair.tumour.files);
-    facets = facets.callCNV {vcf = tnpairResult.platypusVars;} (with tnpairResult.alignments; [normal tumour]);
+    facets = facets.callCNV {vcf = tnpairResult.octopusVars;} (with tnpairResult.alignments; [normal tumour]);
     cnvkit = cnvkitResults.cnvs;
     "cnvkit.pdf" = cnvkitResults.plot;
     "octopus.vcf" = tnpairResult.octopusVars;

@@ -28,7 +28,7 @@ directory and viewing `result/OEBPS/index.html`.
 Several examples are available in `./examples/`. The main example is
 presented in `./examples/default.nix` and can be built using `nix build`
 in `./examples/`. This sample pipeline performs variant calling using
-[`platypus`](https://github.com/andyrimmer/Platypus), alignment using
+[`octopus`](https://github.com/luntergroup/octopus), alignment using
 [`bwa mem`](https://github.com/lh3/bwa), and preprocessing using
 [`samtools`](http://www.htslib.org/).
 
@@ -37,10 +37,10 @@ this pipeline and the other examples.
 
 - The pipeline itself is specified in `examples/call.nix` and
   `examples/default.nix`.
-- The BioNix wrapper to run `platypus` is in
-  `tools/platypus-callVariants.nix`.
-- The Nix expression for the `platypus` software itself can be found in
-  [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/science/biology/platypus/default.nix).
+- The BioNix wrapper to run `octopus` is in
+  `tools/octopus-call.nix`.
+- The Nix expression for the `octopus` software itself can be found in
+  [nixpkgs](https://github.com/NixOS/nixpkgs/blob/master/pkgs/by-name/oc/octopus-caller/package.nix).
 
 ## Constructing workflows
 
