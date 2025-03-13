@@ -1,7 +1,7 @@
 const std = @import("std");
 
 pub const File = struct {
-    ptr: []align(std.mem.page_size) u8,
+    ptr: []align(std.heap.page_size_min) u8,
     len: u64,
     allocator: std.mem.Allocator,
 
