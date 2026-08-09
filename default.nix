@@ -150,11 +150,10 @@ let
           }));
       strip = drv:
         let
-          strip-store-paths = nixpkgs.callPackage ./strip-store-paths { };
           stripCommand = ''
 
             function rewriteOutput {
-              find ''${!1} -type f -print0 | xargs -0 -n1 strip-store-paths
+              find ''${!1} -type f -print0 | xargs -0 -n1 nuke-refs
             }
             for o in $outputs ; do
               rewriteOutput $o
@@ -162,7 +161,7 @@ let
           '';
         in
         drv.overrideAttrs (attrs:
-          { nativeBuildInputs = attrs.nativeBuildInputs or [ ] ++ [ strip-store-paths ]; } // (
+          { nativeBuildInputs = attrs.nativeBuildInputs or [ ] ++ [ pkgs.nukeReferences ]; } // (
             if attrs ? buildCommand then {
               buildCommand = attrs.buildCommand + stripCommand;
             } else {
