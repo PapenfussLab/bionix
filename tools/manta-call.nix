@@ -25,7 +25,7 @@ assert (length (unique refs) == 1);
 
 stage {
   name = "manta-call";
-  buildInputs = with pkgs; [ manta strace ];
+  buildInputs = [ pkgs.manta ];
   buildCommand = ''
     ln -s ${ref} ref.fa
     ln -s ${bionix.samtools.faidx faidxAttrs ref} ref.fa.fai
