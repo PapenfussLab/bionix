@@ -43,7 +43,6 @@ let
       snver = callBionix ./tools/snver.nix { };
       hisat2 = callBionix ./tools/hisat2.nix { };
       xenomapper = callBionix ./tools/xenomapper.nix { };
-      manta = callBionix ./tools/manta.nix { };
       delly = callBionix ./tools/delly.nix { };
       lumpy = callBionix ./tools/lumpy.nix { };
       lastal = callBionix ./tools/last.nix { };

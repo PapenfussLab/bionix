@@ -101,12 +101,6 @@ with lib; let
     "strelka.snvs.vcf" = tnpairResult.variants.snvs;
     "strelka.gl.vcf" = tnpairResult.glvariants;
     delly = delly.call {} (with tnpairResult.alignments; [normal tumour]);
-    manta = manta.call {} (with tnpairResult.alignments; {normals = [normal tumour];});
-    mantaTN = manta.call {} (with tnpairResult.alignments; {
-      normals = [normal];
-      inherit tumour;
-    });
-    mantaT = manta.call {} (with tnpairResult.alignments; {inherit tumour;});
     gridss = gridss.callVariants {} (with tnpairResult.alignments; [normal tumour]);
     gridss2 = gridss.call (with tnpairResult.alignments; [normal tumour]);
     gridss3 = gridss.callAndAssemble (with tnpairResult.alignments; [normal tumour]);
