@@ -12,7 +12,7 @@ with lib;
 
 stage {
   name = "mosdepth-plot";
-  buildInputs = with pkgs; [ python ];
+  buildInputs = with pkgs; [ python3 ];
   buildCommand = ''
     python ${pkgs.mosdepth.src}/scripts/plot-dist.py ${concatMapStringsSep " " (i: "${i}/out.mosdepth.${what}.dist.txt") inputs}
     ${concatStringsSep "\n" (zipListsWith (i: n: "sed -i 's|${i}[^ ]*|${n}|' dist.html") inputs names)}
