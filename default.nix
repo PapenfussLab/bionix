@@ -36,7 +36,6 @@ let
       sambamba = callBionix ./tools/sambamba.nix { };
       snap = callBionix ./tools/snap.nix { };
       snpeff = callBionix ./tools/snpeff.nix { };
-      strelka = callBionix ./tools/strelka.nix { };
       ascat = callBionix ./tools/ascat.nix { };
       fastp = callBionix ./tools/fastp.nix { };
       octopus = callBionix ./tools/octopus.nix { };

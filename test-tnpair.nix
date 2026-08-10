@@ -24,7 +24,6 @@ with lib; let
   flagstat = samtools.flagstat {};
   check-fastqc = fastqc.check {};
   check-fastp = fastp.check {};
-  callVariants = strelka.callSomatic {};
   markdup = samtools.markdup {};
   fixmate = samtools.fixmate {};
 
@@ -57,7 +56,6 @@ with lib; let
       inherit (alignments) normal;
       tumours = [alignments.tumour];
     };
-    glvariants = strelka.call {} (builtins.attrValues alignments);
     octopusVars = octopus.call {} (builtins.attrValues alignments);
     shards = map (x: nameSort (bwa.align {inherit ref;} x)) (shard.fastQPair 2 normal.files);
   };
@@ -97,9 +95,6 @@ with lib; let
     "cnvkit.pdf" = cnvkitResults.plot;
     "octopus.vcf" = tnpairResult.octopusVars;
     "octopus-somatic.vcf" = tnpairResult.octopusSomatic;
-    strelka-indels = tnpairResult.variants.indels;
-    "strelka.snvs.vcf" = tnpairResult.variants.snvs;
-    "strelka.gl.vcf" = tnpairResult.glvariants;
     delly = delly.call {} (with tnpairResult.alignments; [normal tumour]);
     gridss = gridss.callVariants {} (with tnpairResult.alignments; [normal tumour]);
     gridss2 = gridss.call (with tnpairResult.alignments; [normal tumour]);
