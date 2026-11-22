@@ -1,12 +1,18 @@
-{ nixpkgs ? import <nixpkgs> { }, overlays ? [ ] }:
+{
+  nixpkgs ? import <nixpkgs> { },
+  overlays ? [ ],
+}:
 
 let
   inherit (nixpkgs) fetchurl callPackage;
 
-  bionix = nixpkgs.lib.makeExtensible (self:
-    let callBionix = file: attrs: import file ({ bionix = self; } // attrs);
+  bionix = nixpkgs.lib.makeExtensible (
+    self:
+    let
+      callBionix = file: attrs: import file ({ bionix = self; } // attrs);
     in
-    with self; {
+    with self;
+    {
       inherit callBionix;
       id = x: x;
       exec = id;
@@ -52,11 +58,13 @@ let
       pizzly = callBionix ./tools/pizzly.nix { };
       quip = callBionix ./tools/quip.nix { };
       ampliconarchitect = callBionix ./tools/aa.nix { };
+      strobealign = callBionix ./tools/strobealign.nix { };
 
       slurm-run = callPackage ./lib/slurm.nix { };
-      slurm-exec = f: x: y:
-        slurm-run x (f
-          (builtins.removeAttrs x [
+      slurm-exec =
+        f: x: y:
+        slurm-run x (
+          f (builtins.removeAttrs x [
             "ppn"
             "mem"
             "walltime"
@@ -64,12 +72,13 @@ let
             "slurmFlags"
             "salloc"
             "srun"
-          ])
-          y);
+          ]) y
+        );
       slurm = bionix.extend (self: super: { exec = super.slurm-run; });
-      qsub = attrs:
-        bionix.extend (self: super:
-          with self; rec {
+      qsub =
+        attrs:
+        bionix.extend (
+          self: super: with self; rec {
             qsubDefs = {
               ppn = 1;
               mem = 1;
@@ -79,29 +88,38 @@ let
               queue = null;
               qsubFlags = null;
               qsubPath = "/usr/bin";
-            } // attrs;
+            }
+            // attrs;
             qsub = attrs: (callPackage ./lib/qsub.nix { }) (qsubDefs // attrs);
-            exec = f: x: y:
-              qsub (builtins.intersectAttrs qsubDefs x) (super.exec f
-                (builtins.removeAttrs x (builtins.attrNames qsubDefs))
-                y);
-          });
-      def = f: defs: attrs: f (defs // attrs);
+            exec =
+              f: x: y:
+              qsub (builtins.intersectAttrs qsubDefs x) (
+                super.exec f (builtins.removeAttrs x (builtins.attrNames qsubDefs)) y
+              );
+          }
+        );
+      def =
+        f: defs: attrs:
+        f (defs // attrs);
 
-      linkOutputs = x:
+      linkOutputs =
+        x:
         let
           cmds =
             let
-              recurse = x:
+              recurse =
+                x:
                 if x ? type && x.type == "derivation" then
                   x
                 else if builtins.typeOf x == "set" then
                   linkOutputs x
                 else
                   abort "linkOutputs: unsupported type";
-              link = dst: src: lib.optionalString (src != null) ''
-                ln -s ${recurse src} $out/${lib.escapeShellArg dst}
-              '';
+              link =
+                dst: src:
+                lib.optionalString (src != null) ''
+                  ln -s ${recurse src} $out/${lib.escapeShellArg dst}
+                '';
             in
             ''
               mkdir $out
@@ -116,18 +134,10 @@ let
         };
 
       # Fetching files of specific type
-      fetchFastQ = attrs:
-        with types;
-        tagFiletype (filetype.fq { }) (fetchurl attrs);
-      fetchFastA = attrs:
-        with types;
-        tagFiletype (filetype.fa { }) (fetchurl attrs);
-      fetchFastQGZ = attrs:
-        with types;
-        tagFiletype (filetype.gz (filetype.fq { })) (fetchurl attrs);
-      fetchFastAGZ = attrs:
-        with types;
-        tagFiletype (filetype.gz (filetype.fa { })) (fetchurl attrs);
+      fetchFastQ = attrs: with types; tagFiletype (filetype.fq { }) (fetchurl attrs);
+      fetchFastA = attrs: with types; tagFiletype (filetype.fa { }) (fetchurl attrs);
+      fetchFastQGZ = attrs: with types; tagFiletype (filetype.gz (filetype.fq { })) (fetchurl attrs);
+      fetchFastAGZ = attrs: with types; tagFiletype (filetype.gz (filetype.fa { })) (fetchurl attrs);
 
       # Turn a multi-output derivation into a list of derivations
       outputDrvs = drv: map (o: lib.getAttr o drv) drv.outputs;
@@ -137,15 +147,29 @@ let
       lib = nixpkgs.lib // {
         inherit types;
         shard = callBionix ./lib/shard.nix { };
-        concatMapAttrsStringsSep = s: f: a: with nixpkgs.lib; concatStringsSep s (mapAttrsToList f a);
+        concatMapAttrsStringsSep =
+          s: f: a:
+          with nixpkgs.lib;
+          concatStringsSep s (mapAttrsToList f a);
       };
-      stage = x@{ name, stripStorePaths ? true, multicore ? false, ... }:
-        (if stripStorePaths then strip else x: x)
-          (nixpkgs.stdenvNoCC.mkDerivation (x // {
-            name = "bionix-" + name;
-            inherit multicore;
-          }));
-      strip = drv:
+      stage =
+        x@{
+          name,
+          stripStorePaths ? true,
+          multicore ? false,
+          ...
+        }:
+        (if stripStorePaths then strip else x: x) (
+          nixpkgs.stdenvNoCC.mkDerivation (
+            x
+            // {
+              name = "bionix-" + name;
+              inherit multicore;
+            }
+          )
+        );
+      strip =
+        drv:
         let
           stripCommand = ''
 
@@ -157,47 +181,61 @@ let
             done
           '';
         in
-        drv.overrideAttrs (attrs:
-          { nativeBuildInputs = attrs.nativeBuildInputs or [ ] ++ [ pkgs.nukeReferences ]; } // (
-            if attrs ? buildCommand then {
-              buildCommand = attrs.buildCommand + stripCommand;
-            } else {
-              fixupPhase = (if attrs ? fixupPhase then attrs.fixupPhase else "")
-              + stripCommand;
-            }
-          ));
+        drv.overrideAttrs (
+          attrs:
+          {
+            nativeBuildInputs = attrs.nativeBuildInputs or [ ] ++ [ pkgs.nukeReferences ];
+          }
+          // (
+            if attrs ? buildCommand then
+              {
+                buildCommand = attrs.buildCommand + stripCommand;
+              }
+            else
+              {
+                fixupPhase = (if attrs ? fixupPhase then attrs.fixupPhase else "") + stripCommand;
+              }
+          )
+        );
 
       # splitting/joining
-      splitFile = file: drv:
+      splitFile =
+        file: drv:
         stage {
           name = "split-${file}";
           buildCommand = "ln -s ${drv}/${file} $out";
         };
       split = drv: lib.mapAttrs (p: _: splitFile p drv) (builtins.readDir drv);
-      join = drvs:
+      join =
+        drvs:
         stage {
           name = "join";
           buildCommand = ''
             mkdir $out
-            ${builtins.concatStringsSep "\n" (builtins.attrValues
-              (lib.mapAttrs (n: d: "ln -s ${d} $out/${n}") drvs))}
+            ${builtins.concatStringsSep "\n" (
+              builtins.attrValues (lib.mapAttrs (n: d: "ln -s ${d} $out/${n}") drvs)
+            )}
           '';
         };
       each = f: drv: join (lib.mapAttrs (_: f) (split drv));
-    });
+    }
+  );
 
   overlayByType = {
-    lambda = bionix: overlay:
-      bionix.extend
-        (self: super: nixpkgs.lib.recursiveUpdate super (overlay self super));
+    lambda =
+      bionix: overlay:
+      bionix.extend (self: super: nixpkgs.lib.recursiveUpdate super (overlay self super));
     path = bionix: path: overlay bionix (import path);
   };
-  overlay = bionix: overlay:
-    let overlayType = builtins.typeOf overlay;
+  overlay =
+    bionix: overlay:
+    let
+      overlayType = builtins.typeOf overlay;
     in
     if overlayByType ? "${overlayType}" then
       overlayByType."${overlayType}" bionix overlay
     else
       builtins.throw ("cannot overlay type " + overlayType);
 in
-with nixpkgs.lib; foldl overlay bionix overlays
+with nixpkgs.lib;
+foldl overlay bionix overlays
